@@ -42,13 +42,13 @@ const distDir = path.resolve(rootDir, 'dist');
 
   Object.keys(entries).forEach(entryName => {
     packageJsonCopy.exports[`./${entryName}`] = {
-      types: `./${entryName}.d.ts`,
+      types: `./${entryName}/index.d.ts`,
       import: {
-        types: `./${entryName}.d.ts`,
-        default: `./${entryName}.mjs`
+        types: `./${entryName}/index.d.ts`,
+        default: `./${entryName}/index.mjs`
       },
-      require: `./${entryName}.cjs`,
-      default: `./${entryName}.js`
+      require: `./${entryName}/index.cjs`,
+      default: `./${entryName}/index.js`
     };
   });
 
