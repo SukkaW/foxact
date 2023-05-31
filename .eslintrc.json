@@ -8,6 +8,9 @@
         "project": [
           "./tsconfig.json"
         ]
+      },
+      "rules": {
+        "@fluffyfox/prefer-timer-id": "off"
       }
     }
   ],

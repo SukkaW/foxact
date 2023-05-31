@@ -2,7 +2,7 @@ import 'client-only';
 // useState is React Client Component only
 
 import { createContext, useContext, useState } from 'react';
-import noop from '@/utils/noop';
+import { noop } from '@/noop';
 
 export function createContextState<T>(initialState: T) {
   const StateContext = createContext<T>(initialState);

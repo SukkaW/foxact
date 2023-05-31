@@ -1,7 +1,7 @@
 import 'client-only';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { requestIdleCallback, cancelIdleCallback } from '@/utils/ric';
+import { requestIdleCallback, cancelIdleCallback } from '@/request-idle-callback';
 
 type UseIntersectionObserverInit = Pick<IntersectionObserverInit, 'rootMargin' | 'root'>;
 
