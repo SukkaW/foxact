@@ -1,3 +1,10 @@
+# 0.2.5
+
+**Misc Changes**
+
+- Add CI to auto publish release
+- Enable npm provenance
+
 # 0.2.4
 
 **Core Changes**
