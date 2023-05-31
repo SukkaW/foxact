@@ -1,3 +1,17 @@
+# 0.2.1
+
+**Core Changes**
+
+- New hook: `useMap`
+- New hook: `useSet`
+- New hook: `useArray`
+- New hook: `useErrorBoundary`
+- New hook: `useUncontrolled`
+- New hook: `useClipboard`
+- New util: `noop`
+- New util: `request-idle-callback`
+- New util: `typescriptHappyForwardRef`
+
 # 0.2.0
 
 **Core Changes**
