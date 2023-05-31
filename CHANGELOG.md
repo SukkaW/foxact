@@ -1,3 +1,9 @@
+# 0.2.2
+
+**Core Changes**
+
+`useMap`, `useSet`, `useArray` now accept an optional initial value.
+
 # 0.2.1
 
 **Core Changes**
