@@ -2,7 +2,7 @@ name: Automatic Publish
 on:
   push:
     branches:
-      - main
+      - master
     tags-ignore:
       - '**'
     paths-ignore:
