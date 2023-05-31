@@ -7,5 +7,14 @@ export const useArray = <T>(initialState: T[] | (() => T[]) = () => []) => {
   const add = useCallback((v: T) => setArray((prevArray) => prevArray.concat(v)), []);
   const reset = useCallback(() => setArray([]), []);
 
-  return [array, add, reset] as const;
+  const removeByIndex = useCallback((index: number) => setArray((prevArray) => {
+    if (index > -1) {
+      const copy = prevArray.slice();
+      copy.splice(index, 1);
+      return copy;
+    }
+    return prevArray;
+  }), []);
+
+  return [array, add, reset, removeByIndex] as const;
 };
