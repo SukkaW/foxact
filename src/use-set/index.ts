@@ -1,8 +1,8 @@
 import 'client-only';
 import { useCallback, useState } from 'react';
 
-export const useSet = <T>() => {
-  const [set, setSet] = useState(() => new Set<T>());
+export const useSet = <T>(initialState: Set<T> | (() => Set<T>) = () => new Set<T>()) => {
+  const [set, setSet] = useState(initialState);
 
   const add = useCallback((item: T) => setSet((prevSet) => {
     if (prevSet.has(item)) {

@@ -1,8 +1,8 @@
 import 'client-only';
 import { useCallback, useState } from 'react';
 
-export const useMap = <K, T>() => {
-  const [map, setMap] = useState(() => new Map<K, T>());
+export const useMap = <K, T>(initialState: Map<K, T> | (() => Map<K, T>) = () => new Map<K, T>()) => {
+  const [map, setMap] = useState<Map<K, T>>(initialState);
 
   const add = useCallback((k: K, v: T) => setMap((prevMap) => {
     prevMap.set(k, v);
