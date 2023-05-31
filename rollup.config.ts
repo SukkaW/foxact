@@ -36,7 +36,7 @@ export default defineConfig([{
     format: 'commonjs',
     entryFileNames: '[name].js'
   }, {
-    dir: 'dist/esm',
+    dir: 'dist',
     format: 'esm',
     entryFileNames: '[name].mjs'
   }],

@@ -1,6 +1,6 @@
 {
   "name": "foxact",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Hooks/Utils done right. For browser, SSR, and React Server Components.",
   "sideEffects": false,
   "private": true,
@@ -8,7 +8,7 @@
     "prebuild": "rimraf dist",
     "build": "rollup -c rollup.config.ts --configPlugin swc3 --bundleConfigAsCjs",
     "postbuild": "ts-node tools/postbuild.ts",
-    "prepublishOnly": "echo \"This package is not meant to be published from root dir.\" && exit 1"
+    "prepublishOnly": "npm run build && echo \"This package is not meant to be published from root dir.\" && exit 1"
   },
   "files": [
     "**"
