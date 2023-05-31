@@ -1,0 +1,17 @@
+{
+  "root": true,
+  "overrides": [
+    {
+      "files": ["src/**/*.ts", "src/**/*.tsx", "rollup.config.ts", "tools/**/*.ts"],
+      "extends": "sukka/typescript",
+      "parserOptions": {
+        "project": [
+          "./tsconfig.json"
+        ]
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "dist/**/*"
+  ]
+}

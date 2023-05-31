@@ -1,0 +1,61 @@
+{
+  "name": "foxact",
+  "version": "0.1.0",
+  "description": "React Hooks/Utils done right. For browser, SSR, and React Server Components.",
+  "sideEffects": false,
+  "private": true,
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "rollup -c rollup.config.ts --configPlugin swc3 --bundleConfigAsCjs",
+    "postbuild": "ts-node tools/postbuild.ts",
+    "prepublishOnly": "echo \"This package is not meant to be published from root dir.\" && exit 1"
+  },
+  "files": [
+    "**"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SukkaW/reactail.git"
+  },
+  "keywords": [
+    "React",
+    "Hooks"
+  ],
+  "author": "Sukka <https://skk.moe>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SukkaW/reactail/issues"
+  },
+  "homepage": "https://github.com/SukkaW/reactail#readme",
+  "dependencies": {
+    "client-only": "^0.0.1",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^20.2.5",
+    "@types/react": "^18.2.7",
+    "@types/react-dom": "^18.2.4",
+    "@typescript-eslint/eslint-plugin": "^5.59.8",
+    "@typescript-eslint/parser": "^5.59.8",
+    "browserslist": "^4.21.7",
+    "eslint": "^8.41.0",
+    "eslint-config-sukka": "^1.8.5",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.27.5",
+    "fs-extra": "^11.1.1",
+    "rimraf": "^5.0.1",
+    "rollup": "^3.23.0",
+    "rollup-plugin-dts": "^5.3.0",
+    "rollup-plugin-swc3": "^0.8.1",
+    "ts-node": "^10.9.1"
+  },
+  "peerDependencies": {
+    "react": "*"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  }
+}
