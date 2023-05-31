@@ -1,6 +1,6 @@
 {
   "name": "foxact",
-  "version": "0.2.5-alpha.0",
+  "version": "0.2.5-alpha.2",
   "description": "React Hooks/Utils done right. For browser, SSR, and React Server Components.",
   "sideEffects": false,
   "private": true,
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SukkaW/reactail.git"
+    "url": "git+https://github.com/SukkaW/foxact"
   },
   "keywords": [
     "React",
@@ -23,9 +23,9 @@
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SukkaW/reactail/issues"
+    "url": "https://github.com/SukkaW/foxact/issues"
   },
-  "homepage": "https://github.com/SukkaW/reactail#readme",
+  "homepage": "https://github.com/SukkaW/foxact#readme",
   "dependencies": {
     "client-only": "^0.0.1",
     "server-only": "^0.0.1"
