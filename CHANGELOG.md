@@ -1,3 +1,9 @@
+# 0.2.3
+
+**Core Changes**
+
+`useArray` now supports remove by index.
+
 # 0.2.2
 
 **Core Changes**
