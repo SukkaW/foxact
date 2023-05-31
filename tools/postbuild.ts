@@ -1,7 +1,6 @@
 import fse from 'fs-extra';
 import path from 'path';
-
-import { entries } from '../src/entries';
+import { getEntries } from './get-entries';
 
 const rootDir = process.cwd();
 const distDir = path.resolve(rootDir, 'dist');
@@ -39,6 +38,8 @@ const distDir = path.resolve(rootDir, 'dist');
   packageJsonCopy.exports = {
     './package.json': './package.json'
   };
+
+  const entries = await getEntries();
 
   Object.keys(entries).forEach(entryName => {
     packageJsonCopy.exports[`./${entryName}`] = {

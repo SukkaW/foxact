@@ -4,7 +4,7 @@ import dtsExports from 'rollup-plugin-dts';
 
 import pkgJson from './package.json';
 import browserslist from 'browserslist';
-import { entries as input } from './src/entries';
+import { getEntries } from './tools/get-entries';
 
 // @ts-expect-error -- rollup-plugin-dts has incorrect types
 const dts = dtsExports.default as typeof dtsExports;
@@ -24,54 +24,56 @@ const targets = browserslist([
   'safari 12'
 ]);
 
-let cache;
+export default async function () {
+  const input = await getEntries();
 
-export default defineConfig([{
-  input,
-  output: [{
-    dir: 'dist',
-    format: 'commonjs',
-    entryFileNames: '[name]/index.cjs'
-  }, {
-    dir: 'dist',
-    format: 'commonjs',
-    entryFileNames: '[name]/index.js'
-  }, {
-    dir: 'dist',
-    format: 'esm',
-    entryFileNames: '[name]/index.mjs'
-  }],
-  plugins: [
-    swc({
-      isModule: true,
-      jsc: {
-        transform: {
-          react: {
-            runtime: 'automatic'
+  return defineConfig([{
+    input,
+    output: [{
+      dir: 'dist',
+      format: 'commonjs',
+      entryFileNames: '[name]/index.cjs'
+    }, {
+      dir: 'dist',
+      format: 'commonjs',
+      entryFileNames: '[name]/index.js'
+    }, {
+      dir: 'dist',
+      format: 'esm',
+      entryFileNames: '[name]/index.mjs'
+    }],
+    plugins: [
+      swc({
+        isModule: true,
+        jsc: {
+          transform: {
+            react: {
+              runtime: 'automatic'
+            }
+          },
+          minify: {
+            compress: {
+              passes: 2
+            },
+            mangle: {},
+            module: true
           }
         },
-        minify: {
-          compress: {
-            passes: 2
-          },
-          mangle: {},
-          module: true
+        minify: true,
+        env: {
+          targets
         }
-      },
-      minify: true,
-      env: {
-        targets
-      }
-    })
-  ],
-  external,
-  cache
-}, {
-  input,
-  output: {
-    dir: 'dist',
-    format: 'commonjs',
-    entryFileNames: '[name]/index.d.ts'
-  },
-  plugins: [dts()]
-}]);
+      })
+    ],
+    external,
+    cache: true
+  }, {
+    input,
+    output: {
+      dir: 'dist',
+      format: 'commonjs',
+      entryFileNames: '[name]/index.d.ts'
+    },
+    plugins: [dts()]
+  }]);
+}
