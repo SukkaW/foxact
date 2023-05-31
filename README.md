@@ -1,3 +1,5 @@
+<img src="https://pic.skk.moe/gh/foxact.gif" alt="foxact logo" width="128" height="128" align="right" />
+
 # foxact
 
 React Hooks/Utils done right. For browser, SSR, and React Server Components.
