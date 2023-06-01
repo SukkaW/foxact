@@ -1,6 +1,9 @@
 import fse from 'fs-extra';
 import path from 'path';
 import { getEntries } from './get-entries';
+import listDir from '@sukka/listdir';
+import gzipSize from 'gzip-size';
+
 
 const rootDir = process.cwd();
 const distDir = path.resolve(rootDir, 'dist');
@@ -57,4 +60,14 @@ const distDir = path.resolve(rootDir, 'dist');
     path.resolve(distDir, 'package.json'),
     JSON.stringify(packageJsonCopy, null, 2)
   );
+
+  const gzipSizes = await Promise.all(
+    (await listDir(distDir))
+    .filter(filename => filename.endsWith('.mjs'))
+    // Cloudflare & Fastly uses gzip level 4
+    .map(filename => gzipSize.file(path.join(distDir, filename), { level: 4 }))
+  );
+
+  const totalGzipSize = gzipSizes.reduce((acc, cur) => acc + cur, 0);
+  console.log('Total Gzip size sum:', (totalGzipSize / 1024).toFixed(2), 'KiB');
 })();
