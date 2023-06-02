@@ -17,17 +17,24 @@ export default function ExportMetaInfo() {
   }, [data, slug]);
 
   return (
-    <div className="grid grid-cols-[100px_auto] gap-2 text-sm mt-4 mb-8 items-start">
-      <div className="font-semibold">Exports Size</div>
+    <div className="grid grid-cols-[128px_auto] gap-2 text-sm mt-4 mb-8 items-start">
+      <div className="font-bold">Exports Size</div>
       <div>{humanReadableRawSize}</div>
-      <div className="font-semibold">Gzip Size</div>
+      <div className="font-bold">Gzip Size</div>
       <div>{humanReadableGzipSize}</div>
-      <div>Source Code</div>
+      <div className="font-bold">Source Code</div>
       <a
         href={`https://github.com/SukkaW/foxact/tree/master/src/${slug}/`}
         className="underline underline-offset-1"
       >
         View on GitHub
+      </a>
+      <div className="font-bold">Docs</div>
+      <a
+        href={`https://github.com/SukkaW/foxact/blob/master/docs/src/pages/${slug}.mdx`}
+        className="underline underline-offset-1"
+      >
+        Edit this page
       </a>
     </div>
   );
