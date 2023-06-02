@@ -1,5 +1,5 @@
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.js
 .pnp.cjs
@@ -11,8 +11,9 @@ yarn.lock
 /coverage
 
 # next.js
-/.next/
-/out/
+/docs/.next/
+/docs/out/
+next-env.d.ts
 
 # production
 /build

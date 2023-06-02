@@ -2,12 +2,15 @@
   "root": true,
   "overrides": [
     {
-      "files": ["src/**/*.ts", "src/**/*.tsx", "rollup.config.ts", "tools/**/*.ts"],
-      "extends": "sukka/typescript",
+      "files": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "rollup.config.ts",
+        "tools/**/*.ts"
+      ],
+      "extends": ["sukka/typescript"],
       "parserOptions": {
-        "project": [
-          "./tsconfig.json"
-        ]
+        "project": ["./tsconfig.json"]
       },
       "rules": {
         "@fluffyfox/prefer-timer-id": "off"

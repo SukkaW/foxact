@@ -1,15 +1,14 @@
 import fse from 'fs-extra';
 import path from 'path';
 import { getEntries } from './get-entries';
-import listDir from '@sukka/listdir';
 import gzipSize from 'gzip-size';
 
 const rootDir = process.cwd();
 const distDir = path.resolve(rootDir, 'dist');
 
 interface GzipStats {
-  total: { raw: number; gzip: number; };
-  exports: Record<string, { raw: number, gzip: number }>;
+  total: { raw: number, gzip: number },
+  exports: Record<string, { raw: number, gzip: number }>
 }
 
 (async () => {
@@ -67,7 +66,7 @@ interface GzipStats {
         gzipSizeStat.exports[entryName] = {
           raw: fileSize,
           gzip: fileGzipSize
-        }
+        };
       })
   );
 
