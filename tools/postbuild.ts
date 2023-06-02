@@ -4,9 +4,13 @@ import { getEntries } from './get-entries';
 import listDir from '@sukka/listdir';
 import gzipSize from 'gzip-size';
 
-
 const rootDir = process.cwd();
 const distDir = path.resolve(rootDir, 'dist');
+
+interface GzipStats {
+  total: { raw: number; gzip: number; };
+  exports: Record<string, { raw: number, gzip: number }>;
+}
 
 (async () => {
   await Promise.all([
@@ -38,11 +42,44 @@ const distDir = path.resolve(rootDir, 'dist');
       '*': ['ts_version_4.8_and_above_is_required.d.ts']
     }
   };
-  packageJsonCopy.exports = {
-    './package.json': './package.json'
-  };
 
   const entries = await getEntries();
+
+  const gzipSizeStat: GzipStats = {
+    total: { raw: 0, gzip: 0 },
+    exports: {}
+  };
+
+  await Promise.all(
+    Object.keys(entries)
+      // .filter(([_entryName, filename]) => filename.endsWith('.mjs'))
+      .map(async (entryName) => {
+        const filePath = path.join(distDir, entryName, 'index.mjs');
+
+        const [fileSize, fileGzipSize] = await Promise.all([
+          fse.stat(filePath).then(stat => stat.size),
+          gzipSize.file(filePath, { level: 4 })
+        ]);
+
+        gzipSizeStat.total.raw += fileSize;
+        gzipSizeStat.total.gzip += fileGzipSize;
+
+        gzipSizeStat.exports[entryName] = {
+          raw: fileSize,
+          gzip: fileGzipSize
+        }
+      })
+  );
+
+  await fse.writeFile(
+    path.resolve(distDir, 'sizes.json'),
+    JSON.stringify(gzipSizeStat)
+  );
+
+  packageJsonCopy.exports = {
+    './package.json': './package.json',
+    './sizes.json': './sizes.json'
+  };
 
   Object.keys(entries).forEach(entryName => {
     packageJsonCopy.exports[`./${entryName}`] = {
@@ -60,14 +97,4 @@ const distDir = path.resolve(rootDir, 'dist');
     path.resolve(distDir, 'package.json'),
     JSON.stringify(packageJsonCopy, null, 2)
   );
-
-  const gzipSizes = await Promise.all(
-    (await listDir(distDir))
-    .filter(filename => filename.endsWith('.mjs'))
-    // Cloudflare & Fastly uses gzip level 4
-    .map(filename => gzipSize.file(path.join(distDir, filename), { level: 4 }))
-  );
-
-  const totalGzipSize = gzipSizes.reduce((acc, cur) => acc + cur, 0);
-  console.log('Total Gzip size sum:', (totalGzipSize / 1024).toFixed(2), 'KiB');
 })();
