@@ -1,0 +1,37 @@
+{
+  "*": {
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+  "index": {
+    "display": "hidden",
+    "type": "page",
+    "title": "Home",
+    "theme": {
+      "breadcrumb": false,
+      "footer": true,
+      "sidebar": false,
+      "toc": false,
+      "pagination": false
+    }
+  },
+  "-- separator guide": {
+    "type": "separator",
+    "title": "Guide"
+  },
+  "getting-started": {
+    "title": "Getting Started"
+  },
+  "-- separator hooks": {
+    "type": "separator",
+    "title": "Hooks"
+  },
+  "-- separator utilities": {
+    "type": "separator",
+    "title": "Utilities"
+  },
+  "context-state": {
+    "title": "Context State"
+  }
+}

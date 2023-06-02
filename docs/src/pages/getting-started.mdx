@@ -1,0 +1,46 @@
+---
+title: Getting Started
+---
+
+import { Callout, Tabs, Tab } from 'nextra-theme-docs'
+
+# Getting Started
+
+## Installation
+
+Inside your React project directory, run the following:
+
+<Tabs items={['pnpm', 'npm', 'yarn']}>
+  <Tab>
+    ```bash
+    pnpm add foxact
+    ```
+  </Tab>
+  <Tab>
+    ```bash
+    npm i foxact
+    ```
+  </Tab>
+  <Tab>
+    ```bash
+    yarn add foxact
+    ```
+  </Tab>
+</Tabs>
+
+## Usage Example
+
+Simply importing the functions you need from `foxact`:
+
+```tsx
+// src/context/sidebar-active-provider.tsx
+import { createContextState } from 'foxact/context-state';
+
+const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive] = createContextState(false);
+
+export {
+  SidebarActiveProvider,
+  useSidebarActive,
+  useSetSidebarActive
+};
+```

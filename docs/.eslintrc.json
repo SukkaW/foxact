@@ -1,0 +1,41 @@
+{
+  "root": true,
+  "overrides": [
+    {
+      "files": [
+        "next.config.js"
+      ],
+      "extends": "sukka/node",
+      "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": "latest"
+      }
+    },
+    {
+      "files": [
+        "**/*.ts",
+        "**/*.tsx"
+      ],
+      "extends": [
+        "sukka/typescript"
+      ],
+      "parserOptions": {
+        "project": [
+          "./docs/tsconfig.json"
+        ]
+      }
+    },
+    {
+      "files": [
+        "**/*.mdx"
+      ],
+      "extends": [
+        "plugin:mdx/recommended"
+      ]
+    }
+  ],
+  "ignorePatterns": [
+    "dist/**/*",
+    "out/**/*"
+  ]
+}
