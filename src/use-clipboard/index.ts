@@ -49,7 +49,7 @@ export function useClipboard({
         setError(e as Error);
       }
     }
-  }, [handleCopyResult]);
+  }, [handleCopyResult, promptFallbackText, usePromptAsFallback]);
 
   const reset = useCallback(() => {
     setCopied(false);

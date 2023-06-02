@@ -5,7 +5,8 @@ export default function HomePage() {
   return (
     <>
       <div className="flex items-center justify-center mt-8 gap-6">
-        <img src="https://pic.skk.moe/gh/foxact.gif" width={600} height={600} className="block h-16 w-16 md:h-28 md:w-28" />
+        {/* eslint-disable-next-line @next/next/no-img-element -- next/image is way too heavy */}
+        <img src="https://pic.skk.moe/gh/foxact.gif" width={600} height={600} alt="foxact Logo" className="block h-16 w-16 md:h-28 md:w-28" />
         <h1 className="text-center text-5xl font-extrabold md:text-8xl tracking-wide block">foxact</h1>
       </div>
 

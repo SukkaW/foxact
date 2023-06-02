@@ -17,7 +17,7 @@ export default function App() {
 
   return (
     <div>
-      <button onClick={() => copy('Hello World')}>{copied ? 'Copied' : 'Copy Hello World'}</button>
+      <button onClick={handleCopyButtonClick}>{copied ? 'Copied' : 'Copy Hello World'}</button>
     </div>
   );
 }
@@ -57,3 +57,11 @@ const setToken = useSetToken();
 ```
 
 And returned functions (like `addItem`, `clearItems`, `pushTodo`, `emptyTodo`, and `setToken`) are always memoized, so it's safe to add them in any dependencies array.
+
+## Why should you avoid global state management library whenever possible?
+
+Global state management libraries (like [Redux](https://redux.js.org/) or [Zustand](https://github.com/pmndrs/zustand)) usually store the state outside of React, then use `useSyncExternalState` to sync the state into the React.
+
+`useSyncExternalState` is a new React built-in hook introduced in React 18. It is a trade-off between React Concurrent Rendering and the consistency (without tearing). Currently (React 18.2), when React encouters `useSyncExternalState` during the concurrent rendering, React will "de-optimize" and falling back to the syncronous rendering (slower and less responsive) to make sure there is no inconsistency (tearing). Only state stored inside of React (using `useState` and `useReducer`) are concurrent-rendering-friendly.
+
+Global state management libraries are indeed very powerful and great for React application that has complex logic and complicated data flow. But most of the time, a simple state shared across the application is good enough.
