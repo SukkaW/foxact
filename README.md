@@ -34,7 +34,7 @@ The entire **foxact** library has zero dependencies and is **less than 5 KiB gzi
 
 #### Fully Tree Shakable
 
-Feel free to take what you want from **foxact** without worrying about client bundle size.
+Every hook and util is isolated and side-effects free. Feel free to take what you want from **foxact** without worrying about client bundle size.
 
 ## License
 

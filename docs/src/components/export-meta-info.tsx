@@ -1,17 +1,7 @@
 import { useRouter } from 'next/router';
 import { useLatestExportsSizes } from '../hooks/use-latest-exports-sizes';
 import { useMemo } from 'react';
-
-const units = ['B', 'KiB', 'MiB', 'GiB', 'TiB'];
-const humanReadableSize = (bytes: number) => {
-  let results = bytes;
-  let i = 0;
-  while (bytes >= 1024 && i < units.length) {
-    results /= 1024;
-    ++i;
-  }
-  return `${i === 0 ? results : results.toFixed(2)} ${units[i]}`;
-};
+import { humanReadableSize } from '../libs/sizes';
 
 export default function ExportMetaInfo() {
   const { data } = useLatestExportsSizes();

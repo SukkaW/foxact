@@ -29,6 +29,14 @@
   "ts-node": {
     "swc": true
   },
+  "mdx": {
+    "plugins": [
+      [
+        "remark-frontmatter",
+        ["yaml"]
+      ],
+    ]
+  },
   "exclude": [
     "node_modules"
   ]

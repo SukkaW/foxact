@@ -1,4 +1,6 @@
+import { useMemo } from 'react';
 import useSWRImmutable from 'swr/immutable';
+import { humanReadableSize } from '../libs/sizes';
 
 interface ExportsStats {
   total: { raw: number, gzip: number },
@@ -26,4 +28,12 @@ export const useLatestExportsSizes = () => {
       ]);
     }
   );
+};
+
+export const useLatestTotalExportsSize = () => {
+  const { data } = useLatestExportsSizes();
+  return useMemo(() => {
+    if (!data) return 'less than 5 KiB';
+    return humanReadableSize(data.total.gzip);
+  }, [data]);
 };

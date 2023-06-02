@@ -3,43 +3,37 @@ title: React Hooks/Utils done right. For Browser, SSR, and React Server Componen
 ---
 
 import HomePage from '../components/home.tsx';
+import { useLatestTotalExportsSize } from '../hooks/use-latest-exports-sizes';
 
 <HomePage />
 
 <div className="mt-16 mb-20 text-center">
-  [Getting Started](/getting-started) · [GitHub Repository](https://github.com/sukkaw/foxact)
+  [Getting Started](/getting-started) · [GitHub Repository](https://github.com/sukkaw/foxact) · [MIT License](https://github.com/SukkaW/foxact/blob/master/LICENSE)
 </div>
 
-## Features
+### React 18 Safe
 
-#### React 18 Safe
+All hooks and utils are React 18+ Concurrent Rendering resilient. We **strictly follow React best practices, e.g. never read and write ref during the render phase** (unlike many other open-sourced React Hooks libraries). You can use **foxact** with `<Suspense />`, `startTransition`, `<OffScreen />` without worrying about app falling apart.
 
-All hooks and utils are React 18+ Concurrent Rendering resilient. We **strictly follow React best practices and never read and write ref during the render phase** (unlike many other open-sourced React Hooks libraries). You can use **foxact** with `<Suspense />`, `startTransition`, `<OffScreen />` without worrying about app falling apart.
-
-#### SSR Friendly
+### SSR Friendly
 
 Works perfectly with server-side rendering, incremental static generation, and static site generation.
 
 Supports [Next.js](https://nextjs.org) (both Pages Directory and App Router), [Waku](https://github.com/dai-shi/waku), [Gatsby](https://www.gatsbyjs.com/), [Remix](https://remix.run/), and [Shopify Hydrogen](https://hydrogen.shopify.dev/).
 
-
-#### Type Safe and Sound
+### Type Safe and Sound
 
 Written in TypeScript, supports TypeScript 4.8+.
 
-#### Super Lightweight
+### Super Lightweight
 
-The entire **foxact** library has zero dependencies and is **less than 5 KiB gzipped in sum**. And what's more...
+The entire **foxact** library has zero dependencies and is **{useLatestTotalExportsSize()} gzipped in sum**. And what's more...
 
-#### Fully Tree Shakable
+### Fully Tree Shakable
 
-Feel free to take what you want from **foxact** without worrying about client bundle size.
+Every hook and util is isolated and side-effects free. Feel free to take what you want from **foxact** without worrying about client bundle size.
 
-## License
-
-[MIT](https://github.com/SukkaW/foxact/blob/master/LICENSE)
-
-## Author
+----
 
 **foxact** © [Sukka](https://github.com/SukkaW), Released under the [MIT](https://github.com/SukkaW/foxact/blob/master/LICENSE) License.
 Authored and maintained by Sukka with help from contributors ([list](https://github.com/SukkaW/foxact/graphs/contributors)).

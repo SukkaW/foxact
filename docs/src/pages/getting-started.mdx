@@ -2,7 +2,7 @@
 title: Getting Started
 ---
 
-import { Callout, Tabs, Tab } from 'nextra-theme-docs'
+import { Tabs, Tab } from 'nextra-theme-docs'
 
 # Getting Started
 
@@ -10,15 +10,15 @@ import { Callout, Tabs, Tab } from 'nextra-theme-docs'
 
 Inside your React project directory, run the following:
 
-<Tabs items={['pnpm', 'npm', 'yarn']}>
+<Tabs items={['npm', 'pnpm', 'yarn']}>
   <Tab>
     ```bash
-    pnpm add foxact
+    npm i foxact
     ```
   </Tab>
   <Tab>
     ```bash
-    npm i foxact
+    pnpm add foxact
     ```
   </Tab>
   <Tab>
@@ -43,4 +43,17 @@ export {
   useSidebarActive,
   useSetSidebarActive
 };
+
+// src/App.tsx
+import { SidebarActiveProvider } from './context/sidebar-active-provider';
+
+export default function App() {
+  return (
+    <SidebarActiveProvider>
+      <Component />
+    </SidebarActiveProvider>
+  );
+}
 ```
+
+And here you go!

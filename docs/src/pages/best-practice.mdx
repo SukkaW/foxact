@@ -1,0 +1,59 @@
+---
+title: Best Practice
+---
+
+# Best Practice
+
+## Destructuring
+
+Some of the React Hooks in `foxact` will return **an object of memoized values**. You can use [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to extract the values you need, e.g:
+
+```tsx
+import { useClipboard } from 'foxact/use-clipboard';
+
+export default function App() {
+  const { copied, copy } = useClipboard();
+  const handleCopyButtonClick = useCallback(() => copy('Hello World'), [copy]);
+
+  return (
+    <div>
+      <button onClick={() => copy('Hello World')}>{copied ? 'Copied' : 'Copy Hello World'}</button>
+    </div>
+  );
+}
+```
+
+Here, the `copy` function returned by `useClipboard` is memoized, so it's safe to use it as a dependency in the `useCallback` hook.
+
+Other more re-usable utilities and hooks from `foxact` will return **an array of memoized values**, so you can give them a more descriptive name by using [array destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Array_destructuring), e.g:
+
+```tsx
+// src/context/provider.tsx
+import { createContextState } from 'foxact/context-state';
+
+const [TokenProvider, useToken, useSetToken] = createContextState<string | null>(null);
+const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive] = createContextState(false);
+
+const Provider = ({ children }: React.PropsWithChildren) => (
+  <TokenProvider>
+    <SidebarActiveProvider>
+      {children}
+    </SidebarActiveProvider>
+  </TokenProvider>
+);
+
+export {
+  Provider,
+  useToken, useSetToken,
+  useSidebarActive, useSetSidebarActive
+};
+
+// src/App.tsx
+import { useArray } from 'foxact/use-array';
+
+const [items, addItem, clearItems] = useArray();
+const [todos, pushTodo, emptyTodo] = useArray();
+const setToken = useSetToken();
+```
+
+And returned functions (like `addItem`, `clearItems`, `pushTodo`, `emptyTodo`, and `setToken`) are always memoized, so it's safe to add them in any dependencies array.

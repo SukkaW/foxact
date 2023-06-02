@@ -16,12 +16,26 @@
       "pagination": false
     }
   },
+  "-- docs": {
+    "title": "Docs",
+    "type": "page",
+    "href": "/getting-started"
+  },
+  "change-log": {
+    "title": "Change Log",
+    "href": "https://github.com/sukkaw/foxact/releases",
+    "type": "page",
+    "newWindow": true
+  },
   "-- separator guide": {
     "type": "separator",
     "title": "Guide"
   },
   "getting-started": {
     "title": "Getting Started"
+  },
+  "best-practice": {
+    "title": "Best Practice"
   },
   "-- separator hooks": {
     "type": "separator",
