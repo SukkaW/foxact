@@ -17,6 +17,7 @@
         "**/*.tsx"
       ],
       "extends": [
+        "sukka/react",
         "sukka/typescript"
       ],
       "parserOptions": {

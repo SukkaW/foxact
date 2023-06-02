@@ -8,4 +8,91 @@ import ExportMetaInfo from '../components/export-meta-info';
 
 <ExportMetaInfo />
 
+Store your shared state that lives only in React (without using any global state management library). Lift your state up and passing them deeply into your React app with [React Context](https://react.dev/learn/passing-data-deeply-with-context), without need to worry about performance issue.
 
+## Import
+
+```tsx
+import { createContextState } from 'foxact/context-state';
+// Or
+import { createContextState } from 'foxact/create-context-state';
+```
+
+## Usage
+
+First, create a shared state provider along with getter and setter hooks with `createContextState`. It is recommended to place them in a separate file:
+
+```tsx
+// src/context/sidebar-active.tsx
+import { createContextState } from 'foxact/context-state';
+const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive] = createContextState(false);
+
+export { SidebarActiveProvider, useSidebarActive, useSetSidebarActive };
+
+// You can also create your own hooks on top of the getter and setter hooks:
+export const useToggleSidebarActive = () => {
+  const setSidebarActive = useSetSidebarActive();
+  // always use `useCallback` to memoize returned function, just like what `foxact` does:
+  return useCallback(() => setSidebarActive(prevSidebarActive => !prevSidebarActive), [setSidebarActive]);
+  // you can safely add it to the dependency array since `setSidebarActive` is also memoized
+};
+```
+
+Then, wrap your app with the provider:
+
+```tsx
+// src/layout/main-layout.tsx
+import { memo } from 'react';
+import { SidebarActiveProvider } from '../context/sidebar-active';
+
+function MainLayout({ children }: React.PropsWithChildren) {
+  return (
+    <SidebarActiveProvider>
+      <div>
+        {children}
+      </div>
+    </SidebarActiveProvider>
+  );
+}
+
+export default memo(MainLayout);
+```
+
+And now you can use the getter and setter hooks anywhere in your app:
+
+```tsx
+// src/components/sidebar.tsx
+import { memo } from 'react';
+import { useSidebarActive, useSetSidebarActive } from '../context/sidebar-active';
+
+function Sidebar() {
+  const sidebarActive = useSidebarActive();
+  const setSidebarActive = useSetSidebarActive();
+
+  return (
+    <div className={`sidebar ${sidebarActive ? 'active' : ''}`}>
+      <button onClick={() => setSidebarActive(false)}>Close Sidebar</button>
+    </div>
+  );
+}
+
+export default memo(Sidebar);
+
+// src/components/navbar.tsx
+import { memo } from 'react';
+import { useToggleSidebarActive } from '../context/sidebar-active';
+
+function Navbar() {
+  const toggleSidebarActive = useToggleSidebarActive();
+
+  return (
+    <div className="navbar">
+      <button onClick={toggleSidebarActive}>Menu Button</button>
+    </div>
+  );
+}
+
+export default memo(Navbar);
+```
+
+And when the sidebar active state is changed, only the component that uses `useSidebarActive()` hook will be re-rendered, in this case the only affected component is `<Sidebar />`.

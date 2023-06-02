@@ -8,7 +8,7 @@
         "rollup.config.ts",
         "tools/**/*.ts"
       ],
-      "extends": ["sukka/typescript"],
+      "extends": ["sukka/react", "sukka/typescript"],
       "parserOptions": {
         "project": ["./tsconfig.json"]
       },

@@ -22,6 +22,13 @@ export default function ExportMetaInfo() {
       <div>{humanReadableRawSize}</div>
       <div className="font-semibold">Gzip Size</div>
       <div>{humanReadableGzipSize}</div>
+      <div>Source Code</div>
+      <a
+        href={`https://github.com/SukkaW/foxact/tree/master/src/${slug}/`}
+        className="underline underline-offset-1"
+      >
+        View on GitHub
+      </a>
     </div>
   );
 }
