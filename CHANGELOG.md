@@ -1,3 +1,9 @@
+# 0.2.6
+
+**Misc Changes**
+
+- Publish `sizes.json`
+
 # 0.2.5
 
 **Misc Changes**
