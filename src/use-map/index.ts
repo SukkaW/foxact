@@ -18,6 +18,7 @@ export const useMap = <K, T>(initialState: Map<K, T> | (() => Map<K, T>) = () =>
   }), []);
 
   const reset = useCallback(() => setMap(new Map()), []);
+  const setAll = useCallback((m: Map<K, T>) => setMap(m), []);
 
-  return [map, add, remove, reset] as const;
+  return [map, add, remove, reset, setAll] as const;
 };

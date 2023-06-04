@@ -4,6 +4,7 @@ import 'client-only';
 import { createContext, useContext, useState } from 'react';
 import { noop } from '@/noop';
 
+/** @see https://foxact.skk.moe/context-state */
 export function createContextState<T>(initialState: T) {
   const StateContext = createContext<T>(initialState);
   const DispatchContext = createContext<React.Dispatch<React.SetStateAction<T>>>(noop);

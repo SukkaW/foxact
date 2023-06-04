@@ -1,0 +1,34 @@
+---
+title: Noop
+---
+
+# Noop
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+This method simply returns `undefined`. It is introduced to be used as a default value for [Context State](/context-state)'s dispatch context.
+
+## Usage
+
+```tsx
+import { noop } from 'foxact/noop';
+import { createContext } from 'react';
+
+// noop is used as a default value for dispatch context
+const DispatchFoxtailContext = createContext<React.Dispatch<React.SetStateAction<T>>>(noop);
+const FoxtailContext = createContext('sukka');
+
+export default function App() {
+  const [foxtail, setFoxtail] = useState('sukka');
+
+  return (
+    <DispatchFoxtailContextProvider.Provider value={setFoxtail}>
+      <FoxtailContext.Provider value={foxtail}>
+        <Foxtail />
+      </FoxtailContext.Provider>
+    </DispatchFoxtailContextProvider.Provider>
+  );
+}
+```

@@ -4,6 +4,7 @@ import { noop } from '../noop';
 
 const identity = <V>(value: V) => value;
 
+/** @see https://foxact.skk.moe/use-uncontrolled */
 export function useUncontrolled<T, E extends HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement = HTMLInputElement>(initialValue: T, transformValue: (value: T) => T = identity) {
   const [uncontrolledValue, setUncontrolledValue] = useState<T>(initialValue);
   const elementRef = useRef<E>(null);

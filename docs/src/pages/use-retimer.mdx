@@ -1,0 +1,35 @@
+---
+title: useRetimer
+---
+
+# useRetimer
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Use [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/setTimeout) without worrying about memory leaks and race conditions.
+
+## Usage
+
+Let's say you are building a click-to-close button that should disappear 3 seconds after the latest click:
+
+```tsx
+import { useCallback, useState } from 'react';
+import { useRetimer } from 'foxact/use-retimer';
+
+const Demo = () => {
+  const [open, setOpen] = useState(true);
+  const retimer = useRetimer();
+
+  const handleClick = useCallback(() => {
+    retimer(setTimeout(() => setOpen(false), 3000));
+  }, [retimer]); // retimer is memoized so you can include it in the dependency array
+
+  return (
+    <div>
+      {open && <button onClick={handleClick}>close at 3 seconds after the latest click</button>}
+    </div>
+  );
+};
+```

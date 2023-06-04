@@ -20,6 +20,7 @@ export const useSet = <T>(initialState: Set<T> | (() => Set<T>) = () => new Set<
   }), []);
 
   const reset = useCallback(() => setSet(new Set()), []);
+  const setAll = useCallback((s: Set<T>) => setSet(s), []);
 
-  return [set, add, remove, reset] as const;
+  return [set, add, remove, reset, setAll] as const;
 };

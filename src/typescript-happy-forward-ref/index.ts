@@ -8,3 +8,4 @@ export interface TypeScriptHappyForwardRef {
 }
 
 export const typeScriptHappyForwardRef = forwardRef as TypeScriptHappyForwardRef;
+export const typescriptHappyForwardRef = forwardRef as TypeScriptHappyForwardRef;

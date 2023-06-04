@@ -1,0 +1,47 @@
+---
+title: "useUncontrolled"
+---
+
+# useUncontrolled
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Track value from uncontrolled input (so React won't re-renders during user input).
+
+## Usage
+
+```tsx
+import { useCallback } from 'react';
+import useSWR from 'swr';
+import fetcher from '@/lib/fetcher';
+import { useUncontrolled } from 'foxact/use-uncontrolled';
+
+const Demo = () => {
+  const [searchQuery, handleCommitSearchQuery, searchInputRef] = useUncontrolled(
+    '', // initial value for searchQuery state
+    (value: string) => value.trim() // optional, transform the input value before committing to searchQuery state
+  );
+
+  const { data: searchResults } = useSWR('/api/search?query=' + searchQuery, fetcher);
+
+  return (
+    <div>
+      <form onSubmit={useCallback((e) => {
+        e.preventDefault();
+        handleCommitSearchQuery();
+        // handleCommitSearchQuery is memoized as usual.
+      }, [handleCommitSearchQuery])}>
+        <input ref={searchInputRef} />
+        <button type="submit">search</button>
+      </form>
+
+      {searchResults?.map(item => (
+        <div key={item.id}>{item.name}</div>
+      )))}
+    </div>
+  )
+}
+```
+

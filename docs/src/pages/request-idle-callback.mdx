@@ -1,0 +1,37 @@
+---
+title: Request Idle Callback
+---
+
+# Request Idle Callback
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+A [ponyfill](https://github.com/sindresorhus/ponyfill) for `requestIdleCallback`, because [Safari (a.k.a Modern IE) refuses to support it](https://caniuse.com/?search=requestIdleCallback).
+
+From [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback):
+
+> The `window.requestIdleCallback()` method queues a function to be called during a browser's idle periods. This enables developers to perform background and low-priority work on the main event loop, without impacting latency-critical events such as animation and input response.
+
+## Usage
+
+```tsx
+import { useEffect } from 'react';
+import { requestIdleCallback, cancelIdleCallback } from 'foxact/request-idle-callback';
+
+const useIsIdle = () => {
+  const [isIdle, setIsIdle] = useState(false);
+  useEffect(() => {
+    const idleHandle = requestIdleCallback(() => {
+      setIsIdle(true);
+    });
+
+    return () => {
+      cancelIdleCallback(idleHandle);
+    }
+  });
+
+  return isIdle;
+}
+```

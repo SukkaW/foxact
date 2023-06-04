@@ -1,0 +1,61 @@
+---
+title: useErrorBoundary
+---
+
+# useErrorBoundary
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+React's error boundaries feature is limited in that the boundaries can only handle errors thrown during React's rendering. So any error that happens inside event handlers or `useEffect` are not caught by the error boundaries. `useErrorBoundary` is useful when you want to reuse existing error boundaries for those errors.
+
+## Usage
+
+```tsx
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
+import { useErrorBoundary } from 'foxact/use-error-boundary';
+
+const Demo = () => {
+  const { data, error } = useSWR('/_sukka/api', fetcher);
+
+  // Trigger error boundary when SWR returns a non-null "error"
+  useErrorBoundary(error);
+  // Note that this is just an example to demonstrate the usage of useErrorBoundary
+  // It is NOT RECOMMENDED to use SWR with "useErrorBoundary" since SWR has a built-in automatic error retry.
+  // If an error boundary is triggered by "useErrorBoundary", its children along with the SWR will be unmounted,
+  // then no more SWR auto retry and error recovery.
+
+  return (
+    <div />
+  )
+}
+
+const App = () => (
+  <ErrorBoundary>
+    <Demo />
+  </ErrorBoundary>
+);
+```
+
+```tsx
+import { useCallback } from 'react';
+import { useErrorBoundary } from 'foxact/use-error-boundary';
+
+const Demo = () => {
+  const triggerErrorBoundary = useErrorBoundary();
+  const handleClick = useCallback(() => {
+    try {
+      // Do something
+    } catch (e) {
+      triggerErrorBoundary(e);
+    }
+  }, [triggerErrorBoundary]); // triggerErrorBoundary is memoized and is safe to add to the dependency array
+
+  return (
+    <button onClick={handleClick}>submit</button>
+  )
+}
+```
+

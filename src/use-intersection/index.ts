@@ -21,6 +21,7 @@ interface Observer {
 
 const hasIntersectionObserver = typeof IntersectionObserver === 'function';
 
+/** @see https://foxact.skk.moe/use-intersection */
 export function useIntersection<T extends Element>({
   rootRef,
   rootMargin,

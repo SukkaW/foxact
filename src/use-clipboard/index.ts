@@ -10,6 +10,7 @@ interface UseClipboardOption {
   promptFallbackText?: string
 }
 
+/** @see https://foxact.skk.moe/use-clipboard */
 export function useClipboard({
   timeout = 1000,
   usePromptAsFallback = false,

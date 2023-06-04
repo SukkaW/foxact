@@ -1,0 +1,31 @@
+---
+title: TypeScript Happy Forward Ref
+---
+
+# TypeScript Happy Forward Ref
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Make React's `forwardRef` works with TypeScript in case:
+
+- You want to make a polymorphic component with forwarded ref
+- You want to pass generic type to `forwardRef`
+- You have encountered a strange typescript quirk when an interface function object can not be nested
+
+## Usage
+
+Below is an example that uses `typescriptHappyForwardRef` to create a polymorphic button component with forwarded ref.
+
+```tsx
+import { typescriptHappyForwardRef } from 'foxact/typescript-happy-forward-ref';
+
+export type ButtonProps<T extends React.ElementType> = React.ComponentPropsWithoutRef<T> & { as?: T };
+
+const Button = typescriptHappyForwardRef(<E extends React.ElementType>({ as, ...rest }: ButtonProps<E>, ref: React.ForwardedRef<any>) => {
+  const Comp = as || 'button';
+
+  return <Comp {...rest} ref={ref} />;
+});
+```

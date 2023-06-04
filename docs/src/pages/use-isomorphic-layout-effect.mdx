@@ -1,0 +1,40 @@
+---
+title: useIsomorphicLayoutEffect
+---
+
+# useIsomorphicLayoutEffect
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+`useLayoutEffect` that does not show warning when server-side rendering.
+
+## Usage
+
+```diff
+- import { useLayoutEffect } from 'react';
++ import { useIsomorphicLayoutEffect } from 'foxact/use-isomorphic-layout-effect';
+```
+
+Note that [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) requires extra configuration in order to check dependency array for third-party hooks:
+
+```json
+{
+  "rules": {
+    "react-hooks/exhaustive-deps": [
+      "warn",
+      {
+        "additionalHooks": "useIsomorphicLayoutEffect"
+      }
+    ]
+  }
+}
+```
+
+But if you do not want to configure it, `foxact/use-isomorphic-layout-effect` also provides another named export `useLayoutEffect` as an alias of `useIsomorphicLayoutEffect`:
+
+```diff
+- import { useLayoutEffect } from 'react';
++ import { useLayoutEffect } from 'foxact/use-isomorphic-layout-effect';
+```

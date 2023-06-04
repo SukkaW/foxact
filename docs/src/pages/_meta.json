@@ -31,21 +31,24 @@
     "type": "separator",
     "title": "Guide"
   },
-  "getting-started": {
-    "title": "Getting Started"
-  },
-  "best-practice": {
-    "title": "Best Practice"
-  },
+  "getting-started": "Getting Started",
+  "best-practice": "Best Practice",
   "-- separator hooks": {
     "type": "separator",
     "title": "Hooks"
   },
+  "use-clipboard": {},
+  "use-error-boundary": {},
+  "use-intersection": {},
+  "use-isomorphic-layout-effect": {},
+  "use-retimer": {},
+  "use-uncontrolled": {},
   "-- separator utilities": {
     "type": "separator",
     "title": "Utilities"
   },
-  "context-state": {
-    "title": "Context State"
-  }
+  "context-state": {},
+  "noop": {},
+  "request-idle-callback": {},
+  "typescript-happy-forward-ref": {}
 }

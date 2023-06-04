@@ -10,14 +10,6 @@ import ExportMetaInfo from '../components/export-meta-info';
 
 Store your shared state that lives only in React (without using any global state management library). Lift your state up and passing them deeply into your React app with [React Context](https://react.dev/learn/passing-data-deeply-with-context), without worrying about performance.
 
-## Import
-
-```tsx
-import { createContextState } from 'foxact/context-state';
-// Or
-import { createContextState } from 'foxact/create-context-state';
-```
-
 ## Usage
 
 First, create a shared state provider along with getter and setter hooks with `createContextState`. It is recommended to place them in a separate file:
@@ -25,6 +17,9 @@ First, create a shared state provider along with getter and setter hooks with `c
 ```tsx
 // src/context/sidebar-active.tsx
 import { createContextState } from 'foxact/context-state';
+// createContextState is also available from `foxact/create-context-state`:
+// import { createContextState } from 'foxact/create-context-state';
+
 const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive] = createContextState(false);
 
 export { SidebarActiveProvider, useSidebarActive, useSetSidebarActive };

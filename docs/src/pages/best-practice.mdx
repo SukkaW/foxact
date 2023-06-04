@@ -49,19 +49,21 @@ export {
 };
 
 // src/App.tsx
-import { useArray } from 'foxact/use-array';
+import { useIntersection } from 'foxact/use-intersection';
 
-const [items, addItem, clearItems] = useArray();
-const [todos, pushTodo, emptyTodo] = useArray();
+const [setAvatarIntersection, isAvatarIntersected, resetAvatarIsIntersected] = useIntersection<HTMLImageElement>();
+const [setThumbnailIntersection, isThumbnailIntersected, resetThumbnailIsIntersected] = useIntersection<HTMLImageElement>();
 const setToken = useSetToken();
 ```
 
-And returned functions (like `addItem`, `clearItems`, `pushTodo`, `emptyTodo`, and `setToken`) are always memoized, so it's safe to add them in any dependencies array.
+And returned functions (like `setAvatarIntersection`, `resetAvatarIsIntersected`, `setThumbnailIntersection`, `resetThumbnailIsIntersected`, and `setToken`) are always memoized, so it's safe to add them to any dependencies array.
 
-## Why should you avoid global state management library whenever possible?
+## Why / Why not
+
+### Global state management library vs useContext + useState
 
 Global state management libraries (like [Redux](https://redux.js.org/) or [Zustand](https://github.com/pmndrs/zustand)) usually store the state outside of React, then use `useSyncExternalState` to sync the state into the React.
 
-`useSyncExternalState` is a new React built-in hook introduced in React 18. It is a trade-off between React Concurrent Rendering and the consistency (without tearing). Currently (React 18.2), when React encouters `useSyncExternalState` during the concurrent rendering, React will "de-optimize" and falling back to the syncronous rendering (slower and less responsive) to make sure there is no inconsistency (tearing). Only state stored inside of React (using `useState` and `useReducer`) are concurrent-rendering-friendly.
+`useSyncExternalState` is a new React built-in hook introduced in React 18. It is a trade-off between React Concurrent Rendering and consistency (without tearing). Currently (React 18.2), when React encounters `useSyncExternalState` during the concurrent rendering, React will "de-optimize" and fall back to the synchronous rendering (slower and less responsive) to make sure there is no inconsistency (tearing). Only states stored inside of React (using `useState` and `useReducer`) are concurrent-rendering-friendly.
 
 Global state management libraries are indeed very powerful and great for React application that has complex logic and complicated data flow. But most of the time, a simple state shared across the application is good enough.
