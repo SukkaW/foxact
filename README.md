@@ -6,7 +6,7 @@ React Hooks/Utils done right. For Browser, SSR, and React Server Components.
 
 ## Documentation
 
-Under construction.
+https://foxact.skk.moe
 
 ## Features
 

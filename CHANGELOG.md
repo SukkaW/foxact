@@ -1,3 +1,10 @@
+# 0.2.7
+
+**Misc Changes**
+
+- Documentation: https://foxact.skk.moe
+- Finish TSDocs
+
 # 0.2.6
 
 **Misc Changes**
