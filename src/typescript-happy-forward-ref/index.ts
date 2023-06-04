@@ -7,5 +7,7 @@ export interface TypeScriptHappyForwardRef {
   ): (props: P & React.RefAttributes<T>) => React.ReactElement | null
 }
 
+/** @see https://foxact.skk.moe/typescript-happy-forward-ref */
 export const typeScriptHappyForwardRef = forwardRef as TypeScriptHappyForwardRef;
+/** @see https://foxact.skk.moe/typescript-happy-forward-ref */
 export const typescriptHappyForwardRef = forwardRef as TypeScriptHappyForwardRef;
