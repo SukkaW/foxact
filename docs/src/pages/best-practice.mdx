@@ -78,7 +78,7 @@ const isMountedRef = useIsMountedRef();
 
 useEffect(() => {
   someAsyncStuff().then(data => {
-    if (!isMountedRef.current) {
+    if (isMountedRef.current) {
       // trying to avoid set state on unmounted component
       setData(data);
       // BUT NO, DO NOT TO THIS. THIS IS WRONG
@@ -103,7 +103,7 @@ const ExampleComponent = ({ dataKey }: ExampleComponentProps) => {
 
   useEffect(() => {
     someAsyncStuff(dataKey).then(data => {
-      if (!isMountedRef.current) {
+      if (isMountedRef.current) {
         // trying to avoid set state on unmounted component
         setData(data);
         // BUT NO, DO NOT TO THIS. THIS IS WRONG
