@@ -67,3 +67,93 @@ Global state management libraries (like [Redux](https://redux.js.org/) or [Zusta
 `useSyncExternalState` is a new React built-in hook introduced in React 18. It is a trade-off between React Concurrent Rendering and consistency (without tearing). Currently (React 18.2), when React encounters `useSyncExternalState` during the concurrent rendering, React will "de-optimize" and fall back to the synchronous rendering (slower and less responsive) to make sure there is no inconsistency (tearing). Only states stored inside of React (using `useState` and `useReducer`) are concurrent-rendering-friendly.
 
 Global state management libraries are indeed very powerful and great for React application that has complex logic and complicated data flow. But most of the time, a simple state shared across the application is good enough.
+
+### Why not `useIsMounted`
+
+It is common to use `useIsMounted` to check if the component is mounted before calling `setState` during `useEffect`:
+
+```tsx
+// ONLY FOR DEMONSTRATION, NEVER DO THIS IN REAL WORD REACT PROJECT
+const isMountedRef = useIsMountedRef();
+
+useEffect(() => {
+  someAsyncStuff().then(data => {
+    if (!isMountedRef.current) {
+      // trying to avoid set state on unmounted component
+      setData(data);
+      // BUT NO, DO NOT TO THIS. THIS IS WRONG
+    }
+  });
+});
+```
+
+The real problem is that you are trying to avoid is not updating the state after the component has been unmounted, but **what you really should do** is to avoid updating the state after the current effect has been unsubscribed / cleanup-ed.
+
+Imagine this common race condition:
+
+```tsx
+interface ExampleComponentProps {
+  dataKey: 'data1' | 'data2'
+}
+
+const ExampleComponent = ({ dataKey }: ExampleComponentProps) => {
+  const [data, setData] = useState(null);
+  // ONLY FOR DEMONSTRATION, NEVER DO THIS IN REAL WORD REACT PROJECT
+  const isMountedRef = useIsMountedRef();
+
+  useEffect(() => {
+    someAsyncStuff(dataKey).then(data => {
+      if (!isMountedRef.current) {
+        // trying to avoid set state on unmounted component
+        setData(data);
+        // BUT NO, DO NOT TO THIS. THIS IS WRONG
+      }
+    });
+  }, [dataKey]);
+
+  return (
+    <div>{data}</div>
+  );
+};
+```
+
+```
+│ Request data 1 ────────────────────────────────────────► data1 response (setData(data1)) │
+           │ Request data 2 ────► data2 response (setData(data2)) │
+```
+
+Here, although the request for `data1` happened before `data2`, the response for `data2` is received before `data1`. And `useIsMountedRef` doesn't help with that.
+
+To properly avoid `setData(data1)` from being called, the correct pattern is:
+
+```tsx
+interface ExampleComponentProps {
+  dataKey: 'data1' | 'data2'
+}
+
+const ExampleComponent = ({ dataKey }: ExampleComponentProps) => {
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    let isCancelled = false;
+
+    someAsyncStuff().then(data => {
+      if (!isCancelled) {
+        setData(data);
+      }
+    });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [dataKey]);
+}
+```
+
+```
+│ Request data 1 ───────────────────────────────────────────────────────► data1 response │
+| isCancelled: false    | isCancelled: true                                              | isCancelled: true, no setData(data1)
+                        │ Request data 2 ────► data2 response (setData(data2)) │
+                        | isCancelled: false                                   | isCancelled: false, setData(data2)
+```
+
+
