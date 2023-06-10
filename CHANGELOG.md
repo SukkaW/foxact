@@ -1,3 +1,7 @@
+# 0.2.8-alpha.0
+
+- Add `onCopyError` to `useClipboard`
+
 # 0.2.7
 
 **Misc Changes**
