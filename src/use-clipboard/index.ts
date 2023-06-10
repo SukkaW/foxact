@@ -1,24 +1,30 @@
 import 'client-only';
 
 import { useState, useRef, useCallback } from 'react';
+import { noop } from '../noop';
+import { useStableHandler } from '../use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired';
 
 export class UseClipboardError extends Error { }
 
 interface UseClipboardOption {
   timeout?: number,
   usePromptAsFallback?: boolean,
-  promptFallbackText?: string
+  promptFallbackText?: string,
+  onCopyError?: (error: Error) => void
 }
 
 /** @see https://foxact.skk.moe/use-clipboard */
 export function useClipboard({
   timeout = 1000,
   usePromptAsFallback = false,
-  promptFallbackText = 'Failed to copy to clipboard automatically, please manually copy the text below.'
+  promptFallbackText = 'Failed to copy to clipboard automatically, please manually copy the text below.',
+  onCopyError
 }: UseClipboardOption = {}) {
   const [error, setError] = useState<Error | null>(null);
   const [copied, setCopied] = useState(false);
   const copyTimeoutRef = useRef<number | null>(null);
+
+  const stablizedOnCopyError = useStableHandler<[e: Error], void>(onCopyError || noop);
 
   const handleCopyResult = useCallback((isCopied: boolean) => {
     if (copyTimeoutRef.current) {
@@ -29,6 +35,11 @@ export function useClipboard({
     }
     setCopied(isCopied);
   }, [timeout]);
+
+  const handleCopyError = useCallback((e: Error) => {
+    setError(e);
+    stablizedOnCopyError(e);
+  }, [stablizedOnCopyError]);
 
   const copy = useCallback(async (valueToCopy: string) => {
     try {
@@ -44,13 +55,13 @@ export function useClipboard({
           // eslint-disable-next-line no-alert -- prompt as fallback in case of copy error
           window.prompt(promptFallbackText, valueToCopy);
         } catch (e2) {
-          setError(e2 as Error);
+          handleCopyError(e2 as Error);
         }
       } else {
-        setError(e as Error);
+        handleCopyError(e as Error);
       }
     }
-  }, [handleCopyResult, promptFallbackText, usePromptAsFallback]);
+  }, [handleCopyResult, promptFallbackText, handleCopyError, usePromptAsFallback]);
 
   const reset = useCallback(() => {
     setCopied(false);
