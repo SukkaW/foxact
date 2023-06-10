@@ -42,6 +42,9 @@
   "use-intersection": {},
   "use-isomorphic-layout-effect": {},
   "use-retimer": {},
+  "use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired": {
+    "title": "useStableHandler"
+  },
   "use-uncontrolled": {},
   "-- separator utilities": {
     "type": "separator",

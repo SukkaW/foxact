@@ -22,8 +22,8 @@ export const useLatestExportsSizes = () => {
 
       return Promise.any([
         fetch('https://unpkg.com/foxact@latest/sizes.json', { signal }).then(responseToJson),
-        fetch('https://cdn.jsdelivr.net/npm/foxact@latest/sizes.json', { signal }).then(responseToJson),
-        fetch('https://fastly.jsdelivr.net/npm/foxact@latest/sizes.json', { signal }).then(responseToJson),
+        // fetch('https://cdn.jsdelivr.net/npm/foxact@latest/sizes.json', { signal }).then(responseToJson),
+        // fetch('https://fastly.jsdelivr.net/npm/foxact@latest/sizes.json', { signal }).then(responseToJson),
         fetch('https://esm.sh/foxact@latest/sizes.json', { signal }).then(responseToJson)
       ]);
     }

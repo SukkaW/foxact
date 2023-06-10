@@ -1,0 +1,52 @@
+---
+title: useStableHandler
+---
+
+# useStableHandler (only use when you know what you are doing, or you will be fired)
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+A userland implementation of React 18.3 `useEffectEvent` with the returned function memoized.
+
+## Rules
+
+import { Callout } from 'nextra/components'
+
+<Callout type="warning" emoji="⚠️">
+  **Failed to comply will result in you being fired, literally.**
+</Callout>
+
+The hook **IS ONLY FOR**:
+
+- Passing event handlers to custom React Hooks that does not use `useEffect`
+  - The passed event handler **must not be** fired inside `useEffect`, which you should use React's `useEffectEvent` instead.
+  - https://react.dev/learn/reusing-logic-with-custom-hooks#passing-event-handlers-to-custom-hooks
+
+The hook **IS NOT FOR**:
+
+- Replacing the `useCallback`
+- Replacing the `useEffectEvent`
+- Memoizing selector function of global state management libraries
+  - Use `useSyncExternalStoreWithSelector` instead
+  - https://github.com/reactwg/react-18/discussions/86
+- Separating Events Handler from Effects
+  - Use React's `useEffectEvent` instead
+  - https://react.dev/learn/separating-events-from-effects#declaring-an-effect-event
+
+## Difference with React's `useEffectEvent`
+
+- `useEffectEvent` is implemented in React, while `useStableHandler` is implemented in userland.
+- The returned function of `useStableHandler` is always memoized, while the return value of `useEffectEvent` **is guaranteed to not be memoized at all**
+- The returned function of `useEffectEvent` can not be called during the render phase.
+  - Although the returned function `useStableHandler` **should not be called during the render phase as well**, it is implemented in a way to only prevent invocation during the render phase before the first mount.
+  - **You will also be fired if you try to exploit this implementation detail**.
+
+## Usage
+
+```tsx
+import { useStableHandler } from 'foxact/use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired';
+```
+
+The detailed usage and the example are **intentionally** redacted.
