@@ -16,14 +16,14 @@ const useInsertionEffect
  */
 export function useStableHandler<Args extends any[], Result>(
   callback: (...args: Args) => Result
-): (...args: Args) => Result {
+): typeof callback {
   // Keep track of the latest callback:
-  const latestRef = useRef<(...args: Args) => Result>(shouldNotBeInvokedBeforeMount as any);
+  const latestRef = useRef<typeof callback>(shouldNotBeInvokedBeforeMount as any);
   useInsertionEffect(() => {
     latestRef.current = callback;
   }, [callback]);
 
-  return useCallback((...args) => {
+  return useCallback<typeof callback>((...args) => {
     const fn = latestRef.current;
     return fn(...args);
   }, []);
