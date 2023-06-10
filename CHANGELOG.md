@@ -1,6 +1,9 @@
-# 0.2.8-alpha.0
+# 0.2.8
+
+**Core Changes**
 
 - Add `onCopyError` to `useClipboard`
+- Introduce `useStableHandler`
 
 # 0.2.7
 
