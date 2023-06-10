@@ -8,7 +8,7 @@ title: Best Practice
 
 Some of the React Hooks in `foxact` will return **an object of memoized values**. You can use [destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to extract the values you need, e.g:
 
-```tsx
+```tsx copy
 import { useClipboard } from 'foxact/use-clipboard';
 
 export default function App() {
@@ -27,8 +27,7 @@ Here, the `copy` function returned by `useClipboard` is memoized, so it's safe t
 
 Other more re-usable utilities and hooks from `foxact` will return **an array of memoized values**, so you can give them a more descriptive name by using [array destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#Array_destructuring), e.g:
 
-```tsx
-// src/context/provider.tsx
+```tsx filename="src/context/provider.tsx" copy
 import { createContextState } from 'foxact/context-state';
 
 const [TokenProvider, useToken, useSetToken] = createContextState<string | null>(null);
@@ -47,8 +46,9 @@ export {
   useToken, useSetToken,
   useSidebarActive, useSetSidebarActive
 };
-
-// src/App.tsx
+```
+  
+```tsx filename="src/App.tsx" copy
 import { useIntersection } from 'foxact/use-intersection';
 
 const [setAvatarIntersection, isAvatarIntersected, resetAvatarIsIntersected] = useIntersection<HTMLImageElement>();

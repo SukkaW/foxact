@@ -14,8 +14,7 @@ Store your shared state that lives only in React (without using any global state
 
 First, create a shared state provider along with getter and setter hooks with `createContextState`. It is recommended to place them in a separate file:
 
-```tsx
-// src/context/sidebar-active.tsx
+```tsx filename="src/context/sidebar-active.tsx" copy
 import { createContextState } from 'foxact/context-state';
 // createContextState is also available from `foxact/create-context-state`:
 // import { createContextState } from 'foxact/create-context-state';
@@ -35,8 +34,7 @@ export const useToggleSidebarActive = () => {
 
 Then, wrap your app with the provider:
 
-```tsx
-// src/layout/main-layout.tsx
+```tsx filename="src/layout/main-layout.tsx" copy
 import { memo } from 'react';
 import { SidebarActiveProvider } from '../context/sidebar-active';
 
@@ -55,8 +53,7 @@ export default memo(MainLayout);
 
 And now you can use the getter and setter hooks anywhere in your app:
 
-```tsx
-// src/components/sidebar.tsx
+```tsx filename="src/components/sidebar.tsx" copy
 import { memo } from 'react';
 import { useSidebarActive, useSetSidebarActive } from '../context/sidebar-active';
 
@@ -72,8 +69,9 @@ function Sidebar() {
 }
 
 export default memo(Sidebar);
+```
 
-// src/components/navbar.tsx
+```tsx filename="src/components/navbar.tsx" copy
 import { memo } from 'react';
 import { useToggleSidebarActive } from '../context/sidebar-active';
 
