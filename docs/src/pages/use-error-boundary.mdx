@@ -12,7 +12,7 @@ React's error boundaries feature is limited in that the boundaries can only hand
 
 ## Usage
 
-```tsx
+```tsx copy
 import useSWR from 'swr';
 import { fetcher } from '@/lib/fetcher';
 import { useErrorBoundary } from 'foxact/use-error-boundary';
@@ -39,7 +39,7 @@ const App = () => (
 );
 ```
 
-```tsx
+```tsx copy
 import { useCallback } from 'react';
 import { useErrorBoundary } from 'foxact/use-error-boundary';
 

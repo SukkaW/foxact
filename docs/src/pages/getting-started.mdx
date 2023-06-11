@@ -32,8 +32,7 @@ Inside your React project directory, run the following:
 
 Simply importing the functions you need from `foxact`:
 
-```tsx
-// src/context/sidebar-active-provider.tsx
+```tsx filename="src/context/sidebar-active-provider.tsx" copy
 import { createContextState } from 'foxact/context-state';
 
 const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive] = createContextState(false);
@@ -43,8 +42,9 @@ export {
   useSidebarActive,
   useSetSidebarActive
 };
+```
 
-// src/App.tsx
+```tsx filename="src/App.tsx" copy
 import { SidebarActiveProvider } from './context/sidebar-active-provider';
 
 export default function App() {
