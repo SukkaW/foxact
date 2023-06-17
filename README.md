@@ -12,11 +12,7 @@ https://foxact.skk.moe
 
 #### React 18 Safe
 
-All hooks and utils are React 18+ Concurrent Rendering resilient.
-
-**foxact** strictly follows React best practices, e.g. never read and write ref during the render phase, unlike many other open-sourced React Hooks libraries.
-
-You can use **foxact** with `<Suspense />`, `startTransition`, `<OffScreen />` without worrying about app falling apart.
+All hooks and utils are React 18+ Concurrent Rendering resilient. **foxact** strictly follows React best practices, e.g. never read and write ref during the render phase, unlike many other open-sourced React Hooks libraries. You can use **foxact** with `<Suspense />`, `startTransition`, `<OffScreen />` without worrying about app falling apart.
 
 #### SSR Friendly
 
@@ -26,15 +22,15 @@ Supports [Next.js](https://nextjs.org) (both Pages Directory and App Router), [W
 
 #### Type Safe and Sound
 
-Written in TypeScript with TSDocs, supports TypeScript 4.8+.
+Written in TypeScript. Unlocking strong typing benefits with TypeScript 4.8+.
 
 #### Super Lightweight
 
-The entire **foxact** library has zero dependencies and is **less than 5 KiB gzipped in sum**. And what's more...
+The entire **foxact** library has zero dependencies and is **less than 5 KiB gzipped in sum**, ensuring a lean and efficient solution. And what's more...And what's more...
 
 #### Fully Tree Shakable
 
-Every hook and util is isolated and side-effects free. Feel free to take what you want from **foxact** without worrying about client bundle size.
+Every hook and util is isolated and side-effects free, eliminating unused code and delivering leaner bundles for lightning-fast load times. Feel free to take what you want from **foxact** without worrying about client bundle size.
 
 ## License
 

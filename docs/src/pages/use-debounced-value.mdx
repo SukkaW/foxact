@@ -1,0 +1,78 @@
+---
+title: useDebouncedValue
+---
+
+# useDebouncedValue
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Debounces state changes of **controlled components**. This can be useful in case you want to perform a heavy operation based on react state, for example, send a search request.
+
+## Differences with `useDeferredValue`
+
+[`useDeferredValue`](https://react.dev/reference/react/useDeferredValue) is a new React built-in hook introduced in React 18. It is similar to `useDebouncedValue` but has a few differences:
+
+- `useDeferredValue` can suppress Suspense fallback from re-appearing when the value changes, which makes it useful in Suspense-based data fetching.
+- `useDeferredValue` is better suited to optimizing rendering because it is deeply integrated with React itself and adapts to the user’s device as it doesn’t require choosing any fixed delay. The deferred re-render would happen almost immediately and wouldn’t be noticeable if the user’s device is fast (e.g. powerful laptop), while the re-render could “lag behind” the user interaction proportionally to how slow the device is.
+- `useDeferredValue` are interruptible by default, e.g. if React is in the middle of re-rendering a large list, but the user makes another input, React will abandon the current re-render, handle the keystroke, and then start rendering in the background again. While `useDebouncedValue` is not interruptible and wouldn’t improve the "lagging" issue.
+- `useDeferredValue` can not reduce network requests. Though the re-render of `useDeferredValue` can be interrupted, it will always happen.
+
+## Differences with `useDebouncedState`
+
+[`useDebouncedState`](/use-debounced-state) is another hook provided by **foxact**. However, it is designed to work with un-controlled components:
+
+- `useDebouncedValue` is used for controlled components (e.g. both `value` and `onChange` prop).
+- `useDebouncedValue` can only be used if you have direct access to the original state value.
+
+## Usage
+
+Below is an example of different use cases of `useDebouncedValue` and `useDeferredValue`, and how they can be used together:
+
+```tsx copy
+import { useState, useDeferredValue } from 'react';
+import useSWR from 'swr';
+import { useDebouncedValue } from 'foxact/use-debounced-value';
+
+const Example = () => {
+  const [value, setValue] = useState('');
+  const debouncedValue = useDebouncedValue(
+    value,
+    // delay in ms
+    300,
+    // optional, default to false. whether to immediately update the debounced value with the first call
+    false
+  );
+
+  // useDebouncedValue here is used to reduce network requests.
+  const { data } = useSWR<string[]>(debouncedValue ? `/api/search?q=${debouncedValue}` : null);
+
+  // useDeferredValue here is used to opt-in the Concurrent Rendering, to improve the UX.
+  // The value passed to useDeferredValue must be primitive values or memoized. Here we
+  // are relying on useSWR to memoize the returned `data` (which will be an array).
+  const deferredData = useDeferredValue(data);
+
+  return (
+    <div>
+      {/**
+        * The value we passed to <input /> can never be debounced nor deferred, so the UI
+        * will always represent the user input immediately.
+        */}
+      <input value={value} onChange={useCallback((e) => setValue(e.target.value), [])} />
+      {/**
+        * <FancyYetSlowSearchResult /> needs to be wrapped in React.memo, so that it will
+        * only re-render when the `deferredData` changes, not when the `value` nor
+        * `debouncedValue` changes.
+        */}
+      <FancyYetSlowSearchResult
+        // The re-render of <FancyYetSlowSearchResult /> will be interruptible, as it will
+        // be triggered by `useDeferredValue`.
+        // So <FancyYetSlowSearchResult /> may be slow to render, the entire UI will always
+        // remain responsive.
+        list={deferredData}
+      />
+    </div>
+  );
+}
+```

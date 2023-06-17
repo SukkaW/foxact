@@ -38,6 +38,8 @@
     "title": "Hooks"
   },
   "use-clipboard": {},
+  "use-debounced-state": {},
+  "use-debounced-value": {},
   "use-error-boundary": {},
   "use-intersection": {},
   "use-isomorphic-layout-effect": {},
