@@ -1,3 +1,9 @@
+# 0.2.9
+
+**Core Changes**
+
+- Add `useDebouncedValue` and `useDebouncedValue`
+
 # 0.2.8
 
 **Core Changes**
