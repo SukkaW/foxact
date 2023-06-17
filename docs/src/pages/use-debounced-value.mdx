@@ -17,7 +17,7 @@ Debounces state changes of **controlled components**. This can be useful in case
 - `useDeferredValue` can suppress Suspense fallback from re-appearing when the value changes, which makes it useful in Suspense-based data fetching.
 - `useDeferredValue` is better suited to optimizing rendering because it is deeply integrated with React itself and adapts to the user’s device as it doesn’t require choosing any fixed delay. The deferred re-render would happen almost immediately and wouldn’t be noticeable if the user’s device is fast (e.g. powerful laptop), while the re-render could “lag behind” the user interaction proportionally to how slow the device is.
 - `useDeferredValue` are interruptible by default, e.g. if React is in the middle of re-rendering a large list, but the user makes another input, React will abandon the current re-render, handle the keystroke, and then start rendering in the background again. While `useDebouncedValue` is not interruptible and wouldn’t improve the "lagging" issue.
-- `useDeferredValue` can not reduce network requests. Though the re-render of `useDeferredValue` can be interrupted, it will always happen.
+- `useDeferredValue` **can not** reduce network requests. Though the re-render triggered by the `useDeferredValue` can be interrupted by user interaction, the returned JSX from the re-render can be discarded by React (due to being outdated during Concurrent Rendering), the re-render itself will always happen and the network request will always be fired.
 
 ## Differences with `useDebouncedState`
 
