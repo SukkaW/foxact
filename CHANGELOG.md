@@ -1,3 +1,10 @@
+# 0.2.10
+
+**Core Changes**
+
+- Add `useCompositionInput`
+- `createContextState` now returns a fourth value in the tuple, which is the React Context that holds the state value. It is designed to be used with `React.use`.
+
 # 0.2.9
 
 **Core Changes**
