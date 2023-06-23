@@ -11,8 +11,8 @@ interface GzipStats {
   exports: Record<string, { raw: number, gzip: number }>
 }
 
-(async () => {
-  await Promise.all([
+const copyAndCreateFiles = () => {
+  return Promise.all([
     fse.copyFile(
       path.resolve(rootDir, 'LICENSE'),
       path.resolve(distDir, 'LICENSE')
@@ -23,7 +23,9 @@ interface GzipStats {
     ),
     fse.createFile(path.resolve(distDir, 'ts_version_4.8_and_above_is_required.d.ts'))
   ]);
+};
 
+const createPackageJson = async (entries: Record<string, string>) => {
   const packageJsonCopy = (
     await fse.readJson(path.resolve(rootDir, 'package.json'))
     // eslint-disable-next-line @typescript-eslint/consistent-type-imports -- infer type from json file
@@ -42,8 +44,30 @@ interface GzipStats {
     }
   };
 
-  const entries = await getEntries();
+  packageJsonCopy.exports = {
+    './package.json': './package.json',
+    './sizes.json': './sizes.json'
+  };
 
+  Object.keys(entries).forEach(entryName => {
+    packageJsonCopy.exports[`./${entryName}`] = {
+      types: `./${entryName}/index.d.ts`,
+      import: {
+        types: `./${entryName}/index.d.ts`,
+        default: `./${entryName}/index.mjs`
+      },
+      require: `./${entryName}/index.cjs`,
+      default: `./${entryName}/index.js`
+    };
+  });
+
+  await fse.writeFile(
+    path.resolve(distDir, 'package.json'),
+    JSON.stringify(packageJsonCopy, null, 2)
+  );
+};
+
+const createSizesJson = async (entries: Record<string, string>) => {
   const gzipSizeStat: GzipStats = {
     total: { raw: 0, gzip: 0 },
     exports: {}
@@ -74,26 +98,14 @@ interface GzipStats {
     path.resolve(distDir, 'sizes.json'),
     JSON.stringify(gzipSizeStat)
   );
+};
 
-  packageJsonCopy.exports = {
-    './package.json': './package.json',
-    './sizes.json': './sizes.json'
-  };
+(async () => {
+  const entriesPromise = getEntries();
 
-  Object.keys(entries).forEach(entryName => {
-    packageJsonCopy.exports[`./${entryName}`] = {
-      types: `./${entryName}/index.d.ts`,
-      import: {
-        types: `./${entryName}/index.d.ts`,
-        default: `./${entryName}/index.mjs`
-      },
-      require: `./${entryName}/index.cjs`,
-      default: `./${entryName}/index.js`
-    };
-  });
-
-  await fse.writeFile(
-    path.resolve(distDir, 'package.json'),
-    JSON.stringify(packageJsonCopy, null, 2)
-  );
+  await Promise.all([
+    copyAndCreateFiles(),
+    createPackageJson(await entriesPromise),
+    createSizesJson(await entriesPromise)
+  ]);
 })();
