@@ -1,6 +1,7 @@
 import 'client-only';
 import { useEffect, useState, useRef } from 'react';
 
+/** @see https://foxact.skk.moe/use-debounced-value */
 export function useDebouncedValue<T>(value: T, wait: number, leading = false) {
   const [outputValue, setOutputValue] = useState(value);
   const leadingRef = useRef(true);

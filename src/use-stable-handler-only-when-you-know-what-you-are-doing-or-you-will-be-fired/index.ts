@@ -9,6 +9,7 @@ const useInsertionEffect
     : useEffect;
 
 /**
+ * @see https://foxact.skk.moe/use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired
  * Similar to useCallback, with a few subtle differences:
  * - The returned function is a stable reference, and will always be the same between renders
  * - No dependency lists required
