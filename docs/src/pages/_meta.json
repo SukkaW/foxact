@@ -38,6 +38,7 @@
     "title": "Hooks"
   },
   "use-clipboard": {},
+  "use-composition-input": {},
   "use-debounced-state": {},
   "use-debounced-value": {},
   "use-error-boundary": {},

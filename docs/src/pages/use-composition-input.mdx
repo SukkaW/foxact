@@ -1,0 +1,26 @@
+---
+title: useCompositionInput
+---
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Track value of uncontrolled `<input />`, but optimized for languages like Chinese, Japanese, Korean, etc.
+
+## Usage
+
+```tsx copy
+import { useCompositionInput } from 'foxact/use-composition-input';
+import { useCallback } from 'react';
+
+const Example = () => {
+  const inputProps = useCompositionInput(useCallback((value: string) => {
+    // Do something with the value
+  }, []));
+
+  return (
+    <input {...inputProps} />
+  );
+}
+```

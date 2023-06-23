@@ -89,3 +89,93 @@ export default memo(Navbar);
 ```
 
 And when the sidebar active state is changed, only the component that uses `useSidebarActive()` hook will be re-rendered, in this case the only affected component is `<Sidebar />`.
+
+## Read context state conditionally
+
+Normally, you can not read context state conditionally per Rules of Hooks:
+
+> **Only Call Hooks at the Top Level**: Don’t call Hooks inside loops, conditions, or nested functions.
+
+However, if you do need to read the context state conditionally, you can use the new `React.use` introduced in React 18.3:
+
+```tsx filename="src/context/sidebar-active.tsx" copy
+import { createContextState } from 'foxact/context-state';
+// createContextState is also available from `foxact/create-context-state`:
+// import { createContextState } from 'foxact/create-context-state';
+
+const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive, SidebarActiveContext] = createContextState(false);
+
+export { SidebarActiveProvider, useSidebarActive, useSetSidebarActive, SidebarActiveContext };
+```
+
+```tsx filename="src/components/sidebar.tsx" copy
+import { memo, use } from 'react';
+import { SidebarActiveContext } from '../context/sidebar-active';
+
+interface SidebarProps {
+  loggedIn: boolean
+}
+
+function Sidebar({ loggedIn }: SidebarProps) {
+  // This is only for the demonstration purpose to show `React.use` can be called conditionally
+  if (!loggedIn) {
+    return (
+      <div className="sidebar">
+        <div>Hello!</div>
+      </div>
+    )
+  }
+
+  // Here we are using `use` to read the context state conditionally
+  const sidebarActive = use(SidebarActiveContext);
+
+  return (
+    <div className={`sidebar ${sidebarActive ? 'active' : ''}`}>
+      <div>Welcome back, Sukka!</div>
+    </div>
+  );
+}
+
+export default memo(Sidebar);
+```
+
+If you are not able to upgrade to React 18.3 or above, you can use the following risky approach by weilding the ancient dark magic of `React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED`:
+
+```tsx filename="src/components/sidebar.tsx" copy
+import reactExports, { memo, use } from 'react';
+import { SidebarActiveContext } from '../context/sidebar-active';
+
+interface ReactInternal {
+  __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: {
+    ReactCurrentDispatcher: React.RefObject<{ readContext<T>(context: React.Context<T>): T }>
+  }
+}
+
+interface SidebarProps {
+  loggedIn: boolean
+}
+
+function Sidebar({ loggedIn }: SidebarProps) {
+  if (!loggedIn) {
+    return (
+      <div className="sidebar">
+        <div>Hello!</div>
+      </div>
+    )
+  }
+
+  // I'm sure you want me to tell you how safe and stable it is, right?
+  const sidebarActive = (reactExports as unknown as ReactInternal)
+    .__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher
+    ?.current
+    ?.readContext(context))
+
+  return (
+    <div className={`sidebar ${sidebarActive ? 'active' : ''}`}>
+      <div>Welcome back, Sukka!</div>
+    </div>
+  );
+}
+
+export default memo(Sidebar);
+```
