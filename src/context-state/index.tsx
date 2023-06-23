@@ -24,5 +24,11 @@ export function createContextState<T>(initialState: T) {
     );
   };
 
-  return [Provider, useValue, useSetValue] as const;
+  return [
+    Provider,
+    useValue,
+    useSetValue,
+    /** Exports the context that holds the value, which allows you to use `React.use(Context)` */
+    StateContext
+  ] as const;
 }
