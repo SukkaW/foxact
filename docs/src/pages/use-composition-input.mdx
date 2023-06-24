@@ -8,7 +8,9 @@ import ExportMetaInfo from '../components/export-meta-info';
 
 <ExportMetaInfo />
 
-Track value of uncontrolled `<input />`, but optimized for languages like Chinese, Japanese, Korean, etc.
+Track value of **uncontrolled** `<input />`, but optimized for CJK (Chinese, Japanese, Korean, or other non-latin languages) IME. `useCompositionInput` accepts only one parameter `onChange`, which will only be triggered when the composition is finished and the value is actually emitted.
+
+The `useCompositionInput` is **uncontrolled** because the `<input />`'s `value` attribute needs to reflect the current composition state, while the "real value" should not include compositions. Also, if `useCompositionInput` is controlling `<input />`, the re-render count will be a lot more than the user's actual keystroke count due to the very nature of the CJK IME, which can make your React app less responsive.
 
 ## Usage
 
@@ -22,7 +24,11 @@ const Example = () => {
   }, []));
 
   return (
-    <input {...inputProps} />
+    <input
+      {...inputProps}
+      // useCompositionInput is uncontrolled, so you might need to provide defaultValue
+      defaultValue={defaultValue}
+    />
   );
 }
 ```
