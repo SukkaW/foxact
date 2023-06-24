@@ -1,8 +1,12 @@
-import {useState, ChangeEvent, KeyboardEvent, useRef, useMemo} from 'react';
+import 'client-only';
+import {useState, useRef, useMemo, ChangeEvent, KeyboardEvent} from 'react';
 
-export function useInputFormatter(delimiter = ',', interval = 3) {
+export type UseFormattedInputReturnKey = 'ref' | 'value' | 'onChange' | 'onKeyDown';
+export type UseFormattedInputReturn = Pick<JSX.IntrinsicElements['input'], UseFormattedInputReturnKey>;
+
+export function useFormattedInput(delimiter = ',', interval = 3): UseFormattedInputReturn {
   const [rawValue, setRawValue] = useState('');
-  const inputRef = useRef<HTMLInputElement>(null);
+  const ref = useRef<HTMLInputElement>(null);
 
   const formattedValue = useMemo(() => {
     const numericInput = rawValue.replace(/\D/g, '');
@@ -16,13 +20,13 @@ export function useInputFormatter(delimiter = ',', interval = 3) {
     return formatted;
   }, [rawValue, delimiter, interval]);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const {selectionStart} = e.target;
     const newValue = e.target.value;
     setRawValue(newValue);
 
     setTimeout(() => {
-      if (inputRef.current && selectionStart !== null) {
+      if (ref.current && selectionStart !== null) {
         let newCursorPos = selectionStart;
         const oldFormattedValue = e.target.value;
 
@@ -33,13 +37,13 @@ export function useInputFormatter(delimiter = ',', interval = 3) {
           newCursorPos++;
         }
 
-        inputRef.current.selectionStart = newCursorPos;
-        inputRef.current.selectionEnd = newCursorPos;
+        ref.current.selectionStart = newCursorPos;
+        ref.current.selectionEnd = newCursorPos;
       }
     });
   };
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace' && e.currentTarget.selectionStart !== null && e.currentTarget.selectionStart > 0) {
       if (e.currentTarget.value[e.currentTarget.selectionStart - 1] === delimiter) {
         e.preventDefault();
@@ -51,6 +55,11 @@ export function useInputFormatter(delimiter = ',', interval = 3) {
     }
   };
 
-  return [formattedValue, handleChange, handleKeyDown, inputRef];
+  return {
+    ref,
+    value: formattedValue,
+    onChange,
+    onKeyDown
+  }
 }
 
