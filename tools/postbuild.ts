@@ -2,13 +2,16 @@ import fse from 'fs-extra';
 import path from 'path';
 import { getEntries } from './get-entries';
 import gzipSize from 'gzip-size';
+import { file as brotliSizeFile } from 'brotli-size';
+
+import zlib from 'zlib';
 
 const rootDir = process.cwd();
 const distDir = path.resolve(rootDir, 'dist');
 
 interface GzipStats {
-  total: { raw: number, gzip: number },
-  exports: Record<string, { raw: number, gzip: number }>
+  total: { raw: number, gzip: number, br: number },
+  exports: Record<string, { raw: number, gzip: number, br: number }>
 }
 
 const copyAndCreateFiles = () => {
@@ -69,7 +72,7 @@ const createPackageJson = async (entries: Record<string, string>) => {
 
 const createSizesJson = async (entries: Record<string, string>) => {
   const gzipSizeStat: GzipStats = {
-    total: { raw: 0, gzip: 0 },
+    total: { raw: 0, gzip: 0, br: 0 },
     exports: {}
   };
 
@@ -79,9 +82,15 @@ const createSizesJson = async (entries: Record<string, string>) => {
       .map(async (entryName) => {
         const filePath = path.join(distDir, entryName, 'index.mjs');
 
-        const [fileSize, fileGzipSize] = await Promise.all([
+        const [fileSize, fileGzipSize, fileBrotliSize] = await Promise.all([
           fse.stat(filePath).then(stat => stat.size),
-          gzipSize.file(filePath, { level: 4 })
+          // Cloudflare uses gzip level 8 and brotli level 4 as default
+          // https://blog.cloudflare.com/this-is-brotli-from-origin/
+          gzipSize.file(filePath, { level: 8 }),
+          brotliSizeFile(filePath, {
+            [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
+            [zlib.constants.BROTLI_PARAM_QUALITY]: 4
+          })
         ]);
 
         gzipSizeStat.total.raw += fileSize;
@@ -89,7 +98,8 @@ const createSizesJson = async (entries: Record<string, string>) => {
 
         gzipSizeStat.exports[entryName] = {
           raw: fileSize,
-          gzip: fileGzipSize
+          gzip: fileGzipSize,
+          br: fileBrotliSize
         };
       })
   );
