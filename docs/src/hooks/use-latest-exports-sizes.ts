@@ -4,7 +4,7 @@ import { humanReadableSize } from '../libs/sizes';
 
 interface ExportsStats {
   total: { raw: number, gzip: number },
-  exports: Record<string, { raw: number, gzip: number }>
+  exports: Record<string, { raw: number, gzip: number, br: number }>
 }
 
 export const useLatestExportsSizes = () => {

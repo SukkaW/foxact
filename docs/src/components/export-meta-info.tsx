@@ -8,12 +8,16 @@ export default function ExportMetaInfo() {
   const _slug = useRouter().asPath.split(/[?#]/)[0];
   const slug = _slug.startsWith('/') ? _slug.slice(1) : _slug;
 
-  const [humanReadableRawSize, humanReadableGzipSize] = useMemo(() => {
+  const [humanReadableRawSize, humanReadableGzipSize, humanReadableBrotliSize] = useMemo(() => {
     if (!data) return ['loading...', 'loading...'];
     if (!(slug in data.exports)) {
-      return ['N/A', 'N/A'];
+      return ['N/A', 'N/A', 'N/A'];
     }
-    return [humanReadableSize(data.exports[slug].raw), humanReadableSize(data.exports[slug].gzip)];
+    return [
+      humanReadableSize(data.exports[slug].raw),
+      humanReadableSize(data.exports[slug].gzip),
+      humanReadableSize(data.exports[slug].br)
+    ];
   }, [data, slug]);
 
   return (
@@ -23,6 +27,8 @@ export default function ExportMetaInfo() {
         <div>{humanReadableRawSize}</div>
         <div className="font-bold">Gzip Size</div>
         <div>{humanReadableGzipSize}</div>
+        <div className="font-bold">Brotli Size</div>
+        <div>{humanReadableBrotliSize}</div>
         <div className="font-bold">Source Code</div>
         <a
           href={`https://github.com/SukkaW/foxact/tree/master/src/${slug}/`}
