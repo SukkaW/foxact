@@ -1,6 +1,6 @@
 {
   "name": "foxact",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "React Hooks/Utils done right. For browser, SSR, and React Server Components.",
   "sideEffects": false,
   "private": true,

@@ -43,6 +43,12 @@ The hook **IS NOT FOR**:
   - Although the returned function `useStableHandler` **should not be called during the render phase as well**, it is implemented in a way to only prevent invocation during the render phase before the first mount.
   - **You will also be fired if you try to exploit this implementation detail**.
 
+## When you don't need `useStableHandler`
+
+You don't necessarily need `useStableHandler` if you are just passing a reducer-like function to a custom hook.
+
+See this GitHub commit [`sukkaw/foxact @ 5934ed8`](https://github.com/SukkaW/foxact/commit/5934ed8f27f6a3acba4cb332b431c9e820fceeda) for an example, where I drop the `useStableHandler` from foxact's [`useUncontrolled`](/use-uncontrolled).
+
 ## Usage
 
 ```tsx

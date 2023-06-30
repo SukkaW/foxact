@@ -1,3 +1,9 @@
+# 0.2.11
+
+**Misc Changes**
+
+- Making `useUncontrolled` more React Concurrent Rendering resilient by avoiding a hacky workaround.
+
 # 0.2.10
 
 **Core Changes**
