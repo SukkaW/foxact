@@ -1,3 +1,21 @@
+# 0.2.12
+
+**Core Changes**
+
+- Add `useReactRouterIsMatch`
+
+**Misc Changes**
+
+- Replace `eslint-plugin-import` with `eslint-plugin-i`
+  - Why you should also do `npm install -D eslint-plugin-import@npm:eslint-plugin-i@latest` in your projects:
+
+  - https://github.com/import-js/eslint-plugin-import/pull/2812#issuecomment-1617241548
+  - https://github.com/import-js/eslint-plugin-import/pull/2447
+
+  ![](https://pic.skk.moe/misc/HdUAUWOEQFVs9Tk0MvRqq.png)
+  ![](https://pic.skk.moe/misc/lO3aKLfXBo3hcAwJoGCED.jpeg)
+  ![](https://pic.skk.moe/misc/4bWD1kBv65_8oYRlU7rsg.jpeg)
+
 # 0.2.11
 
 **Misc Changes**
