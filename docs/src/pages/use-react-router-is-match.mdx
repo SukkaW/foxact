@@ -1,0 +1,34 @@
+---
+title: useReactRouterIsMatch (React Router v6)
+---
+
+# useReactRouterIsMatch
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Programmatically returns whether the current location matches the given path. Useful when building a navigation menu, such as a breadcrumb or a set of tabs where you'd like to show which of them is currently selected. This is designed to be an alternative of React Router DOM v6's `<NavLink />` component's render prop approach.
+
+## Usage
+
+```tsx
+import { clsx } from 'clsx';
+import * as styles from './navbar.module.css';
+import { Link } from 'react-router-dom';
+import { useReactRouterIsMatch } from 'foxact/use-react-router-is-match';
+
+interface NavLinkProps {
+  to: string
+}
+
+const NavLink = ({ to }: NavLinkProps) => {
+  const isActive = useReactRouterIsMatch(to);
+
+  return (
+    <Link to={to} className={clsx(styles.link, isActive && styles.active)}>
+      {isActive ? 'You are already here!' : 'Click Me!'}
+    </Link>
+  )
+}
+```

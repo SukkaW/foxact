@@ -56,5 +56,10 @@
   "context-state": {},
   "noop": {},
   "request-idle-callback": {},
-  "typescript-happy-forward-ref": {}
+  "typescript-happy-forward-ref": {},
+  "-- separator extensions": {
+    "type": "separator",
+    "title": "Extensions"
+  },
+  "use-react-router-is-match": {}
 }
