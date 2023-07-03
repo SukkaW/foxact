@@ -12,7 +12,10 @@ import { getEntries } from './tools/get-entries';
 const dts = dtsExports.default as typeof dtsExports;
 
 const externalModules = Object.keys(pkgJson.dependencies)
-  .concat(Object.keys(pkgJson.peerDependencies));
+  .concat(Object.keys(pkgJson.peerDependencies))
+  .concat([
+    'react-router-dom'
+  ]);
 const external = (id: string) => {
   return externalModules.some((name) => id === name || id.startsWith(`${name}/`));
 };
