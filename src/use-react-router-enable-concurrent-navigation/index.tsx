@@ -9,6 +9,11 @@ import { UNSAFE_NavigationContext } from 'react-router-dom';
 export const useReactRouterEnableConcurrentNavigation = () => {
   const { navigator } = useContext(UNSAFE_NavigationContext);
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- type check
+  if (!navigator) {
+    throw new TypeError('[foxact] useReactRouterEnableConcurrentNavigation must be used under <RouterProvider /> or a Router component (e.g. <BrowserRouter />)');
+  }
+
   useEffect(() => {
     const originalNavigatorGo = navigator.go.bind(navigator);
     const originalNavigatorPush = navigator.push.bind(navigator);
