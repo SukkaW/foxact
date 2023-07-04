@@ -1,3 +1,9 @@
+# 0.2.13
+
+**Core Changes**
+
+- Add `useReactRouterEnableConcurrentNavigation` and `<ReactRouterConcurrentNavigationProvider />`
+
 # 0.2.12
 
 **Core Changes**
@@ -12,9 +18,14 @@
   - https://github.com/import-js/eslint-plugin-import/pull/2812#issuecomment-1617241548
   - https://github.com/import-js/eslint-plugin-import/pull/2447
 
+  <details>
+  <summary>Screenshots</summary>
+
   ![](https://pic.skk.moe/misc/HdUAUWOEQFVs9Tk0MvRqq.png)
   ![](https://pic.skk.moe/misc/lO3aKLfXBo3hcAwJoGCED.jpeg)
   ![](https://pic.skk.moe/misc/4bWD1kBv65_8oYRlU7rsg.jpeg)
+
+  </details>
 
 # 0.2.11
 
