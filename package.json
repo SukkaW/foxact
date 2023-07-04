@@ -31,6 +31,7 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
+    "@napi-rs/magic-string": "^0.3.4",
     "@sukka/listdir": "^0.2.0",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^20.3.1",
