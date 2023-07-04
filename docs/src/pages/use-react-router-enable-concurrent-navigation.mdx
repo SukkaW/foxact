@@ -1,0 +1,139 @@
+---
+title: useReactRouterEnableConcurrentNavigation (React Router v6)
+---
+
+# useReactRouterEnableConcurrentNavigation (React Router v6)
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Improve React Router v6's navigation experience with `<Suspense />`, `React.lazy()`, and `useReactRouterEnableConcurrentNavigation()` using the power of React Transition and React Concurrent Rendering. Addresses Dan Abramov's feature request [Remix issue #5763: Integrating Remix Router with React Transitions](https://github.com/remix-run/remix/issues/5763).
+
+## Usage
+
+Below is an example of how to use `<Suspense />`, `React.lazy()`, and `useReactRouterEnableConcurrentNavigation()` to bring lazyload and smooth transition to your React Router v6 application:
+
+```tsx filename="src/index.tsx" copy
+// The entry point of your app
+
+import { StrictMode } from 'react';
+import { RouterProvider } from 'react-router-dom';
+
+import { router } from './router';
+
+function App() {
+  return (
+    <StrictMode>
+      <RouterProvider router={router} />
+    </StrictMode>
+  );
+}
+
+const el = document.getElementById('app');
+if (el) {
+  createRoot(el).render(<App />);
+}
+```
+
+```tsx filename="src/router/index.tsx" copy
+// The router declaration
+
+import { lazy, memo } from 'react';
+import { createBrowserRouter, useRouteError, isRouteErrorResponse } from 'react-router-dom';
+
+import { RootLayout } from '@/layouts/root-layout';
+import { DashboardLayout } from '@/layouts/sub-layout';
+import { ProfileLayout } from '@/layouts/sub-layout';
+
+const RouterErrorBoundary = memo(() => {
+  const error = useRouteError();
+  if (isRouteErrorResponse(error)) {
+    if (error.status === 404) {
+      return <NotFoundPage />;
+    }
+  }
+  return <GlobalErrorPage />;
+});
+
+// Use `React.lazy()` for code splitting and lazy loading
+const Homepage = lazy(() => import(/* webpackPrefetch: true */ '@/pages/home'));
+const Dashboard = lazy(() => import(/* webpackPrefetch: true */ '@/pages/dashboard'));
+const Profile = lazy(() => import(/* webpackPrefetch: true */ '@/pages/profile'));
+
+export const router = createBrowserRouter([
+  {
+    element: <RootLayout />,
+    errorElement: <RouterErrorBoundary />,
+    children: [{
+      path: 'dashboard',
+      element: <DashboardLayout />,
+      children: [
+        {
+          index: true,
+          element: <Dashboard />
+        },
+        // A common nested route pattern
+        {
+          path: 'profile',
+          element: <ProfileLayout />,
+          children: [
+            {
+              index: true,
+              element: <Profile />
+            }
+          ]
+        }
+      ]
+    }]
+  }
+]);
+```
+
+In your root layout component (`<RootLayout />`), invoke `useReactRouterEnableConcurrentNavigation`:
+
+```tsx filename="src/layouts/root-layout.tsx" copy
+import { Suspense } from 'react';
+import { Outlet } from 'react-router-dom';
+
+import { useReactRouterEnableConcurrentNavigation } from `foxact/use-react-router-enable-concurrent-navigation`;
+
+export const RootLayout = () => {
+  useReactRouterEnableConcurrentNavigation();
+
+  return (
+    <SomeFancyLayout>
+      <Suspense fallback={<Skeleton />}>
+        {/**
+          * Wraps your <Outlet /> with <Suspense /> to for lazy loading
+          * and concurrent rendering
+          */}
+        <Outlet />
+      </Suspense>
+    </SomeFancyLayout>
+  )
+};
+```
+
+If you prefer the Provider component approach, `foxact` also gets you covered:
+
+```tsx filename="src/layouts/root-layout.tsx" copy
+import { Suspense } from 'react';
+import { Outlet } from 'react-router-dom';
+
+import { ReactRouterConcurrentNavigationProvider } from `foxact/use-react-router-enable-concurrent-navigation`;
+
+export const RootLayout = () => (
+  <ReactRouterConcurrentNavigationProvider>
+    <SomeFancyLayout>
+      <Suspense fallback={<Skeleton />}>
+        <Outlet />
+      </Suspense>
+    </SomeFancyLayout>
+  </ReactRouterConcurrentNavigationProvider>
+);
+```
+
+Note that you should choose **one of** `useReactRouterEnableConcurrentNavigation` and `<ReactRouterConcurrentNavigationProvider />` in your app, **not both**. You only need to invoke it once in your app, and you should invoke it **under the `<RouterProvider />`** (to have access to `NavigationContext`). It is recommended to put it in your root layout component.
+
+Normally, if your app is built with React Router, `<Suspense />`, and `React.lazy()`, the Suspense fallback will always be shown during the navigation, resulting in a bad user experience. With `useReactRouterEnableConcurrentNavigation` or `<ReactRouterConcurrentNavigationProvider />`, Suspense fallback won't re-appear during the navigation, resulting in a smooth user experience.

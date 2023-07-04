@@ -61,5 +61,6 @@
     "type": "separator",
     "title": "Extensions"
   },
+  "use-react-router-enable-concurrent-navigation": {},
   "use-react-router-is-match": {}
 }
