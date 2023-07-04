@@ -1,3 +1,10 @@
+# 0.2.14
+
+**Core Changes**
+
+- Make the 2nd parameter of `useReactRouterIsMatch` optional
+- Add invariant type check for `NavigationContext` in `useReactRouterEnableConcurrentNavigation`
+
 # 0.2.13
 
 **Core Changes**
