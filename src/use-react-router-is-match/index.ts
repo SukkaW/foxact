@@ -16,7 +16,7 @@ export const useReactRouterIsMatch = (to: To, {
   relative,
   caseSensitive = false,
   end = false
-}: UseReactRouterIsMatchOption) => {
+}: UseReactRouterIsMatchOption = {}) => {
   const { pathname: $locationPathname } = useLocation();
 
   const { navigator: { encodeLocation } } = useContext(UNSAFE_NavigationContext);
