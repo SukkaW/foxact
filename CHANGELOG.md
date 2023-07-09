@@ -1,3 +1,9 @@
+# 0.2.16
+
+**Core Changes**
+
+- Add `useNextPathname`
+
 # 0.2.15
 
 **Core Changes**
