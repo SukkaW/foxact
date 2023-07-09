@@ -14,7 +14,7 @@ const isTruthy = (value: ErrorLike): value is NonNullable<ErrorLike> => {
 };
 
 /** @see https://foxact.skk.moe/use-error-boundary */
-export const useErrorBoundary = (givenError?: ErrorLike) => {
+export const useErrorBoundary = (givenError: ErrorLike = false) => {
   const [error, setError] = useState<ErrorLike>(false);
 
   if (isTruthy(givenError)) throw givenError;
