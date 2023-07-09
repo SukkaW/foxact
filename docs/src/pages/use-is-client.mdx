@@ -1,0 +1,56 @@
+---
+title: useIsClient
+---
+
+# useIsClient
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Perform a two-pass rendering after the initial hydration to fix the hydration mismatch when rendering something different on the server and the client. This way the initial render pass will render the same content as the server, avoiding mismatches, but an additional pass will happen synchronously right after hydration.
+
+import { Callout } from 'nextra/components'
+
+<Callout type="warning" emoji="⚠️">
+This approach makes hydration slower because your components have to render twice. Be mindful of the user experience on slow connections. The JavaScript code may load significantly later than the initial HTML render, so rendering a different UI immediately after hydration may also feel jarring to the user.
+</Callout>
+
+See [Handling different client and server content - React Docs](https://react.dev/reference/react-dom/client/hydrateRoot#handling-different-client-and-server-content) for more information.
+
+## Usage
+
+Imagine you are building a dark/light theme toggle switch that will store the user's preference in the `localStorage`. During the SSR/SSG the server does not have access to the users' preferences so it will render the default theme. On the client, we want to render the theme that the user has selected, which could lead to a hydration mismatch. And here is where `useIsClient` comes in handy:
+
+```tsx copy
+import { useCallback } from 'react';
+import { useIsClient } from 'foxact/use-is-client';
+
+const ThemeToggle = () => {
+  // On the server, `useTheme` will return the default theme
+  // On the client, `useTheme` will return the user's preference from the `localStorage`
+  // during the initial hydration, which is a mismatch
+  const [theme, setTheme] = useTheme();
+
+  const toggleTheme = useCallback(() => {
+    setTheme(theme === 'dark' ? 'light' : 'dark')
+  }, []);
+
+  const isClient = useIsClient();
+
+  return (
+    <span
+      role="button"
+      aria-label="Toggle Dark Mode"
+      className="nx-cursor-pointer nx-p-2 nx-text-current"
+      tabIndex={0}
+      onClick={toggleTheme}
+      onKeyDown={useCallback<React.KeyboardEventHandler>(e => {
+        if (e.key === 'Enter') toggleTheme()
+      })}
+    >
+      {isClient && theme === 'dark' ? 'Dark' : 'Light'}
+    </span>
+  )
+}
+```
