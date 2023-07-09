@@ -1,0 +1,26 @@
+---
+title: useNextPathname (Next.js Pages Router)
+---
+
+# useNextPathname (Next.js Pages Router)
+
+Read the current URL's pathname when using Next.js Pages Router.
+
+import { Callout } from 'nextra/components'
+
+<Callout type="warning" emoji="⚠️">
+  If you are using Next.js App Router, please use `usePathname()` from `next/navigation` instead.
+</Callout>
+
+## Usage
+
+```tsx copy
+import { useNextPathname } from 'foxact/use-next-pathname';
+// If you are using Next.js App Router, use this instead:
+// import { usePathname } from 'next/navigation';
+
+export default function ExampleClientComponent() {
+  const pathname = useNextPathname()
+  return <p>Current pathname: {pathname}</p>
+}
+```
