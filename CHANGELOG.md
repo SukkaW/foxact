@@ -1,3 +1,10 @@
+# 0.2.15
+
+**Core Changes**
+
+- Add `useIsClient`
+- Make `useErrorBoundary`'s parameter optional
+
 # 0.2.14
 
 **Core Changes**
