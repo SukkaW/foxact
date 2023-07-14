@@ -1,6 +1,6 @@
 import 'client-only';
 
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router.js';
 import { useMemo } from 'react';
 
 /** @see https://foxact.skk.moe/use-next-pathname */
