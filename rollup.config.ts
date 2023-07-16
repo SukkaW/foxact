@@ -1,5 +1,6 @@
 import { defineConfig } from 'rollup';
-import { swc, preserveUseDirective } from 'rollup-plugin-swc3';
+import { swc } from 'rollup-plugin-swc3';
+import swcPreserveDirectives from 'rollup-swc-preserve-directives';
 import dtsExports from 'rollup-plugin-dts';
 
 import fse from 'fs-extra';
@@ -72,7 +73,7 @@ export default async function () {
           targets
         }
       }),
-      preserveUseDirective()
+      swcPreserveDirectives()
     ],
     external,
     cache: true
