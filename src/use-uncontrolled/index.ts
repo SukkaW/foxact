@@ -12,9 +12,13 @@ export function useUncontrolled<T, E extends HTMLInputElement | HTMLSelectElemen
 
   // Although the `transformValue` is most likely not stable, still wraps it with `useCallback` in case the
   // user does memoize it and we are able to opt-in useReducer's internal optimization.
-  const reducer = useCallback((_prevState: T, valueAsAction: T) => {
+  //
+  // **UPDATE**
+  // React removes the eager reducer bailout since React 18, so memoize the reducer is no longer necessary.
+  // https://github.com/facebook/react/pull/22445
+  const reducer = (_prevState: T, valueAsAction: T) => {
     return transformValue(valueAsAction);
-  }, [transformValue]);
+  };
 
   const [uncontrolledValue, setUncontrolledValue] = useReducer(reducer, initialValue);
 
