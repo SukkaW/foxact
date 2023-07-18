@@ -1,5 +1,6 @@
 import 'client-only';
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
+import { useSingleton } from '../use-singleton';
 
 export type UseCompositionInputCallback = (value: string) => void;
 export type UseCompositionInputReturnKey = 'onChange' | 'onCompositionStart' | 'onCompositionEnd';
@@ -7,19 +8,10 @@ export type UseCompositionInputReturn = Pick<JSX.IntrinsicElements['input'], Use
 
 /** @see https://foxact.skk.moe/use-composition-input */
 export const useCompositionInput = (cb: UseCompositionInputCallback): UseCompositionInputReturn => {
-  // @ts-expect-error -- We are using singleton approach here, to prevent repeated initialization.
-  const internalState: React.MutableRefObject<{
-    /** is"C"ompositioning */ c: boolean,
-    /** is"E"mitted */ e: boolean
-  }> = useRef();
-
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- it will be undefined only on first render
-  if (!internalState.current) {
-    internalState.current = {
-      /** is"C"ompositioning */ c: false,
-      /** is"E"mitted */ e: false
-    };
-  }
+  const internalState = useSingleton(() => ({
+    /** is"C"ompositioning */ c: false,
+    /** is"E"mitted */ e: false
+  }));
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement> | React.CompositionEvent<HTMLInputElement>) => {
     if ('value' in e.target) {
@@ -32,12 +24,12 @@ export const useCompositionInput = (cb: UseCompositionInputCallback): UseComposi
         internalState.current.e = false;
       }
     }
-  }, [cb]);
+  }, [cb, internalState]);
 
   const onCompositionStart = useCallback<React.CompositionEventHandler<HTMLInputElement>>(() => {
     internalState.current.c = true;
     internalState.current.e = false;
-  }, []);
+  }, [internalState]);
 
   const onCompositionEnd = useCallback<React.CompositionEventHandler<HTMLInputElement>>((e) => {
     internalState.current.c = false;
@@ -48,7 +40,7 @@ export const useCompositionInput = (cb: UseCompositionInputCallback): UseComposi
     if (!internalState.current.e) {
       onChange(e);
     }
-  }, [onChange]);
+  }, [internalState, onChange]);
 
   return {
     onChange,
