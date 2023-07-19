@@ -1,0 +1,59 @@
+---
+title: useSingleton
+---
+
+# useSingleton
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+The React documentation's ["Avoiding recreating the ref contents" pattern](https://react.dev/reference/react/useRef#avoiding-recreating-the-ref-contents) as a hook.
+
+**Before:**
+
+```tsx
+function Video() {
+  const playerRef = useRef(null);
+  if (playerRef.current === null) {
+    playerRef.current = new VideoPlayer();
+  }
+  // ...
+```
+
+**After:**
+
+```tsx
+function Video() {
+  const playerRef = useSingleton(() => new VideoPlayer());
+  // ...
+```
+
+## Usage
+
+```tsx copy
+import { useCallback, useEffect } from 'react';
+import { useSingleton } from 'foxact/use-singleton';
+
+interface VideoProps {
+  videoSrc: string;
+}
+
+function Video({ videoSrc }: VideoProps) {
+  const playerRef = useSingleton(() => new VideoPlayer());
+
+  // callback ref to attach the player to the video element
+  const videoElementCallbackRef = useCallback((el: HTMLVideoElement | null) => {
+    if (el) {
+      playerRef.current.attach(el);
+      playerRef.current.load(videoSrc);
+    } else {
+      playerRef.current.destroy();
+    }
+  }, [videoSrc]);
+
+  return <video ref={videoElementCallbackRef} />;
+}
+```
+
+
