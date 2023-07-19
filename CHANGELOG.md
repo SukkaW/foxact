@@ -1,3 +1,15 @@
+# 0.2.17
+
+**Core Changes**
+
+- Fix `useNextPathname` to work with Next.js
+- Add `useSingleton`
+
+**Misc Changes**
+
+- Refactor `useCompositionInput` to use `useSingleton`
+- Refactor `useUncontrolled`, remove the memoization of the inline reducer
+
 # 0.2.16
 
 **Core Changes**
