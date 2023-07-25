@@ -1,12 +1,12 @@
 import 'client-only';
-import { useCallback, useRef, useState } from 'react';
-import { useRetimer } from '../use-retimer';
+import {useCallback, useRef, useState} from 'react';
+import {useRetimer} from '../use-retimer';
 
 /** @see https://foxact.skk.moe/use-debounced-state */
 export function useDebouncedState<T>(defaultValue: T | (() => T), wait: number, leading = false) {
   const [value, setValue] = useState<T>(defaultValue);
   const leadingRef = useRef(true);
-  const retimer = useRetimer();
+  const [retimer, clearRetimer] = useRetimer();
 
   const debouncedSetValue = useCallback((newValue: T) => {
     if (leadingRef.current && leading) {
@@ -20,5 +20,13 @@ export function useDebouncedState<T>(defaultValue: T | (() => T), wait: number, 
     leadingRef.current = false;
   }, [leading, retimer, wait]);
 
-  return [value, debouncedSetValue] as const;
+  const forceSetValue = useCallback(
+    (newValue: T) => {
+      clearRetimer();
+      setValue(newValue);
+    },
+    [clearRetimer]
+  );
+
+  return [value, debouncedSetValue, forceSetValue] as const;
 }
