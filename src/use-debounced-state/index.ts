@@ -6,7 +6,7 @@ import {useRetimer} from '../use-retimer';
 export function useDebouncedState<T>(defaultValue: T | (() => T), wait: number, leading = false) {
   const [value, setValue] = useState<T>(defaultValue);
   const leadingRef = useRef(true);
-  const [retimer, clearRetimer] = useRetimer();
+  const retimer = useRetimer();
 
   const debouncedSetValue = useCallback((newValue: T) => {
     if (leadingRef.current && leading) {
@@ -22,10 +22,10 @@ export function useDebouncedState<T>(defaultValue: T | (() => T), wait: number, 
 
   const forceSetValue = useCallback(
     (newValue: T) => {
-      clearRetimer();
+      retimer.clear();
       setValue(newValue);
     },
-    [clearRetimer]
+    [retimer]
   );
 
   return [value, debouncedSetValue, forceSetValue] as const;

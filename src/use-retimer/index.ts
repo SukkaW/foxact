@@ -1,7 +1,12 @@
 import 'client-only';
 // useRef is React Client Component only
 
-import { useCallback, useRef } from 'react';
+import {useCallback, useRef} from 'react';
+
+export type RetimerType = {
+  (timerId: number): void,
+  clear: () => void
+};
 
 /** @see https://foxact.skk.moe/use-retimer */
 export const useRetimer = () => {
@@ -12,12 +17,12 @@ export const useRetimer = () => {
       clearTimeout(timerIdRef.current);
     }
     timerIdRef.current = timerId;
-  }, []);
+  }, []) as RetimerType;
 
-  const clearRetimer = useCallback(() => {
+  retimer.clear = useCallback(() => {
     clearTimeout(timerIdRef.current);
     timerIdRef.current = undefined;
   }, []);
 
-  return [retimer, clearRetimer] as const;
+  return retimer
 };
