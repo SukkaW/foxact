@@ -1,6 +1,6 @@
 import 'client-only';
-import {useCallback, useRef, useState} from 'react';
-import {useRetimer} from '../use-retimer';
+import { useCallback, useRef, useState } from 'react';
+import { useRetimer } from '../use-retimer';
 
 /** @see https://foxact.skk.moe/use-debounced-state */
 export function useDebouncedState<T>(defaultValue: T | (() => T), wait: number, leading = false) {
