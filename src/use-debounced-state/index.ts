@@ -22,7 +22,7 @@ export function useDebouncedState<T>(defaultValue: T | (() => T), wait: number, 
 
   const forceSetValue = useCallback(
     (newValue: T) => {
-      retimer.clear();
+      retimer();
       setValue(newValue);
     },
     [retimer]
