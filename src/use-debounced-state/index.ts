@@ -20,5 +20,13 @@ export function useDebouncedState<T>(defaultValue: T | (() => T), wait: number, 
     leadingRef.current = false;
   }, [leading, retimer, wait]);
 
-  return [value, debouncedSetValue] as const;
+  const forceSetValue = useCallback(
+    (newValue: T) => {
+      retimer();
+      setValue(newValue);
+    },
+    [retimer]
+  );
+
+  return [value, debouncedSetValue, forceSetValue] as const;
 }
