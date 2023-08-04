@@ -33,6 +33,7 @@
   },
   "getting-started": "Getting Started",
   "best-practice": "Best Practice",
+  "where-is": "Where is ...?",
   "-- separator hooks": {
     "type": "separator",
     "title": "Hooks"
