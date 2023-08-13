@@ -57,6 +57,7 @@
     "title": "Utilities"
   },
   "context-state": {},
+  "create-fixed-array": {},
   "noop": {},
   "request-idle-callback": {},
   "typescript-happy-forward-ref": {},

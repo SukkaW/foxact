@@ -1,0 +1,32 @@
+---
+title: createFixedArray
+---
+
+# createFixedArray
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Create shared fied-size read-only arrays.
+
+## Usage
+
+Below is an example of creating a loading skeleton screen with 10 skeleton items:
+
+```tsx copy
+import { memo } from 'react';
+import { createFixedArray } from 'foxact/create-fixed-array';
+
+const PostsLoading = () => {
+  return (
+    <Stack>
+      {createFixedArray(10).map(i => (
+        <Skeleton key={i} h={48} w="100%" />
+      ))}
+    </Stack>
+  );
+};
+
+export default memo(PostsLoading);
+```
