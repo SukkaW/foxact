@@ -1,3 +1,10 @@
+# 0.2.18
+
+**Core Changes**
+
+- Add `forceSetValue` to `useDebouncedState`
+- Add `createFixedArray`
+
 # 0.2.17
 
 **Core Changes**
