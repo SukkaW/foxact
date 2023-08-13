@@ -1,3 +1,9 @@
+# 0.2.19
+
+**Core Changes**
+
+- Change `createFixedArray`'s return types
+
 # 0.2.18
 
 **Core Changes**
