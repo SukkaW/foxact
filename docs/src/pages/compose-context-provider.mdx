@@ -1,0 +1,93 @@
+---
+title: ComposeContextProvider
+---
+
+# ComposeContextProvider
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Compose multiple React context providers together.
+
+## Usage
+
+```tsx filename="src/context.tsx" copy
+'use client';
+import { createContextState } from 'foxact/context-state';
+import { SWRConfig } from 'swr';
+
+const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive] = createContextState(false);
+const [AuthTokenProvider, useAuthToken, useSetAuthToken] = createContextState(false);
+
+const MySWRProvider = ({ config, children }: React.PropsWithChildren<{ config: any }>) => {
+  return (
+    <SWRConfig
+      value={{
+        refreshInterval: 3000,
+        ...config
+      }}
+    >
+      <Dashboard />
+    </SWRConfig>
+  );
+}
+
+export {
+  SidebarActiveProvider, useSidebarActive, useSetSidebarActive,
+  AuthTokenProvider, useAuthToken, useSetAuthToken,
+  MySWRProvider
+};
+```
+
+Normally, to use multiple context providers, you would have to nest them like this:
+
+```tsx filename="src/app/layout.tsx" copy
+import { SidebarActiveProvider, AuthTokenProvider, MySWRProvider } from 'src/context';
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <head />
+      <body>
+        <SidebarActiveProvider>
+          <AuthTokenProvider>
+            {/** provider nesting hell */}
+            <MySWRProvider config={{ fetcher }}>
+              {children}
+            </MySWRProvider>
+          </AuthTokenProvider>
+        </SidebarActiveProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+With `<ComposeContextProvider />` you can do this:
+
+```tsx filename="src/app/layout.tsx" copy
+import { SidebarActiveProvider, AuthTokenProvider, MySWRProvider } from 'src/context';
+import { ComposeContextProvider } from 'foxact/compose-context-provider';
+
+const contexts = [
+  <SidebarActiveProvider />,
+  <AuthTokenProvider />,
+  // You can also pass prop to the composed providers
+  <MySWRProvider config={{ fetcher }} />
+];
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <head />
+      <body>
+        {/** composed providers */}
+        <ComposeContextProvider contexts={contexts}>
+          {children}
+        </SidebarActiveProvider>
+      </body>
+    </html>
+  );
+}
+```

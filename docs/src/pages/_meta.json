@@ -56,6 +56,7 @@
     "type": "separator",
     "title": "Utilities"
   },
+  "compose-context-provider": {},
   "context-state": {},
   "create-fixed-array": {},
   "noop": {},
