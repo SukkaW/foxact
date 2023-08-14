@@ -1,6 +1,7 @@
 import { cloneElement } from 'react';
 
 export interface ContextComposeProviderProps extends React.PropsWithChildren {
+  // eslint-disable-next-line @typescript-eslint/ban-types -- cloneElement
   contexts: React.ReactElement[]
 }
 
