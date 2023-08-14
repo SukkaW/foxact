@@ -17,7 +17,7 @@ export const useLatestExportsSizes = () => {
       const responseToJson = async (response: Response) => {
         const json = await response.json();
         controller?.abort();
-        return json;
+        return json as ExportsStats;
       };
 
       return Promise.any([
