@@ -1,3 +1,9 @@
+# 0.2.20
+
+**Core Changes**
+
+- Add `composeContextProvider`
+
 # 0.2.19
 
 **Core Changes**
