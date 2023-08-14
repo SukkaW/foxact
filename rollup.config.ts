@@ -54,6 +54,7 @@ export default async function () {
       swc({
         isModule: true,
         jsc: {
+          target: undefined,
           transform: {
             react: {
               runtime: 'automatic'
