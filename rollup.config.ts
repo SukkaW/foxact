@@ -1,15 +1,12 @@
 import { defineConfig } from 'rollup';
 import { swc, preserveUseDirective } from 'rollup-plugin-swc3';
-import dtsExports from 'rollup-plugin-dts';
+import { dts } from 'rollup-plugin-dts';
 
 import fse from 'fs-extra';
 
 import pkgJson from './package.json';
 import browserslist from 'browserslist';
 import { getEntries } from './tools/get-entries';
-
-// @ts-expect-error -- rollup-plugin-dts has incorrect types
-const dts = dtsExports.default as typeof dtsExports;
 
 const externalModules = Object.keys(pkgJson.dependencies)
   .concat(Object.keys(pkgJson.peerDependencies))
