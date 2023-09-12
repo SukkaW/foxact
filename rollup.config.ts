@@ -59,7 +59,8 @@ export default async function () {
           },
           minify: {
             compress: {
-              passes: 2
+              passes: 2,
+              const_to_let: false
             },
             mangle: {},
             module: true
