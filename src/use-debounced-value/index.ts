@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 
 /** @see https://foxact.skk.moe/use-debounced-value */
 export function useDebouncedValue<T>(value: T, wait: number, leading = false) {
-  const [outputValue, setOutputValue] = useState(value);
+  const [outputValue, setOutputValue] = useState(() => value);
   const leadingRef = useRef(true);
 
   useEffect(() => {
@@ -14,11 +14,11 @@ export function useDebouncedValue<T>(value: T, wait: number, leading = false) {
     if (!isCancelled) {
       if (leadingRef.current && leading) {
         leadingRef.current = false;
-        setOutputValue(value);
+        setOutputValue(() => value);
       } else {
         timeout = window.setTimeout(() => {
           leadingRef.current = true;
-          setOutputValue(value);
+          setOutputValue(() => value);
         }, wait);
       }
     }
