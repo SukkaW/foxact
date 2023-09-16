@@ -1,8 +1,15 @@
 import 'client-only';
 import { useEffect, useState, useRef } from 'react';
 
+// eslint-disable-next-line @typescript-eslint/ban-types -- explicitly baning ALL functions
+type NotFunction<T> = T extends Function ? never : T;
+
 /** @see https://foxact.skk.moe/use-debounced-value */
-export function useDebouncedValue<T>(value: T, wait: number, leading = false) {
+export function useDebouncedValue<T>(value: NotFunction<T>, wait: number, leading = false) {
+  if (typeof value === 'function') {
+    throw new TypeError('useDebouncedValue does not support function as value');
+  }
+
   const [outputValue, setOutputValue] = useState(value);
   const leadingRef = useRef(true);
 
