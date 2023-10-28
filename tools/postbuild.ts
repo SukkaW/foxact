@@ -1,4 +1,4 @@
-import fse from 'fs-extra';
+import fsp from 'fs/promises';
 import path from 'path';
 import { getEntries } from './get-entries';
 import gzipSize from 'gzip-size';
@@ -16,21 +16,21 @@ interface GzipStats {
 
 const copyAndCreateFiles = () => {
   return Promise.all([
-    fse.copyFile(
+    fsp.copyFile(
       path.resolve(rootDir, 'LICENSE'),
       path.resolve(distDir, 'LICENSE')
     ),
-    fse.copyFile(
+    fsp.copyFile(
       path.resolve(rootDir, 'README.md'),
       path.resolve(distDir, 'README.md')
     ),
-    fse.createFile(path.resolve(distDir, 'ts_version_4.8_and_above_is_required.d.ts'))
+    fsp.writeFile(path.resolve(distDir, 'ts_version_4.8_and_above_is_required.d.ts'), '')
   ]);
 };
 
 const createPackageJson = async (entries: Record<string, string>) => {
-  const packageJsonCopy = (
-    await fse.readJson(path.resolve(rootDir, 'package.json'))
+  const packageJsonCopy = JSON.parse(
+    await fsp.readFile(path.resolve(rootDir, 'package.json'), 'utf-8')
   ) as Partial<typeof import('../package.json')> & { exports: any, typeVersions: any };
 
   delete packageJsonCopy.devDependencies;
@@ -63,7 +63,7 @@ const createPackageJson = async (entries: Record<string, string>) => {
     };
   });
 
-  await fse.writeFile(
+  await fsp.writeFile(
     path.resolve(distDir, 'package.json'),
     JSON.stringify(packageJsonCopy, null, 2)
   );
@@ -82,7 +82,7 @@ const createSizesJson = async (entries: Record<string, string>) => {
         const filePath = path.join(distDir, entryName, 'index.mjs');
 
         const [fileSize, fileGzipSize, fileBrotliSize] = await Promise.all([
-          fse.stat(filePath).then(stat => stat.size),
+          fsp.stat(filePath).then(stat => stat.size),
           // Cloudflare uses gzip level 8 and brotli level 4 as default
           // https://blog.cloudflare.com/this-is-brotli-from-origin/
           gzipSize.file(filePath, { level: 8 }),
@@ -103,7 +103,7 @@ const createSizesJson = async (entries: Record<string, string>) => {
       })
   );
 
-  await fse.writeFile(
+  await fsp.writeFile(
     path.resolve(distDir, 'sizes.json'),
     JSON.stringify(gzipSizeStat)
   );

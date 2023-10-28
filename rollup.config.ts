@@ -2,7 +2,7 @@ import { defineConfig } from 'rollup';
 import { swc, preserveUseDirective } from 'rollup-plugin-swc3';
 import { dts } from 'rollup-plugin-dts';
 
-import fse from 'fs-extra';
+import fsp from 'fs/promises';
 
 import pkgJson from './package.json';
 import browserslist from 'browserslist';
@@ -28,7 +28,7 @@ const targets = browserslist([
 ]);
 
 export default async function () {
-  await fse.rm('dist', { recursive: true, force: true });
+  await fsp.rm('dist', { recursive: true, force: true });
 
   const input = await getEntries();
 
