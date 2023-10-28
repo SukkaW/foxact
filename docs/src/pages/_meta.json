@@ -60,6 +60,7 @@
   "context-state": {},
   "create-fixed-array": {},
   "noop": {},
+  "rem": {},
   "request-idle-callback": {},
   "typescript-happy-forward-ref": {},
   "-- separator extensions": {
