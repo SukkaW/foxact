@@ -139,7 +139,7 @@ function Sidebar({ loggedIn }: SidebarProps) {
 export default memo(Sidebar);
 ```
 
-If you are not able to upgrade to React 18.3 or above, you can use the following risky approach by weilding the ancient dark magic of `React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED`:
+If you are not able to upgrade to React 18.3 or above, you can use the following risky approach by wielding the ancient dark magic of `React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED`:
 
 ```tsx filename="src/components/sidebar.tsx" copy
 import reactExports, { memo, use } from 'react';
