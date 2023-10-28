@@ -1,3 +1,9 @@
+# 0.2.22
+
+**Core Changes**
+
+- Remove leaking `dependencies`
+
 # 0.2.21
 
 **Core Changes**
