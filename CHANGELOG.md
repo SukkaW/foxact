@@ -1,3 +1,10 @@
+# 0.2.21
+
+**Core Changes**
+
+- Add `rem` and `em` CSS units converter
+- Disallow `useDebouncedValue` a function
+
 # 0.2.20
 
 **Core Changes**
