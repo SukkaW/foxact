@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition -- polyfill */
-/* eslint-disable no-restricted-globals -- polyfill */
 
 /** @see https://foxact.skk.moe/request-idle-callback */
 export const requestIdleCallback = (

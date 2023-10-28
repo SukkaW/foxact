@@ -31,7 +31,6 @@ const copyAndCreateFiles = () => {
 const createPackageJson = async (entries: Record<string, string>) => {
   const packageJsonCopy = (
     await fse.readJson(path.resolve(rootDir, 'package.json'))
-    // eslint-disable-next-line @typescript-eslint/consistent-type-imports -- infer type from json file
   ) as Partial<typeof import('../package.json')> & { exports: any, typeVersions: any };
 
   delete packageJsonCopy.devDependencies;

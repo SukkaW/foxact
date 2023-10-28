@@ -5,7 +5,7 @@
 import reactExports from 'react';
 
 export const use
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, import/no-named-as-default-member -- see above
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- see above
   = reactExports.use
   || (<T>(
     promise: PromiseLike<T> & {
@@ -14,24 +14,29 @@ export const use
       reason?: unknown
     }
   ): T => {
-    if (promise.status === 'pending') {
-      throw promise;
-    } else if (promise.status === 'fulfilled') {
-      return promise.value as T;
-    } else if (promise.status === 'rejected') {
-      throw promise.reason;
-    } else {
-      promise.status = 'pending';
-      promise.then(
-        (v) => {
-          promise.status = 'fulfilled';
-          promise.value = v;
-        },
-        (e) => {
-          promise.status = 'rejected';
-          promise.reason = e;
-        }
-      );
-      throw promise;
+    switch (promise.status) {
+      case 'pending': {
+        throw promise;
+      }
+      case 'fulfilled': {
+        return promise.value as T;
+      }
+      case 'rejected': {
+        throw promise.reason;
+      }
+      default: {
+        promise.status = 'pending';
+        promise.then(
+          (v) => {
+            promise.status = 'fulfilled';
+            promise.value = v;
+          },
+          (e) => {
+            promise.status = 'rejected';
+            promise.reason = e;
+          }
+        );
+        throw promise;
+      }
     }
   });

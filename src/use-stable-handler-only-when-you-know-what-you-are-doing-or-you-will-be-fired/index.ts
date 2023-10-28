@@ -4,7 +4,7 @@ import reactExports, { useCallback, useEffect, useLayoutEffect, useRef } from 'r
 const useInsertionEffect
   = typeof window !== 'undefined'
     // useInsertionEffect is only available in React 18+
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, import/no-named-as-default-member -- see above
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- see above
     ? reactExports.useInsertionEffect || useLayoutEffect
     : useEffect;
 
@@ -35,7 +35,6 @@ export function useStableHandler<Args extends any[], Result>(
  * so we will throw this error if the callback is called while rendering.
  */
 function shouldNotBeInvokedBeforeMount() {
-  // eslint-disable-next-line @fluffyfox/no-default-error -- this error is not intended to be caught
   throw new Error(
     'foxact: the stablized handler cannot be invoked before the component has mounted.'
   );

@@ -1,19 +1,20 @@
 {
   "compilerOptions": {
     "target": "es2018",
+    "jsx": "react-jsx",
     "module": "commonjs",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "resolveJsonModule": true,
     "declaration": true,
     "outDir": "./dist",
-    "strict": true,
-    "jsx": "react-jsx",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "paths": {
-      "@/*": ["./src/*"],
-    }
+    "strict": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "rollup.config.ts", "tools/**/*.ts"],
+  "exclude": ["docs"],
   "ts-node": {
     "swc": true
   }

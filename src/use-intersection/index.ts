@@ -47,7 +47,6 @@ export function useIntersection<T extends Element>({
       const idleCallback = requestIdleCallback(() => setVisible(true));
       return () => cancelIdleCallback(idleCallback);
     }
-
   }, [disabled, rootMargin, rootRef, visible]);
 
   const resetVisible = useCallback(() => {
