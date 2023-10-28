@@ -18,7 +18,7 @@
   "scripts": {
     "lint": "eslint --format=sukka .",
     "build": "rollup -c rollup.config.ts --configPlugin swc3 --bundleConfigAsCjs",
-    "postbuild": "ts-node tools/postbuild.ts",
+    "postbuild": "node -r @swc-node/register tools/postbuild.ts",
     "prepublishOnly": "npm run build && echo \"This package is not meant to be published from root dir.\" && exit 1"
   },
   "keywords": [
@@ -37,6 +37,7 @@
     "@eslint-sukka/ts": "^4.1.7",
     "@napi-rs/magic-string": "^0.3.4",
     "@sukka/listdir": "^0.2.0",
+    "@swc-node/register": "^1.6.8",
     "@swc/core": "^1.3.75",
     "@types/node": "^20.5.0",
     "@types/react": "^18.2.14",
@@ -55,8 +56,7 @@
     "rollup": "^4.1.4",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-swc3": "^0.10.3",
-    "rollup-swc-preserve-directives": "^0.3.0",
-    "ts-node": "^10.9.1"
+    "rollup-swc-preserve-directives": "^0.3.0"
   },
   "peerDependencies": {
     "react": "*"
