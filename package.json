@@ -6,7 +6,7 @@
   "homepage": "https://foxact.skk.moe",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SukkaW/foxact"
+    "url": "git+https://github.com/SukkaW/foxact.git"
   },
   "bugs": {
     "url": "https://github.com/SukkaW/foxact/issues"
