@@ -28,12 +28,12 @@
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
   "dependencies": {
-    "@eslint-sukka/node": "^4.1.7",
-    "@eslint-sukka/react": "^4.1.7",
     "client-only": "^0.0.1",
     "server-only": "^0.0.1"
   },
   "devDependencies": {
+    "@eslint-sukka/node": "^4.1.7",
+    "@eslint-sukka/react": "^4.1.7",
     "@eslint-sukka/ts": "^4.1.7",
     "@napi-rs/magic-string": "^0.3.4",
     "@sukka/listdir": "^0.2.0",
