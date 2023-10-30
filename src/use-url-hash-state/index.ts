@@ -39,16 +39,16 @@ const subscribe: Parameters<typeof useSyncExternalStore>[0] = (() => {
 // eslint-disable-next-line @typescript-eslint/ban-types -- workaround TypeScript bug
 const isFunction = (x: unknown): x is Function => typeof x === 'function';
 
-function useUrlHashState<T extends string | number>(
+function useUrlHashState<T>(
   key: string,
   defaultValue?: undefined
 ): readonly [T | undefined, React.Dispatch<React.SetStateAction<T | undefined>>];
-function useUrlHashState<T extends string | number>(
+function useUrlHashState<T>(
   key: string,
   defaultValue: T,
   transform?: (value: string) => T
 ): readonly [T, React.Dispatch<React.SetStateAction<T>>];
-function useUrlHashState<T extends string | number>(
+function useUrlHashState<T>(
   key: string,
   defaultValue?: T | undefined,
   transform: (value: string) => T = identity
@@ -66,9 +66,9 @@ function useUrlHashState<T extends string | number>(
       () => defaultValue
     ),
     useCallback((updater) => {
-      const searchParams = new URLSearchParams(location.hash.slice(1));
-
       const currentHash = location.hash;
+
+      const searchParams = new URLSearchParams(currentHash.slice(1));
 
       let newValue;
 
@@ -80,7 +80,7 @@ function useUrlHashState<T extends string | number>(
       }
 
       if (
-        (defaultValue !== undefined && newValue === defaultValue)
+        newValue === defaultValue
         || newValue === undefined
       ) {
         searchParams.delete(key);
@@ -94,7 +94,7 @@ function useUrlHashState<T extends string | number>(
         return;
       }
 
-      location.hash = searchParams.toString();
+      location.hash = newHash;
     }, [defaultValue, key, memoized_transform])
   ] as const;
 }
