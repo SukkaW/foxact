@@ -1,7 +1,7 @@
 import { useSyncExternalStore, useCallback, useEffect } from 'react';
 import { noop } from '../noop';
 import { useIsomorphicLayoutEffect } from '../use-isomorphic-layout-effect';
-import { noSSR } from '../no-ssr';
+import { noSSRError } from '../no-ssr';
 
 function dispatchStorageEvent(key: string, newValue: string | null) {
   if (typeof window !== 'undefined') {
@@ -59,7 +59,9 @@ const subscribeToLocalStorage = (callback: () => void) => {
   return noop;
 };
 
-const getServerSnapshotWithoutServerValue = () => noSSR('foxact: useLocalStorage without `serverValue` will only be used at client side.');
+const getServerSnapshotWithoutServerValue = () => {
+  throw noSSRError('useLocalStorage cannot be used on the server without a serverValue');
+};
 
 // This type utility is only used for workaround https://github.com/microsoft/TypeScript/issues/37663
 // eslint-disable-next-line @typescript-eslint/ban-types -- workaround TypeScript bug
