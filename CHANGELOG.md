@@ -1,3 +1,11 @@
+# 0.2.23
+
+**Core Changes**
+
+- Add `unstable_useUrlHashState`
+- Add `useLocalStorage`
+- Add `noSSR`
+
 # 0.2.22
 
 **Core Changes**
