@@ -61,6 +61,7 @@ const getServerSnapshotWithoutServerValue = () => noSSR('foxact: useLocalStorage
 // eslint-disable-next-line @typescript-eslint/ban-types -- workaround TypeScript bug
 const isFunction = (x: unknown): x is Function => typeof x === 'function';
 
+/** @see https://foxact.skk.moe/use-local-storage */
 export const useLocalStorage = <T extends string | number>(key: string, serverValue?: T) => {
   const getSnapshot = () => getLocalStorageItem(key);
 

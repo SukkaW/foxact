@@ -1,3 +1,4 @@
+/** @see https://foxact.skk.moe/no-ssr */
 export const noSSR = (extraMessage?: string) => {
   const error = new Error(extraMessage);
 

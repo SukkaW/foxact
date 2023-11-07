@@ -39,6 +39,7 @@ const subscribe: Parameters<typeof useSyncExternalStore>[0] = (() => {
 // eslint-disable-next-line @typescript-eslint/ban-types -- workaround TypeScript bug
 const isFunction = (x: unknown): x is Function => typeof x === 'function';
 
+/** @see https://foxact.skk.moe/use-url-hash-state */
 function useUrlHashState<T>(
   key: string,
   defaultValue?: undefined
