@@ -61,6 +61,7 @@
   "context-state": {},
   "create-fixed-array": {},
   "noop": {},
+  "no-ssr": {},
   "rem": {},
   "request-idle-callback": {},
   "typescript-happy-forward-ref": {},
