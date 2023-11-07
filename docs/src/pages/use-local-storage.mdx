@@ -1,0 +1,83 @@
+---
+title: useLocalStorage
+---
+
+# useLocalStorage
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+`useLocalStorage` provides a convenient way to synchronize the state of a component with the data stored in the `localStorage`.
+
+## Usage
+
+```tsx
+import { useEffect } from 'react';
+import { useLocalStorage } from 'foxact/use-local-storage';
+
+const Comp = () => {
+  const [value, setValue] = useLocalStorage<'circle' | 'square' | 'triangle'>(
+    /** The localStorage key */
+    'local-storage-key',
+    /**
+     * The initial value to use if there is no item in the local storage with the provided key,
+     * the undefined value will be used if no initial value is provided.
+     *
+     * Also, the initial value will also be used during the server-side rendering, see below.
+     */
+    'circle'
+  );
+
+  return (
+    <div>
+      <button onClick={() => setValue('circle')}>Circle</button>
+      <button onClick={() => setValue('square')}>Square</button>
+      <button onClick={() => setValue('triangle')}>Triangle</button>
+
+      <button onClick={() => setValue(null)}>Clear</button>
+      <div>{value}</div>
+    </div>
+  );
+};
+```
+
+## Sever-side Rendering
+
+If the second argument (the initial value) is provided, React will use the initial value to render the UI and generate HTML on the server. The user will see the initial value (which might be stale) first. On the client, React will first use the initial value to hydrate the server-side rendered HTML, and then immediately re-render the component with the actual value (read from the browser's `localStorage`) after the hydration. The user will see the latest value stored in the browser's `localStorage` after both the hydration and the re-render.
+
+```tsx
+import { useLocalStorage } from 'foxact/use-local-storage';
+
+const Comp = () => {
+  const [value, setValue] = useLocalStorage('local-storage-key', 'server');
+
+  return (
+    <div>{value}</div>
+  );
+};
+
+// The server-generated HTML will include "server", and the user will see the "server" first, then the actual value stored in the browser's localStorage.
+```
+
+If the second argument is not present, React will find the closest `<Suspense>` boundary and render its `fallback` UI into the generated server HTML on the server. The user will see the fallback UI at first. React will attempt to render the component during the hydration on the browser, where the actual value is read from the browser's `localStorage` and the user will see the actual value after the hydration is finished. See also [\<Suspense\> Providing a fallback for server errors and client-only content](https://react.dev/reference/react/Suspense#providing-a-fallback-for-server-errors-and-client-only-content) at React docs.
+
+```tsx
+import { useLocalStorage } from 'foxact/use-local-storage';
+
+const Comp = () => {
+  const [value, setValue] = useLocalStorage('local-storage-key', 'server');
+
+  return (
+    <div>{value}</div>
+  );
+};
+
+const App = () => (
+  <Suspense fallback={<div>fallback</div>}>
+    <Comp />
+  </Suspense>
+);
+
+// The server-generated HTML will include "fallback", and the user will see the "fallback" first, then the actual value stored in the browser's localStorage.
+```
