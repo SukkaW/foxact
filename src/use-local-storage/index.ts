@@ -38,7 +38,11 @@ const removeLocalStorageItem = (key: string) => {
 const getLocalStorageItem = (key: string) => {
   if (typeof window !== 'undefined') {
     try {
-      return window.localStorage.getItem(key);
+      const value = window.localStorage.getItem(key);
+      if (value) {
+        return JSON.parse(value);
+      }
+      return value;
     } catch (e) {
       console.warn(e);
       return null;
@@ -62,13 +66,13 @@ const getServerSnapshotWithoutServerValue = () => noSSR('foxact: useLocalStorage
 const isFunction = (x: unknown): x is Function => typeof x === 'function';
 
 /** @see https://foxact.skk.moe/use-local-storage */
-export const useLocalStorage = <T extends string | number>(key: string, serverValue?: T) => {
-  const getSnapshot = () => getLocalStorageItem(key);
+export function useLocalStorage<T extends string | number>(key: string, serverValue?: T) {
+  const getSnapshot = () => getLocalStorageItem(key) as T | null;
 
   // If the serverValue is provided, we pass it to useSES' getServerSnapshot, which will be used during SSR
   // If the serverValue is not provided, we don't pass it to useSES, which will cause useSES to opt-in client-side rendering
   const getServerSnapshot = typeof serverValue !== 'undefined'
-    ? () => JSON.stringify(serverValue)
+    ? () => serverValue
     : getServerSnapshotWithoutServerValue;
 
   const store = useSyncExternalStore(
@@ -77,14 +81,14 @@ export const useLocalStorage = <T extends string | number>(key: string, serverVa
     getServerSnapshot
   );
 
-  const setState = useCallback<React.Dispatch<React.SetStateAction<T | null | undefined>>>(
+  const setState = useCallback<React.Dispatch<React.SetStateAction<T | null>>>(
     (v) => {
       try {
         const nextState = isFunction(v)
-          ? v(store != null ? JSON.parse(store) : null)
+          ? v(store ?? null)
           : v;
 
-        if (nextState === undefined || nextState === null) {
+        if (nextState == null) {
           removeLocalStorageItem(key);
         } else {
           setLocalStorageItem(key, nextState);
@@ -105,5 +109,5 @@ export const useLocalStorage = <T extends string | number>(key: string, serverVa
     }
   }, [key, serverValue]);
 
-  return [store != null ? JSON.parse(store) : serverValue, setState];
-};
+  return [store ?? serverValue ?? null, setState] as const;
+}
