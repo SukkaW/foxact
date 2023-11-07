@@ -10,6 +10,12 @@ import ExportMetaInfo from '../components/export-meta-info';
 
 Force React stream server-side rendering to include the closet `<Suspense>` boundary's fallback UI (e.g. a loading indicator) into the generated server HTML. On the browser, the user will see the fallback UI first when the page loads, while React attempts to render the same component again during the hydration, and the user will see the proper content once React finishes the hydration. See [\<Suspense\> Providing a fallback for server errors and client-only content](https://react.dev/reference/react/Suspense#providing-a-fallback-for-server-errors-and-client-only-content) at React docs.
 
+import { Callout } from 'nextra/components'
+
+<Callout type="warning" emoji="⚠️">
+The `noSSR` function can only be used with React stream server-side rendering. If you are using the React synchronous server-side rendering (e.g. `renderToString`), you should use the `useIsClient` approach instead. See [`useIsClient`](/use-is-client).
+</Callout>
+
 ## Usage
 
 ```tsx filename="src/chat.tsx" copy
