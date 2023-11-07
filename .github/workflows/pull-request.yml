@@ -1,0 +1,27 @@
+name: Pull Request Check
+on:
+  pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - LICENSE
+      - '**/*.gitignore'
+      - .editorconfig
+      - docs/**
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          check-latest: true
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies
+        run: npm install -g npm && npm install
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
