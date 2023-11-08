@@ -1,3 +1,15 @@
+# 0.2.25
+
+**Core Changes**
+
+- Allow customize `useLocalStorage`'s `serializer` and `deserializer`
+
+# 0.2.24
+
+**Core Changes**
+
+- Make `noSSR` only throw on the server
+
 # 0.2.23
 
 **Core Changes**
