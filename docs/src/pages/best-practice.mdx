@@ -62,9 +62,9 @@ And returned functions (like `setAvatarIntersection`, `resetAvatarIsIntersected`
 
 ### Global state management library vs useContext + useState
 
-Global state management libraries (like [Redux](https://redux.js.org/) or [Zustand](https://github.com/pmndrs/zustand)) usually store the state outside of React, then use `useSyncExternalState` to sync the state into the React.
+Global state management libraries (like [Redux](https://redux.js.org/) or [Zustand](https://github.com/pmndrs/zustand)) usually store the state outside of React, then use `useSyncExternalStore` to sync the state into the React.
 
-`useSyncExternalState` is a new React built-in hook introduced in React 18. It is a trade-off between React Concurrent Rendering and consistency (without tearing). Currently (React 18.2), when React encounters `useSyncExternalState` during the concurrent rendering, React will "de-optimize" and fall back to the synchronous rendering (slower and less responsive) to make sure there is no inconsistency (tearing). Only states stored inside of React (using `useState` and `useReducer`) are concurrent-rendering-friendly.
+`useSyncExternalStore` is a new React built-in hook introduced in React 18. It is a trade-off between React Concurrent Rendering and consistency (without tearing). Currently (React 18.2), when React encounters `useSyncExternalStore` during the concurrent rendering, React will "de-optimize" and fall back to the synchronous rendering (slower and less responsive) to make sure there is no inconsistency (tearing). Only states stored inside of React (using `useState` and `useReducer`) are concurrent-rendering-friendly.
 
 Global state management libraries are indeed very powerful and great for React application that has complex logic and complicated data flow. But most of the time, a simple state shared across the application is good enough.
 
