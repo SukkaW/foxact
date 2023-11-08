@@ -3,9 +3,18 @@ import { noop } from '../noop';
 import { useIsomorphicLayoutEffect } from '../use-isomorphic-layout-effect';
 import { noSSRError } from '../no-ssr';
 
-function dispatchStorageEvent(key: string, newValue: string | null) {
+// StorageEvent is deliberately not fired on the same document, we do not want to change that
+type CustomStorageEvent = CustomEvent<string>;
+
+declare global {
+  interface WindowEventMap {
+    'foxact-local-storage': CustomStorageEvent
+  }
+}
+
+function dispatchStorageEvent(key: string) {
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(new StorageEvent('storage', { key, newValue }));
+    window.dispatchEvent(new CustomEvent<string>('foxact-local-storage', { detail: key }));
   }
 }
 
@@ -14,13 +23,12 @@ export type Deserializer<T> = (value: string) => T;
 
 const setLocalStorageItem = <T>(key: string, value: any, serializer: Serializer<T>) => {
   if (typeof window !== 'undefined') {
-    const stringifiedValue = serializer(value);
     try {
-      window.localStorage.setItem(key, stringifiedValue);
+      window.localStorage.setItem(key, serializer(value));
     } catch (e) {
       console.error(e);
     } finally {
-      dispatchStorageEvent(key, stringifiedValue);
+      dispatchStorageEvent(key);
     }
   }
 };
@@ -33,7 +41,7 @@ const removeLocalStorageItem = (key: string) => {
     } catch (e) {
       console.error(e);
     } finally {
-      dispatchStorageEvent(key, null);
+      dispatchStorageEvent(key);
     }
   }
 };
@@ -49,14 +57,6 @@ const getLocalStorageItem = <T>(key: string, deserializer: Deserializer<T>) => {
     }
   }
   return null;
-};
-
-const subscribeToLocalStorage = (callback: () => void) => {
-  if (typeof window !== 'undefined') {
-    window.addEventListener('storage', callback);
-    return () => window.removeEventListener('storage', callback);
-  }
-  return noop;
 };
 
 const getServerSnapshotWithoutServerValue = () => {
@@ -83,6 +83,34 @@ type NotUndefined<T> = T extends undefined ? never : T;
 
 /** @see https://foxact.skk.moe/use-local-storage */
 export function useLocalStorage<T>(key: string, serverValue?: NotUndefined<T> | undefined, options?: UseLocalStorageRawOption | UseLocalStorageParserOption<NotUndefined<T>>) {
+  const subscribeToLocalStorage = useCallback((callback: () => void) => {
+    if (typeof window === 'undefined') {
+      return noop;
+    }
+
+    const handleStorageEvent = (e: StorageEvent) => {
+      if (
+        (!('key' in e)) // Some browsers' strange quirk where StorageEvent is missing key
+        || e.key === key
+      ) {
+        callback();
+      }
+    };
+
+    const handleCustomStorageEvent = (e: CustomStorageEvent) => {
+      if (e.detail === key) {
+        callback();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageEvent);
+    window.addEventListener('foxact-local-storage', handleCustomStorageEvent);
+    return () => {
+      window.removeEventListener('storage', handleStorageEvent);
+      window.removeEventListener('foxact-local-storage', handleCustomStorageEvent);
+    };
+  }, [key]);
+
   const serializer: Serializer<T> = options?.raw ? identity : (options?.serializer ?? JSON.stringify);
   const deserializer: Deserializer<T> = options?.raw ? identity : (options?.deserializer ?? JSON.parse);
 
