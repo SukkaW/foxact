@@ -1,22 +1,23 @@
+import 'client-only';
 import { useSyncExternalStore, useCallback } from 'react';
 import { noop } from '../noop';
 import { useIsomorphicLayoutEffect } from '../use-isomorphic-layout-effect';
 import { noSSRError } from '../no-ssr';
 
 // StorageEvent is deliberately not fired on the same document, we do not want to change that
+const FOXACT_LOCAL_STORAGE_EVENT_KEY = 'foxact-local-storage';
 type CustomStorageEvent = CustomEvent<string>;
-
 declare global {
   interface WindowEventMap {
-    'foxact-local-storage': CustomStorageEvent
+    [FOXACT_LOCAL_STORAGE_EVENT_KEY]: CustomStorageEvent
   }
 }
 
-function dispatchStorageEvent(key: string) {
+const dispatchStorageEvent = (key: string) => {
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent<string>('foxact-local-storage', { detail: key }));
+    window.dispatchEvent(new CustomEvent<string>(FOXACT_LOCAL_STORAGE_EVENT_KEY, { detail: key }));
   }
-}
+};
 
 export type Serializer<T> = (value: T) => string;
 export type Deserializer<T> = (value: string) => T;
@@ -47,16 +48,16 @@ const removeLocalStorageItem = (key: string) => {
 };
 
 const getLocalStorageItem = <T>(key: string, deserializer: Deserializer<T>) => {
-  if (typeof window !== 'undefined') {
-    try {
-      const value = window.localStorage.getItem(key);
-      return value === null ? null : deserializer(value);
-    } catch (e) {
-      console.warn(e);
-      return null;
-    }
+  if (typeof window === 'undefined') {
+    return null;
   }
-  return null;
+  try {
+    const value = window.localStorage.getItem(key);
+    return value === null ? null : deserializer(value);
+  } catch (e) {
+    console.warn(e);
+    return null;
+  }
 };
 
 const getServerSnapshotWithoutServerValue = () => {
@@ -82,7 +83,14 @@ export interface UseLocalStorageParserOption<T> {
 type NotUndefined<T> = T extends undefined ? never : T;
 
 /** @see https://foxact.skk.moe/use-local-storage */
-export function useLocalStorage<T>(key: string, serverValue?: NotUndefined<T> | undefined, options?: UseLocalStorageRawOption | UseLocalStorageParserOption<NotUndefined<T>>) {
+export function useLocalStorage<T>(
+  key: string,
+  serverValue?: NotUndefined<T> | undefined,
+  options: UseLocalStorageRawOption | UseLocalStorageParserOption<T> = {
+    serializer: JSON.stringify,
+    deserializer: JSON.parse
+  }
+) {
   const subscribeToLocalStorage = useCallback((callback: () => void) => {
     if (typeof window === 'undefined') {
       return noop;
@@ -104,21 +112,21 @@ export function useLocalStorage<T>(key: string, serverValue?: NotUndefined<T> | 
     };
 
     window.addEventListener('storage', handleStorageEvent);
-    window.addEventListener('foxact-local-storage', handleCustomStorageEvent);
+    window.addEventListener(FOXACT_LOCAL_STORAGE_EVENT_KEY, handleCustomStorageEvent);
     return () => {
       window.removeEventListener('storage', handleStorageEvent);
-      window.removeEventListener('foxact-local-storage', handleCustomStorageEvent);
+      window.removeEventListener(FOXACT_LOCAL_STORAGE_EVENT_KEY, handleCustomStorageEvent);
     };
   }, [key]);
 
-  const serializer: Serializer<T> = options?.raw ? identity : (options?.serializer ?? JSON.stringify);
-  const deserializer: Deserializer<T> = options?.raw ? identity : (options?.deserializer ?? JSON.parse);
+  const serializer: Serializer<T> = options.raw ? identity : options.serializer;
+  const deserializer: Deserializer<T> = options.raw ? identity : options.deserializer;
 
   const getClientSnapshot = () => getLocalStorageItem<T>(key, deserializer);
 
   // If the serverValue is provided, we pass it to useSES' getServerSnapshot, which will be used during SSR
   // If the serverValue is not provided, we don't pass it to useSES, which will cause useSES to opt-in client-side rendering
-  const getServerSnapshot = typeof serverValue !== 'undefined'
+  const getServerSnapshot = serverValue !== undefined
     ? () => serverValue
     : getServerSnapshotWithoutServerValue;
 
@@ -150,7 +158,7 @@ export function useLocalStorage<T>(key: string, serverValue?: NotUndefined<T> | 
   useIsomorphicLayoutEffect(() => {
     if (
       getLocalStorageItem<T>(key, deserializer) === null
-      && typeof serverValue !== 'undefined'
+      && serverValue !== undefined
     ) {
       setLocalStorageItem<T>(key, serverValue, serializer);
     }
