@@ -9,7 +9,10 @@ function dispatchStorageEvent(key: string, newValue: string | null) {
   }
 }
 
-const setLocalStorageItem = <T extends string | number>(key: string, value: any, serializer: (value: T) => string) => {
+export type Serializer<T> = (value: T) => string;
+export type Deserializer<T> = (value: string) => T;
+
+const setLocalStorageItem = <T>(key: string, value: any, serializer: Serializer<T>) => {
   if (typeof window !== 'undefined') {
     const stringifiedValue = serializer(value);
     try {
@@ -35,14 +38,11 @@ const removeLocalStorageItem = (key: string) => {
   }
 };
 
-const getLocalStorageItem = <T extends string | number>(key: string, deserializer: (value: string) => T) => {
+const getLocalStorageItem = <T>(key: string, deserializer: Deserializer<T>) => {
   if (typeof window !== 'undefined') {
     try {
       const value = window.localStorage.getItem(key);
-      if (value) {
-        return deserializer(value);
-      }
-      return value;
+      return value === null ? null : deserializer(value);
     } catch (e) {
       console.warn(e);
       return null;
@@ -67,41 +67,26 @@ const getServerSnapshotWithoutServerValue = () => {
 // eslint-disable-next-line @typescript-eslint/ban-types -- workaround TypeScript bug
 const isFunction = (x: unknown): x is Function => typeof x === 'function';
 
-const getLocalStorageParser = <T extends string | number>(options?: UseLocalStorageRawOption | UseLocalStorageParserOption<T>): UseLocalStorageParserOption<T> => {
-  if (typeof options === 'undefined') {
-    return {
-      serializer: JSON.stringify,
-      deserializer: JSON.parse
-    };
-  }
-  if ('raw' in options) {
-    return {
-      serializer: String,
-      deserializer: (value: string) => value as T
-    };
-  }
-  if ('serializer' in options && 'deserializer' in options) {
-    return options;
-  }
-  return {
-    serializer: JSON.stringify,
-    deserializer: JSON.parse
-  };
-};
+const identity = (x: any) => x;
 
-interface UseLocalStorageRawOption {
+export interface UseLocalStorageRawOption {
   raw: true
 }
 
-interface UseLocalStorageParserOption<T extends string | number> {
-  serializer: (value: T) => string,
-  deserializer: (value: string) => T
+export interface UseLocalStorageParserOption<T> {
+  raw?: false,
+  serializer: Serializer<T>,
+  deserializer: Deserializer<T>
 }
 
+type NotUndefined<T> = T extends undefined ? never : T;
+
 /** @see https://foxact.skk.moe/use-local-storage */
-export function useLocalStorage<T extends string | number>(key: string, serverValue?: T, options?: UseLocalStorageRawOption | UseLocalStorageParserOption<T>) {
-  const { serializer, deserializer } = getLocalStorageParser<T>(options);
-  const getSnapshot = () => getLocalStorageItem<T>(key, deserializer) as T | null;
+export function useLocalStorage<T>(key: string, serverValue?: NotUndefined<T> | undefined, options?: UseLocalStorageRawOption | UseLocalStorageParserOption<NotUndefined<T>>) {
+  const serializer: Serializer<T> = options?.raw ? identity : (options?.serializer ?? JSON.stringify);
+  const deserializer: Deserializer<T> = options?.raw ? identity : (options?.deserializer ?? JSON.parse);
+
+  const getClientSnapshot = () => getLocalStorageItem<T>(key, deserializer);
 
   // If the serverValue is provided, we pass it to useSES' getServerSnapshot, which will be used during SSR
   // If the serverValue is not provided, we don't pass it to useSES, which will cause useSES to opt-in client-side rendering
@@ -111,7 +96,7 @@ export function useLocalStorage<T extends string | number>(key: string, serverVa
 
   const store = useSyncExternalStore(
     subscribeToLocalStorage,
-    getSnapshot,
+    getClientSnapshot,
     getServerSnapshot
   );
 
@@ -122,7 +107,7 @@ export function useLocalStorage<T extends string | number>(key: string, serverVa
           ? v(store ?? null)
           : v;
 
-        if (nextState == null) {
+        if (nextState === null) {
           removeLocalStorageItem(key);
         } else {
           setLocalStorageItem<T>(key, nextState, serializer);
