@@ -26,7 +26,18 @@ const Comp = () => {
      *
      * Also, the initial value will also be used during the server-side rendering, see below.
      */
-    'circle'
+    'circle',
+    /**
+     * Optional configuration object enables the customization of value serialization before it's stored in local storage.
+     */
+    {
+      // Optional, default to false. When set to "true", the value will be passed to the localStorage API as is.
+      raw: false,
+      // Optional, default to "JSON.stringify". Can only be specified when the "raw" is set to false (which is the default).
+      serializer: JSON.stringify,
+      // Optional, default to "JSON.parse". Can only be specified when the "raw" is set to false (which is the default).
+      deserializer: JSON.parse,
+    }
   );
 
   return (
