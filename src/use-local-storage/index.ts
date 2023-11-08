@@ -9,9 +9,9 @@ function dispatchStorageEvent(key: string, newValue: string | null) {
   }
 }
 
-const setLocalStorageItem = <T extends string | number>(key: string, value: any, parser: UseLocalStorageParserOption<T>) => {
+const setLocalStorageItem = <T extends string | number>(key: string, value: any, serializer: (value: T) => string) => {
   if (typeof window !== 'undefined') {
-    const stringifiedValue = parser.serializer(value);
+    const stringifiedValue = serializer(value);
     try {
       window.localStorage.setItem(key, stringifiedValue);
     } catch (e) {
@@ -35,12 +35,12 @@ const removeLocalStorageItem = (key: string) => {
   }
 };
 
-const getLocalStorageItem = <T extends string | number>(key: string, parser: UseLocalStorageParserOption<T>) => {
+const getLocalStorageItem = <T extends string | number>(key: string, deserializer: (value: string) => T) => {
   if (typeof window !== 'undefined') {
     try {
       const value = window.localStorage.getItem(key);
       if (value) {
-        return parser.deserializer(value);
+        return deserializer(value);
       }
       return value;
     } catch (e) {
@@ -100,8 +100,8 @@ interface UseLocalStorageParserOption<T extends string | number> {
 
 /** @see https://foxact.skk.moe/use-local-storage */
 export function useLocalStorage<T extends string | number>(key: string, serverValue?: T, options?: UseLocalStorageRawOption | UseLocalStorageParserOption<T>) {
-  const parser = getLocalStorageParser<T>(options);
-  const getSnapshot = () => getLocalStorageItem<T>(key, parser) as T | null;
+  const { serializer, deserializer } = getLocalStorageParser<T>(options);
+  const getSnapshot = () => getLocalStorageItem<T>(key, deserializer) as T | null;
 
   // If the serverValue is provided, we pass it to useSES' getServerSnapshot, which will be used during SSR
   // If the serverValue is not provided, we don't pass it to useSES, which will cause useSES to opt-in client-side rendering
@@ -125,23 +125,23 @@ export function useLocalStorage<T extends string | number>(key: string, serverVa
         if (nextState == null) {
           removeLocalStorageItem(key);
         } else {
-          setLocalStorageItem<T>(key, nextState, parser);
+          setLocalStorageItem<T>(key, nextState, serializer);
         }
       } catch (e) {
         console.warn(e);
       }
     },
-    [key, parser, store]
+    [key, serializer, store]
   );
 
   useIsomorphicLayoutEffect(() => {
     if (
-      getLocalStorageItem<T>(key, parser) === null
+      getLocalStorageItem<T>(key, deserializer) === null
       && typeof serverValue !== 'undefined'
     ) {
-      setLocalStorageItem<T>(key, serverValue, parser);
+      setLocalStorageItem<T>(key, serverValue, serializer);
     }
-  }, [key, parser, serverValue]);
+  }, [deserializer, key, serializer, serverValue]);
 
   return [store ?? serverValue ?? null, setState] as const;
 }
