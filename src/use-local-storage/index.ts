@@ -22,10 +22,10 @@ const dispatchStorageEvent = (key: string) => {
 export type Serializer<T> = (value: T) => string;
 export type Deserializer<T> = (value: string) => T;
 
-const setLocalStorageItem = <T>(key: string, value: any, serializer: Serializer<T>) => {
+const setLocalStorageItem = (key: string, value: string) => {
   if (typeof window !== 'undefined') {
     try {
-      window.localStorage.setItem(key, serializer(value));
+      window.localStorage.setItem(key, value);
     } catch (e) {
       console.error(e);
     } finally {
@@ -47,13 +47,12 @@ const removeLocalStorageItem = (key: string) => {
   }
 };
 
-const getLocalStorageItem = <T>(key: string, deserializer: Deserializer<T>) => {
+const getLocalStorageItem = (key: string) => {
   if (typeof window === 'undefined') {
     return null;
   }
   try {
-    const value = window.localStorage.getItem(key);
-    return value === null ? null : deserializer(value);
+    return window.localStorage.getItem(key);
   } catch (e) {
     console.warn(e);
     return null;
@@ -91,7 +90,7 @@ export function useLocalStorage<T>(
     deserializer: JSON.parse
   }
 ) {
-  const subscribeToLocalStorage = useCallback((callback: () => void) => {
+  const subscribeToSpecificKeyOfLocalStorage = useCallback((callback: () => void) => {
     if (typeof window === 'undefined') {
       return noop;
     }
@@ -104,7 +103,6 @@ export function useLocalStorage<T>(
         callback();
       }
     };
-
     const handleCustomStorageEvent = (e: CustomStorageEvent) => {
       if (e.detail === key) {
         callback();
@@ -122,47 +120,49 @@ export function useLocalStorage<T>(
   const serializer: Serializer<T> = options.raw ? identity : options.serializer;
   const deserializer: Deserializer<T> = options.raw ? identity : options.deserializer;
 
-  const getClientSnapshot = () => getLocalStorageItem<T>(key, deserializer);
+  const getClientSnapshot = () => getLocalStorageItem(key);
 
   // If the serverValue is provided, we pass it to useSES' getServerSnapshot, which will be used during SSR
   // If the serverValue is not provided, we don't pass it to useSES, which will cause useSES to opt-in client-side rendering
   const getServerSnapshot = serverValue !== undefined
-    ? () => serverValue
+    ? () => serializer(serverValue)
     : getServerSnapshotWithoutServerValue;
 
   const store = useSyncExternalStore(
-    subscribeToLocalStorage,
+    subscribeToSpecificKeyOfLocalStorage,
     getClientSnapshot,
     getServerSnapshot
   );
+
+  const deserialized = store === null ? null : deserializer(store);
 
   const setState = useCallback<React.Dispatch<React.SetStateAction<T | null>>>(
     (v) => {
       try {
         const nextState = isFunction(v)
-          ? v(store ?? null)
+          ? v(deserialized ?? null)
           : v;
 
         if (nextState === null) {
           removeLocalStorageItem(key);
         } else {
-          setLocalStorageItem<T>(key, nextState, serializer);
+          setLocalStorageItem(key, serializer(nextState));
         }
       } catch (e) {
         console.warn(e);
       }
     },
-    [key, serializer, store]
+    [key, serializer, deserialized]
   );
 
   useIsomorphicLayoutEffect(() => {
     if (
-      getLocalStorageItem<T>(key, deserializer) === null
+      getLocalStorageItem(key) === null
       && serverValue !== undefined
     ) {
-      setLocalStorageItem<T>(key, serverValue, serializer);
+      setLocalStorageItem(key, serializer(serverValue));
     }
   }, [deserializer, key, serializer, serverValue]);
 
-  return [store ?? serverValue ?? null, setState] as const;
+  return [deserialized ?? serverValue ?? null, setState] as const;
 }
