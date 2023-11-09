@@ -1,5 +1,5 @@
 import 'client-only';
-import { useSyncExternalStore, useCallback } from 'react';
+import { useSyncExternalStore, useCallback, useMemo } from 'react';
 import { noop } from '../noop';
 import { useIsomorphicLayoutEffect } from '../use-isomorphic-layout-effect';
 import { noSSRError } from '../no-ssr';
@@ -134,7 +134,7 @@ export function useLocalStorage<T>(
     getServerSnapshot
   );
 
-  const deserialized = store === null ? null : deserializer(store);
+  const deserialized = useMemo(() => (store === null ? null : deserializer(store)), [store, deserializer]);
 
   const setState = useCallback<React.Dispatch<React.SetStateAction<T | null>>>(
     (v) => {
