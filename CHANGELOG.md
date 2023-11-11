@@ -1,3 +1,9 @@
+# 0.2.26
+
+**Core Changes**
+
+- Allow the `deserializer` of `useLocalStorage` to return an un-memoized value
+
 # 0.2.25
 
 **Core Changes**

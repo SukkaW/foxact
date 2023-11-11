@@ -26,7 +26,7 @@ Written in TypeScript. Unlocking strong typing benefits with TypeScript 4.8+.
 
 #### Super Lightweight
 
-The entire **foxact** library has zero dependencies and is **about 5 KiB gzipped in sum**, ensuring a lean and efficient solution. And what's more...
+The entire **foxact** library has zero dependencies, ensuring a lean and efficient solution. And what's more...
 
 #### Fully Tree Shakable
 
