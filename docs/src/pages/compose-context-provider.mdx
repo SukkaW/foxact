@@ -85,7 +85,7 @@ export default function RootLayout({ children }) {
         {/** composed providers */}
         <ComposeContextProvider contexts={contexts}>
           {children}
-        </SidebarActiveProvider>
+        </ComposeContextProvider>
       </body>
     </html>
   );
