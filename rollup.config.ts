@@ -37,15 +37,21 @@ export default async function () {
     output: [{
       dir: 'dist',
       format: 'commonjs',
-      entryFileNames: '[name]/index.cjs'
+      entryFileNames: '[name]/index.cjs',
+      chunkFileNames: 'chunks/[name].[hash].cjs',
+      compact: true
     }, {
       dir: 'dist',
       format: 'commonjs',
-      entryFileNames: '[name]/index.js'
+      entryFileNames: '[name]/index.js',
+      chunkFileNames: 'chunks/[name].[hash].js',
+      compact: true
     }, {
       dir: 'dist',
       format: 'esm',
-      entryFileNames: '[name]/index.mjs'
+      entryFileNames: '[name]/index.mjs',
+      chunkFileNames: 'chunks/[name].[hash].mjs',
+      compact: true
     }],
     plugins: [
       swc({
