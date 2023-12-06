@@ -7,7 +7,7 @@ export type {
   UseStorageParserOption as UseLocalStorageParserOption
 } from '../create-storage-hook';
 
-const useLocalStorage = createStorage('localStorage');
+const { useStorage: useLocalStorage, useSetStorage: useSetLocalStorage } = createStorage('localStorage');
 
 /** @see https://foxact.skk.moe/use-local-storage */
-export { useLocalStorage };
+export { useLocalStorage, useSetLocalStorage };

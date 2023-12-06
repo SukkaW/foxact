@@ -84,7 +84,22 @@ export function createStorage(type: StorageType) {
     }
   };
 
-  return function useStorage<T>(
+  const useSetStorage = <T>(key: string, serializer: Serializer<T>) => useCallback(
+    (v: T | null) => {
+      try {
+        if (v === null) {
+          removeStorageItem(key);
+        } else {
+          setStorageItem(key, serializer(v));
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    },
+    [key, serializer]
+  );
+
+  function useStorage<T>(
     key: string,
     serverValue?: NotUndefined<T> | undefined,
     options: UseStorageRawOption | UseStorageParserOption<T> = {
@@ -167,5 +182,10 @@ export function createStorage(type: StorageType) {
     }, [deserializer, key, serializer, serverValue]);
 
     return [deserialized ?? serverValue ?? null, setState] as const;
+  }
+
+  return {
+    useStorage,
+    useSetStorage
   };
 }

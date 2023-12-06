@@ -7,7 +7,7 @@ export type {
   UseStorageParserOption as UseSessionStorageParserOption
 } from '../create-storage-hook';
 
-const useSessionStorage = createStorage('sessionStorage');
+const { useStorage: useSessionStorage, useSetStorage: useSetSessionStorage } = createStorage('sessionStorage');
 
 /** @see https://foxact.skk.moe/use-session-storage */
-export { useSessionStorage };
+export { useSessionStorage, useSetSessionStorage };
