@@ -1,0 +1,58 @@
+---
+title: useSessionStorage
+---
+
+# useSessionStorage
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+`useSessionStorage` provides a convenient way to synchronize the state of a component with the data stored in the `sessionStorage`.
+
+## Usage
+
+```tsx copy
+import { useEffect } from 'react';
+import { useSessionStorage } from 'foxact/use-session-storage';
+
+const Comp = () => {
+  const [value, setValue] = useSessionStorage<'circle' | 'square' | 'triangle'>(
+    /** The localStorage key */
+    'session-storage-key',
+    /**
+     * The initial value to use if there is no item in the local storage with the provided key,
+     * the undefined value will be used if no initial value is provided.
+     *
+     * Also, the initial value will also be used during the server-side rendering, see below.
+     */
+    'circle',
+    /**
+     * Optional configuration object enables the customization of value serialization before it's stored in local storage.
+     */
+    {
+      // Optional, default to false. When set to "true", the value will be passed to the localStorage API as is.
+      raw: false,
+      // Optional, default to "JSON.stringify". Can only be specified when the "raw" is set to false (which is the default).
+      serializer: JSON.stringify,
+      // Optional, default to "JSON.parse". Can only be specified when the "raw" is set to false (which is the default).
+      deserializer: JSON.parse,
+    }
+  );
+
+  return (
+    <div>
+      <button onClick={() => setValue('circle')}>Circle</button>
+      <button onClick={() => setValue('square')}>Square</button>
+      <button onClick={() => setValue('triangle')}>Triangle</button>
+
+      <button onClick={() => setValue(null)}>Clear</button>
+      <div>{value}</div>
+    </div>
+  );
+};
+```
+
+## Sever-side Rendering
+
+See [useLocalStorage](/use-local-storage#sever-side-rendering) for more details.
