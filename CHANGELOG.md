@@ -1,3 +1,10 @@
+# 0.2.27
+
+**Core Changes**
+
+- Add `useSessionStorage`
+- Improve performance of `noSSR`
+
 # 0.2.26
 
 **Core Changes**
