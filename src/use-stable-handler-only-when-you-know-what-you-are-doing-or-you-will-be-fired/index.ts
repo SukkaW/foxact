@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports -- check if React.use is available
 import reactExports, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 
 // useIsomorphicInsertionEffect
