@@ -1,10 +1,12 @@
 import 'client-only';
 
-import { useCallback, useSyncExternalStore } from 'react';
+import { useCallback, useMemo, useSyncExternalStore } from 'react';
 import { noop } from '../noop';
-import { useStableHandler } from '../use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired';
+import { noSSRError } from '../no-ssr';
 
-const identity = <T>(x: string) => x as T;
+type NotUndefined<T> = T extends undefined ? never : T;
+
+const identity = (x: any) => x;
 
 const subscribe: Parameters<typeof useSyncExternalStore>[0] = (() => {
   if (typeof window === 'undefined') {
@@ -39,64 +41,81 @@ const subscribe: Parameters<typeof useSyncExternalStore>[0] = (() => {
 // eslint-disable-next-line @typescript-eslint/ban-types -- workaround TypeScript bug
 const isFunction = (x: unknown): x is Function => typeof x === 'function';
 
+export type Serializer<T> = (value: T) => string;
+export type Deserializer<T> = (value: string) => T;
+
+export interface UseUrlHashStateRawOption {
+  raw: true
+}
+
+export interface UseUrlHashStateParserOption<T> {
+  raw?: false,
+  serializer: Serializer<T>,
+  deserializer: Deserializer<T>
+}
+
+const getServerSnapshotWithoutServerValue = () => {
+  throw noSSRError('useUrlHashState cannot be used on the server without a serverValue');
+};
+
 /** @see https://foxact.skk.moe/use-url-hash-state */
 function useUrlHashState<T>(
   key: string,
-  defaultValue?: undefined
-): readonly [T | undefined, React.Dispatch<React.SetStateAction<T | undefined>>];
-function useUrlHashState<T>(
-  key: string,
-  defaultValue: T,
-  transform?: (value: string) => T
-): readonly [T, React.Dispatch<React.SetStateAction<T>>];
-function useUrlHashState<T>(
-  key: string,
-  defaultValue?: T | undefined,
-  transform: (value: string) => T = identity
-): readonly [T | undefined, React.Dispatch<React.SetStateAction<T | undefined>>] {
-  const memoized_transform = useStableHandler(transform);
+  defaultValue?: NotUndefined<T> | undefined,
+  options: UseUrlHashStateRawOption | UseUrlHashStateParserOption<T> = {
+    serializer: identity,
+    deserializer: identity
+  }
+) {
+  const serializer: Serializer<T> = options.raw ? identity : options.serializer;
+  const deserializer: Deserializer<T> = options.raw ? identity : options.deserializer;
+
+  const getClientSnapshot = () => (new URLSearchParams(location.hash.slice(1))).get(key);
+
+  // If the serverValue is provided, we pass it to useSES' getServerSnapshot, which will be used during SSR
+  // If the serverValue is not provided, we don't pass it to useSES, which will cause useSES to opt-in client-side rendering
+  const getServerSnapshot = defaultValue !== undefined
+    ? () => serializer(defaultValue)
+    : getServerSnapshotWithoutServerValue;
+
+  const store = useSyncExternalStore(
+    subscribe,
+    getClientSnapshot,
+    getServerSnapshot
+  );
+
+  const deserialized = useMemo(() => (store === null ? (defaultValue ?? null) : deserializer(store)), [defaultValue, deserializer, store]);
+
+  const setState = useCallback((v: React.SetStateAction<T | null>) => {
+    const currentHash = location.hash;
+
+    const searchParams = new URLSearchParams(currentHash.slice(1));
+
+    const nextState = isFunction(v)
+      ? v(deserialized)
+      : v;
+
+    if (
+      nextState === defaultValue
+      || nextState === null
+    ) {
+      searchParams.delete(key);
+    } else {
+      searchParams.set(key, serializer(nextState));
+    }
+
+    const newHash = searchParams.toString();
+
+    if (currentHash === newHash) {
+      return;
+    }
+
+    location.hash = newHash;
+  }, [defaultValue, deserialized, key, serializer]);
 
   return [
-    useSyncExternalStore(
-      subscribe,
-      () => {
-        const searchParams = new URLSearchParams(location.hash.slice(1));
-        const storedValue = searchParams.get(key);
-        return storedValue !== null ? transform(storedValue) : defaultValue;
-      },
-      () => defaultValue
-    ),
-    useCallback((updater) => {
-      const currentHash = location.hash;
-
-      const searchParams = new URLSearchParams(currentHash.slice(1));
-
-      let newValue;
-
-      if (isFunction(updater)) {
-        const storedValue = searchParams.get(key);
-        newValue = updater(storedValue !== null ? memoized_transform(storedValue) : defaultValue);
-      } else {
-        newValue = updater;
-      }
-
-      if (
-        newValue === defaultValue
-        || newValue === undefined
-      ) {
-        searchParams.delete(key);
-      } else {
-        searchParams.set(key, JSON.stringify(newValue));
-      }
-
-      const newHash = searchParams.toString();
-
-      if (currentHash === newHash) {
-        return;
-      }
-
-      location.hash = newHash;
-    }, [defaultValue, key, memoized_transform])
+    deserialized ?? defaultValue ?? null,
+    setState
   ] as const;
 }
 
