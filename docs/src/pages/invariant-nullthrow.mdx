@@ -1,0 +1,62 @@
+---
+title: invariant & nullthrow
+---
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+# invariant
+
+<ExportMetaInfo slug="invariant" />
+
+```ts
+import { invariant } from 'foxact/invariant';
+
+invariant(true);
+// => undefined
+invariant(false);
+// => undefined
+invariant(0);
+// => undefined
+invariant('');
+// => undefined
+invariant(null);
+// Error: Value is null or undefined
+invariant(undefined);
+// Error: Value is null or undefined
+invariant();
+// Error: Value is null or undefined
+
+
+let value: string | null;
+invariant(value);
+console.log(value);
+          // ^?: string
+```
+
+# nullthrow
+
+<ExportMetaInfo slug="nullthrow" />
+
+```ts
+import { nullthrow } from 'foxact/nullthrow';
+
+nullthrow(true);
+// => undefined
+nullthrow(false);
+// => undefined
+nullthrow(0);
+// => undefined
+nullthrow('');
+// => undefined
+nullthrow(null);
+// Error: Value is null or undefined
+nullthrow(undefined);
+// Error: Value is null or undefined
+nullthrow();
+// Error: Value is null or undefined
+
+let nullable: string | null;
+const value = nullthrow(nullable);
+console.log(value);
+          // ^: string
+```

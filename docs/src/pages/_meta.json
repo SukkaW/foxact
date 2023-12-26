@@ -60,6 +60,7 @@
   "compose-context-provider": {},
   "context-state": {},
   "create-fixed-array": {},
+  "invariant-nullthrow": {},
   "noop": {},
   "no-ssr": {},
   "rem": {},
