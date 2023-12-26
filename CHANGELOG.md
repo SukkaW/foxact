@@ -1,3 +1,11 @@
+# 0.2.28
+
+**Core Changes**
+
+- Add `invariant` function
+- Add `nullthrow` function
+- Re-implement `unstable_useUrlHashState`
+
 # 0.2.27
 
 **Core Changes**
