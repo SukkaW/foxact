@@ -40,20 +40,19 @@
     "@sukka/listdir": "^0.3.1",
     "@swc-node/register": "^1.6.8",
     "@swc/core": "^1.3.101",
-    "@types/node": "^20.5.0",
-    "@types/react": "^18.2.14",
-    "@types/react-dom": "^18.2.6",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
     "brotli-size": "^4.0.0",
     "browserslist": "^4.22.2",
     "eslint": "^8.56.0",
     "eslint-config-sukka": "^5.0.0-beta.3",
     "eslint-formatter-sukka": "^5.0.0-beta.3",
-    "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "gzip-size": "^6.0.0",
-    "next": "^13.4.9",
-    "react-router-dom": "^6.14.1",
+    "next": "^14.0.4",
+    "react-router-dom": "^6.21.1",
     "rollup": "^4.9.1",
     "rollup-plugin-dts": "^6.1.0",
     "rollup-plugin-swc3": "^0.11.0"
@@ -82,6 +81,7 @@
     "es-iterator-helpers": "npm:@nolyfill/es-iterator-helpers@latest",
     "array.prototype.findlastindex": "npm:@nolyfill/array.prototype.findlastindex@latest",
     "function-bind": "npm:@nolyfill/function-bind@latest",
-    "object.groupby": "npm:@nolyfill/object.groupby@latest"
+    "object.groupby": "npm:@nolyfill/object.groupby@latest",
+    "hasown": "npm:@nolyfill/hasown@latest"
   }
 }
