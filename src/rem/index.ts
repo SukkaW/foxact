@@ -5,7 +5,11 @@ function scaleRem(remValue: string, shouldScaleTo: string) {
 }
 
 function createConverter(units: string, shouldScaleTo: string | null = null) {
-  return (value: number | string) => {
+  return function converter(value: number | string | number[] | string[]): string {
+    if (Array.isArray(value)) {
+      return value.map((val) => converter(val)).join(' ');
+    }
+
     if (value === 0 || value === '0') {
       return '0';
     }
@@ -15,8 +19,15 @@ function createConverter(units: string, shouldScaleTo: string | null = null) {
       return (shouldScaleTo && shouldScaleTo !== SIXTEEN_PX) ? scaleRem(val, shouldScaleTo) : val;
     }
 
-    if (value.includes('calc(') || value.includes('var(')) {
+    if (value.includes('calc(') || value.includes('var(') || value.includes('clamp(')) {
       return value;
+    }
+
+    if (value.includes(' ')) {
+      return value
+        .split(' ')
+        .map((val) => converter(val))
+        .join(' ');
     }
 
     if (value.includes(units)) {
