@@ -53,11 +53,16 @@
     "title": "useStableHandler"
   },
   "use-uncontrolled": {},
+  "-- separator components": {
+    "type": "separator",
+    "title": "Components"
+  },
+  "compose-context-provider": {},
+  "current-year": {},
   "-- separator utilities": {
     "type": "separator",
     "title": "Utilities"
   },
-  "compose-context-provider": {},
   "context-state": {},
   "create-fixed-array": {},
   "invariant-nullthrow": {},

@@ -39,6 +39,8 @@ export default function ExportMetaInfo({ slug: _slug }: ExportMetaInfoProps) {
         <a
           href={`https://github.com/SukkaW/foxact/tree/master/src/${slug}/`}
           className="underline underline-offset-1"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           View on GitHub
         </a>

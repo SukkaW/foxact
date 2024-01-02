@@ -1,0 +1,27 @@
+---
+title: CurrentYear
+---
+
+# CurrentYear
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Render a `<span />` element with the current year, works well with React Server Components, React Server-side Rendering, no "mismatch" errors.
+
+## Usage
+
+During the server-side rendering, the `defaultYear` prop is required and its value will be emitted to the output HTML. On the client-side, the `defaultYear` prop will be used for hydration. After hydration is done, the `<CurrentYear />` component will re-render with the `new Date().getFullYear()`.
+
+```tsx filename="src/footer.tsx" copy
+export default function Footer() {
+  return (
+    <footer>
+      <p>
+        &copy; 2018 - <CurrentYear defaultYear={2023} /> All rights reserved.
+      </p>
+    </footer>
+  )
+}
+```
