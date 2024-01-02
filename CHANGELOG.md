@@ -1,3 +1,9 @@
+# 0.2.30
+
+**Breaking Changes**
+
+- `<CurrentYear />` component change from default export to named export
+
 # 0.2.29
 
 **Core Changes**
