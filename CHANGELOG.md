@@ -1,3 +1,15 @@
+# 0.2.29
+
+**Core Changes**
+
+- `rem` and `em` functions now accepts multiple values
+- `invariant` function now accepts custom error message
+- Add `<CurrentYear />` component
+
+**Misc Changes**
+
+- Improve error messages
+
 # 0.2.28
 
 **Core Changes**
