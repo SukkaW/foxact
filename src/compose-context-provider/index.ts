@@ -1,11 +1,12 @@
-import { cloneElement } from 'react';
+import { cloneElement, memo } from 'react';
 
 export interface ContextComposeProviderProps extends React.PropsWithChildren {
   // eslint-disable-next-line @typescript-eslint/ban-types -- cloneElement
   contexts: React.ReactElement[]
 }
 
-export const ComposeContextProvider = ({
+/** @see https://foxact.skk.moe/compose-context-provider */
+export const ComposeContextProvider = memo(({
   contexts,
   children
 }: ContextComposeProviderProps) => contexts.reduceRight<React.ReactNode>(
@@ -14,4 +15,4 @@ export const ComposeContextProvider = ({
     { children }
   ),
   children
-);
+));

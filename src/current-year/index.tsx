@@ -7,7 +7,8 @@ interface CurrentYearProps extends React.ComponentProps<'span'> {
   defaultYear?: number
 }
 
-function CopyrightYear({ defaultYear, ...restProps }: CurrentYearProps) {
+/** @see https://foxact.skk.moe/current-year */
+export const CurrentYear = memo(({ defaultYear, ...restProps }: CurrentYearProps) => {
   if (typeof window === 'undefined') {
     if (typeof defaultYear === 'undefined') {
       console.warn('[foxact/current-year] "defaultYear" is required during the server-side rendering.');
@@ -20,6 +21,8 @@ function CopyrightYear({ defaultYear, ...restProps }: CurrentYearProps) {
   }, []);
 
   return <span {...restProps}>{year}</span>;
-}
+});
 
-export default memo(CopyrightYear);
+if (process.env.NODE_ENV !== 'production') {
+  CurrentYear.displayName = 'CurrentYear';
+}
