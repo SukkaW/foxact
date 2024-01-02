@@ -60,4 +60,22 @@ if (el) {
     }
   });
 }
+
+// patch console.error to prevent the recoverable error from being called
+const origConsoleError = window.console.error;
+const isRecoverableError = (error) => {
+  return error && typeof error === 'object' && 'recoverableError' in error && error.recoverableError
+};
+window.console.error = (...args) => {
+  if (isRecoverableError(args[0])) {
+    return;
+  }
+  origConsoleError.apply(window.console, args);
+};
+window.addEventListener('error', (ev) => {
+  if (isRecoverableError(ev.error)) {
+    ev.preventDefault();
+    return;
+  }
+});
 ```
