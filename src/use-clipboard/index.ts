@@ -47,7 +47,7 @@ export function useClipboard({
         await navigator.clipboard.writeText(valueToCopy);
         handleCopyResult(true);
       } else {
-        throw new UseClipboardError('[foxact] useClipboard: navigator.clipboard is not supported');
+        throw new UseClipboardError('[foxact/use-clipboard] navigator.clipboard is not supported');
       }
     } catch (e) {
       if (usePromptAsFallback) {

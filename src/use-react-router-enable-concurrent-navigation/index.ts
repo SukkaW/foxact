@@ -11,7 +11,7 @@ export const useReactRouterEnableConcurrentNavigation = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- type check
   if (!navigator) {
-    throw new TypeError('[foxact] useReactRouterEnableConcurrentNavigation must be used under <RouterProvider /> or a Router component (e.g. <BrowserRouter />)');
+    throw new TypeError('[foxact/use-react-router-enable-concurrent-navigation] must be used under <RouterProvider /> or a Router component (e.g. <BrowserRouter />)');
   }
 
   useEffect(() => {

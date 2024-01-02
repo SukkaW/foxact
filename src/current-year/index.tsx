@@ -10,7 +10,7 @@ interface CurrentYearProps extends React.ComponentProps<'span'> {
 function CopyrightYear({ defaultYear, ...restProps }: CurrentYearProps) {
   if (typeof window === 'undefined') {
     if (typeof defaultYear === 'undefined') {
-      console.warn('[foxact] "defaultYear" is required during the server-side rendering.');
+      console.warn('[foxact/current-year] "defaultYear" is required during the server-side rendering.');
     }
   }
 

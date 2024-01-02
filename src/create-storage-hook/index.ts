@@ -11,8 +11,8 @@ type NotUndefined<T> = T extends undefined ? never : T;
 type CustomStorageEvent = CustomEvent<string>;
 declare global {
   interface WindowEventMap {
-    'foxact-local-storage': CustomStorageEvent,
-    'foxact-session-storage': CustomStorageEvent
+    'foxact-use-local-storage': CustomStorageEvent,
+    'foxact-use-session-storage': CustomStorageEvent
   }
 }
 
@@ -40,7 +40,9 @@ const getServerSnapshotWithoutServerValue = () => {
 };
 
 export function createStorage(type: StorageType) {
-  const FOXACT_LOCAL_STORAGE_EVENT_KEY = type === 'localStorage' ? 'foxact-local-storage' : 'foxact-session-storage';
+  const FOXACT_LOCAL_STORAGE_EVENT_KEY = type === 'localStorage' ? 'foxact-use-local-storage' : 'foxact-use-session-storage';
+
+  const foxactHookName = type === 'localStorage' ? 'foxact/use-local-storage' : 'foxact/use-session-storage';
 
   const dispatchStorageEvent = typeof window !== 'undefined'
     ? (key: string) => {
@@ -53,7 +55,7 @@ export function createStorage(type: StorageType) {
       try {
         window[type].setItem(key, value);
       } catch {
-        console.warn(`[foxact] Failed to set value to ${type}, it might be blocked`);
+        console.warn(`[${foxactHookName}] Failed to set value to ${type}, it might be blocked`);
       } finally {
         dispatchStorageEvent(key);
       }
@@ -65,7 +67,7 @@ export function createStorage(type: StorageType) {
       try {
         window[type].removeItem(key);
       } catch {
-        console.warn(`[foxact] Failed to remove value from ${type}, it might be blocked`);
+        console.warn(`[${foxactHookName}] Failed to remove value from ${type}, it might be blocked`);
       } finally {
         dispatchStorageEvent(key);
       }
@@ -79,7 +81,7 @@ export function createStorage(type: StorageType) {
     try {
       return window[type].getItem(key);
     } catch {
-      console.warn(`[foxact] Failed to get value from ${type}, it might be blocked`);
+      console.warn(`[${foxactHookName}] Failed to get value from ${type}, it might be blocked`);
       return null;
     }
   };
