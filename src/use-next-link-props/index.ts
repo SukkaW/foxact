@@ -1,4 +1,5 @@
 import 'client-only';
+
 import type { LinkProps } from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { MouseEvent } from 'react';
@@ -8,7 +9,7 @@ export interface ExtraProps {
   isPending: boolean
 }
 
-export const useNextLinkProps = (props: LinkProps): LinkProps & ExtraProps => {
+export const useNextLink = (props: LinkProps): LinkProps & ExtraProps => {
   const pathname = usePathname();
   const [targetPathname, setTargetPathname] = useState(() => pathname);
   useEffect(() => {
