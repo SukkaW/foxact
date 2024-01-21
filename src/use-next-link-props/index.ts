@@ -139,21 +139,19 @@ export const useNextLink = (
     );
   }, [appPrefetchKind, isVisible, prefetchEnabled, resolvedHref, router]);
 
-  const callbackRef: React.RefCallback<HTMLAnchorElement> = useCallback((el: HTMLAnchorElement | null) => {
-    // track the element visibility
-    setIntersectionRef(el);
-
-    if (typeof ref === 'function') {
-      ref(el);
-    } else if (ref && el) {
-      // We are acting on React behalf to assign the passed-in ref
-      (ref as React.MutableRefObject<HTMLAnchorElement>).current = el;
-    }
-  }, [ref, setIntersectionRef]);
-
   const childProps: UseNextLinkReturnProps = {
-    ref: callbackRef,
-    onClick(e) {
+    ref: useCallback<React.RefCallback<HTMLAnchorElement>>((el: HTMLAnchorElement | null) => {
+      // track the element visibility
+      setIntersectionRef(el);
+
+      if (typeof ref === 'function') {
+        ref(el);
+      } else if (ref && el) {
+        // We are acting on React behalf to assign the passed-in ref
+        (ref as React.MutableRefObject<HTMLAnchorElement>).current = el;
+      }
+    }, [ref, setIntersectionRef]),
+    onClick: useCallback((e) => {
       if (typeof onClick === 'function') {
         onClick(e);
       }
@@ -177,8 +175,8 @@ export const useNextLink = (
       startTransition(() => {
         router[replace ? 'replace' : 'push'](resolvedHref, { scroll: routerScroll });
       });
-    },
-    onMouseEnter(e) {
+    }, [onClick, replace, resolvedHref, router, routerScroll]),
+    onMouseEnter: useCallback((e) => {
       if (typeof onMouseEnter === 'function') {
         onMouseEnter(e);
       }
@@ -198,8 +196,8 @@ export const useNextLink = (
           kind: appPrefetchKind as PrefetchKind
         }
       );
-    },
-    onTouchStart(e) {
+    }, [appPrefetchKind, onMouseEnter, prefetchEnabled, resolvedHref, router]),
+    onTouchStart: useCallback((e) => {
       if (typeof onTouchStart === 'function') {
         onTouchStart(e);
       }
@@ -219,7 +217,7 @@ export const useNextLink = (
           kind: appPrefetchKind as PrefetchKind
         }
       );
-    },
+    }, [appPrefetchKind, onTouchStart, prefetchEnabled, resolvedHref, router]),
     ...restProps
   };
 
