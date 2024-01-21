@@ -25,7 +25,7 @@ import { unstable_useNextLink as useNextLink } from 'foxact/use-next-link';
 export default function Page() {
   const ref = useRef<HTMLAnchorElement>(null);
 
-  const [isPending, linkProps] = useNextLinkProps(
+  const [isPending, linkProps] = useNextLink(
     // `href`
     '/about',
     // optional, your usual next/link prop like "onClick", "prefetch", "replace" and "scroll" should go here.
