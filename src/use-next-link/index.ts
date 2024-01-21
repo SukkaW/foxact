@@ -71,7 +71,8 @@ const prefetch = (
   });
 };
 
-export const useNextLink = (
+/** @see https://foxact.skk.moe/use-next-link */
+const useNextLink = (
   hrefProp: string | UrlObject,
   {
     prefetch: prefetchProp,
@@ -226,3 +227,5 @@ export const useNextLink = (
     childProps
   ] as const;
 };
+
+export const unstable_useNextLink = useNextLink;

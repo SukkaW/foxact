@@ -20,7 +20,7 @@ The `useNextLink` hook is your last resort. You should always prefer `next/link`
 'use client';
 
 import { useRef } from 'react';
-import { useNextLink } from 'foxact/use-next-link';
+import { unstable_useNextLink as useNextLink } from 'foxact/use-next-link';
 
 export default function Page() {
   const ref = useRef<HTMLAnchorElement>(null);
