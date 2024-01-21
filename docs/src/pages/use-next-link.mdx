@@ -1,0 +1,49 @@
+---
+title: useNextLink (Next.js App Router)
+---
+
+# useNextLink (Next.js App Router)
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Build your own `next/link` component with all Next.js features you love (client-side navigation between routes, prefetching), plus React's `isPending` transition state to build "navigating..." animation.
+
+import { Callout } from 'nextra/components'
+
+<Callout type="warning" emoji="⚠️">
+The `useNextLink` hook is your last resort. You should always prefer `next/link` when possible. This hook can only be used with Next.js App Router, and should only be used when using the `isPending` transition state to build "navigating..." animation.
+</Callout>
+
+```tsx
+'use client';
+
+import { useRef } from 'react';
+import { unstable_useNextLink as useNextLink } from 'foxact/use-next-link';
+
+export default function Page() {
+  const ref = useRef<HTMLAnchorElement>(null);
+
+  const [isPending, linkProps] = useNextLinkProps(
+    // `href`
+    '/about',
+    // optional, your usual next/link prop like "onClick", "prefetch", "replace" and "scroll" should go here.
+    {
+      // If you want to attach your ref to the link, you should put your "ref" here instead of doing <a ref={ref} {...linkProps} />
+      ref
+    }
+  );
+
+  return (
+    <div>
+      {isPending && <div>Navigating...</div>}
+      {/** You can only pass non-"next/link" prop directly to the <a /> */}
+      {/** All "next/link" prop and "ref" should be passed to useNextLink() */}
+      <a className="link" {...linkProps}>
+        About
+      </a>
+    </div>
+  );
+}
+```
