@@ -32,11 +32,12 @@ export interface UseNextLinkReturnProps extends Partial<JSX.IntrinsicElements['a
   href?: string
 }
 
-const isModifiedEvent = (event: React.MouseEvent) => {
-  const eventTarget = event.target as HTMLElement;
+const isModifiedEvent = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const eventTarget = event.currentTarget;
   const target = eventTarget.getAttribute('target');
   return (
     (target && target !== '_self')
+    || eventTarget.download
     || event.metaKey
     || event.ctrlKey
     || event.shiftKey
