@@ -2,12 +2,16 @@ import 'client-only';
 
 import type { UrlObject } from 'url';
 import type { LinkProps } from 'next/link';
-import { useCallback, useMemo, useState, useTransition } from 'react';
+import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { formatUrl } from 'next/dist/shared/lib/router/utils/format-url';
 import { useIntersection } from '../use-intersection';
-import { noop } from '@/noop';
+
+import type {
+  PrefetchOptions as AppRouterPrefetchOptions
+} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import type { PrefetchKind } from 'next/dist/client/components/router-reducer/router-reducer-types';
 
 export interface UseNextLinkOptions extends Omit<LinkProps,
   | 'as' // Next.js App Router doesn't encourage to use `as` prop (it is only retained for the legacy puprpose)
@@ -41,10 +45,35 @@ const isModifiedEvent = (event: React.MouseEvent) => {
   );
 };
 
+// https://github.com/vercel/next.js/blob/39589ff35003ba73f92b7f7b349b3fdd3458819f/packages/next/src/client/components/router-reducer/router-reducer-types.ts#L148
+const PREFETCH_APPROUTER_AUTO = 'auto';
+const PREFETCH_APPROUTER_FULL = 'full';
+
+const prefetch = (
+  router: ReturnType<typeof useRouter>,
+  href: string,
+  options: AppRouterPrefetchOptions
+) => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  // Prefetch the RSC if asked (only in the client)
+  // We need to handle a prefetch error here since we may be
+  // loading with priority which can reject but we don't
+  // want to force navigation since this is only a prefetch
+  Promise.resolve(router.prefetch(href, options)).catch((err) => {
+    if (process.env.NODE_ENV !== 'production') {
+      // rethrow to show invalid URL errors
+      throw err;
+    }
+  });
+};
+
 export const useNextLink = (
   hrefProp: string | UrlObject,
   {
-    prefetch = true,
+    prefetch: prefetchProp,
     ref,
     onClick,
     onMouseEnter,
@@ -58,6 +87,15 @@ export const useNextLink = (
   if (process.env.NODE_ENV === 'development') {
     const _: Record<string, never> = restProps;
   }
+
+  /**
+    * The possible states for prefetch are:
+    * - null: this is the default "auto" mode, where we will prefetch partially if the link is in the viewport
+    * - true: we will prefetch if the link is visible and prefetch the full page, not just partially
+    * - false: we will not prefetch if in the viewport at all
+    */
+  const appPrefetchKind = prefetchProp == null ? PREFETCH_APPROUTER_AUTO : PREFETCH_APPROUTER_FULL;
+  const prefetchEnabled = prefetchProp !== false;
 
   const router = useRouter();
 
@@ -77,6 +115,28 @@ export const useNextLink = (
     setPreviousResolvedHref(resolvedHref);
     resetVisible();
   }
+
+  // Prefetch the URL if we haven't already and it's visible.
+  useEffect(() => {
+    // in dev, we only prefetch on hover to avoid wasting resources as the prefetch will trigger compiling the page.
+    if (process.env.NODE_ENV !== 'production') {
+      return;
+    }
+
+    // If we don't need to prefetch the URL, don't do prefetch.
+    if (!isVisible || !prefetchEnabled) {
+      return;
+    }
+
+    // Prefetch the URL.
+    prefetch(
+      router,
+      resolvedHref,
+      {
+        kind: appPrefetchKind as PrefetchKind
+      }
+    );
+  }, [appPrefetchKind, isVisible, prefetchEnabled, resolvedHref, router]);
 
   const callbackRef: React.RefCallback<HTMLAnchorElement> = useCallback((el: HTMLAnchorElement | null) => {
     // track the element visibility
@@ -125,12 +185,18 @@ export const useNextLink = (
       if (process.env.NODE_ENV === 'development') {
         return;
       }
-      if (!prefetch) {
+      if (!prefetchEnabled) {
         return;
       }
 
-      // TODO-SUKKA: bring up prefetch
-      noop(e);
+      // Prefetch the URL.
+      prefetch(
+        router,
+        resolvedHref,
+        {
+          kind: appPrefetchKind as PrefetchKind
+        }
+      );
     },
     onTouchStart(e) {
       if (typeof onTouchStart === 'function') {
@@ -140,12 +206,18 @@ export const useNextLink = (
       if (process.env.NODE_ENV === 'development') {
         return;
       }
-      if (!prefetch) {
+      if (!prefetchEnabled) {
         return;
       }
 
-      // TODO-SUKKA: bring up prefetch
-      noop(e);
+      // Prefetch the URL.
+      prefetch(
+        router,
+        resolvedHref,
+        {
+          kind: appPrefetchKind as PrefetchKind
+        }
+      );
     },
     ...restProps
   };
