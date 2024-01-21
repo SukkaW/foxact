@@ -75,6 +75,7 @@
     "type": "separator",
     "title": "Extensions"
   },
+  "use-next-link": {},
   "use-next-pathname": {},
   "use-react-router-enable-concurrent-navigation": {},
   "use-react-router-is-match": {}
