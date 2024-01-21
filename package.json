@@ -1,6 +1,6 @@
 {
   "name": "foxact",
-  "version": "0.2.30",
+  "version": "0.2.31",
   "private": true,
   "description": "React Hooks/Utils done right. For browser, SSR, and React Server Components.",
   "homepage": "https://foxact.skk.moe",

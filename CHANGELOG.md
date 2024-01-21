@@ -1,3 +1,9 @@
+# 0.2.31
+
+**Core Changes**
+
+- Add `unstable_useNextLink`
+
 # 0.2.30
 
 **Breaking Changes**
