@@ -5,7 +5,7 @@ const stlProp = Object.getOwnPropertyDescriptor(
 const hasSTL = stlProp?.writable && typeof stlProp.value === 'number';
 
 /** @private */
-export const noSSRError = (errorMessage?: string) => {
+export const noSSRError = (errorMessage?: string | undefined, nextjsDigest = 'BAILOUT_TO_CLIENT_SIDE_RENDERING') => {
   const originalStackTraceLimit = Error.stackTraceLimit;
 
   /**
@@ -30,7 +30,7 @@ export const noSSRError = (errorMessage?: string) => {
 
   // Next.js marks errors with `NEXT_DYNAMIC_NO_SSR_CODE` digest as recoverable:
   // https://github.com/vercel/next.js/blob/bef716ad031591bdf94058aaf4b8d842e75900b5/packages/next/src/shared/lib/lazy-dynamic/bailout-to-csr.ts#L2
-  (error as any).digest = 'BAILOUT_TO_CLIENT_SIDE_RENDERING';
+  (error as any).digest = nextjsDigest;
 
   (error as any).recoverableError = 'NO_SSR';
 
