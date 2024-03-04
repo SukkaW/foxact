@@ -1,6 +1,5 @@
 import 'client-only';
 
-import type { UrlObject } from 'url';
 import type { LinkProps } from 'next/link';
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
@@ -12,6 +11,20 @@ import type {
   PrefetchOptions as AppRouterPrefetchOptions
 } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import type { PrefetchKind } from 'next/dist/client/components/router-reducer/router-reducer-types';
+
+interface UrlObject {
+  auth?: string | null | undefined,
+  hash?: string | null | undefined,
+  host?: string | null | undefined,
+  hostname?: string | null | undefined,
+  href?: string | null | undefined,
+  pathname?: string | null | undefined,
+  protocol?: string | null | undefined,
+  search?: string | null | undefined,
+  slashes?: boolean | null | undefined,
+  port?: string | number | null | undefined,
+  query?: any
+}
 
 export interface UseNextLinkOptions extends Omit<LinkProps,
   | 'as' // Next.js App Router doesn't encourage to use `as` prop (it is only retained for the legacy puprpose)
