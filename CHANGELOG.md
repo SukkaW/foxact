@@ -1,3 +1,10 @@
+# 0.2.32
+
+**Core Changes**
+
+- Make `no-ssr` digest configurable
+- Change default digest of `no-ssr` to the Next.js latest digest
+
 # 0.2.31
 
 **Core Changes**
