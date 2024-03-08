@@ -44,6 +44,22 @@ useAbortableEffect((signal) => {
 }, [dataKey]);
 ```
 
+You can also pass the `signal` to your async function if it supports `AbortSignal`:
+
+```tsx
+useAbortableEffect((signal) => {
+  someAsyncStuff({ signal })
+    .then(data => {
+      if (!signal.aborted) return
+      setData(data);
+    })
+    .catch(error => {
+      if (error.name === 'AbortError') return
+      setError(error);
+    });
+}, [dataKey]);
+```
+
 Note that [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) requires extra configuration in order to check dependency array for third-party hooks:
 
 ```json filename=".eslintrc.json" copy
