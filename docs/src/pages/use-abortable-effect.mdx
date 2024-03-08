@@ -1,0 +1,67 @@
+---
+title: useAbortableEffect
+---
+
+# useAbortableEffect
+
+`useEffect` that gives you an [AbortSignal](https://mdn.io/AbortSignal).
+
+## Usage
+
+```js
+import { useAbortableEffect } from 'foxact/use-use-abortable-effect';
+
+function Component() {
+  useAbortableEffect(signal => {
+    item.addEventListener('event', () => {
+      // ...
+    }, { signal })
+  }, [item]);
+}
+```
+
+```js
+// before
+useEffect(() => {
+  let isCancelled = false;
+  someAsyncStuff().then(data => {
+    if (!isCancelled) {
+      setData(data);
+    }
+  });
+
+  return () => {
+    isCancelled = true;
+  };
+}, [dataKey]);
+
+// after
+useAbortableEffect((signal) => {
+  someAsyncStuff().then(data => {
+    if (!signal.aborted) return
+    setData(data);
+  });
+}, [dataKey]);
+```
+
+Note that [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) requires extra configuration in order to check dependency array for third-party hooks:
+
+```json filename=".eslintrc.json" copy
+{
+  "rules": {
+    "react-hooks/exhaustive-deps": [
+      "warn",
+      {
+        "additionalHooks": "useAbortableEffect"
+      }
+    ]
+  }
+}
+```
+
+But if you do not want to configure it, `foxact/use-abortable-effect` also provides another named export `useEffect` as an alias of `useAbortableEffect`:
+
+```diff
+- import { useEffect } from 'react';
++ import { useEffect } from 'foxact/use-abortable-effect';
+```

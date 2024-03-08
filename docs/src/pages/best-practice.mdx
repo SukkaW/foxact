@@ -47,7 +47,7 @@ export {
   useSidebarActive, useSetSidebarActive
 };
 ```
-  
+
 ```tsx filename="src/App.tsx" copy
 import { useIntersection } from 'foxact/use-intersection';
 
@@ -124,7 +124,8 @@ const ExampleComponent = ({ dataKey }: ExampleComponentProps) => {
 
 Here, although the request for `data1` happened before `data2`, the response for `data2` is received before `data1`. And `useIsMountedRef` doesn't help with that.
 
-To properly avoid `setData(data1)` from being called, the correct pattern is:
+To properly avoid `setData(data1)` from being called, the correct pattern is described below.
+You can also use [`useAbortableEffect`](./use-abortable-effect) instead.
 
 ```tsx
 interface ExampleComponentProps {
@@ -155,5 +156,3 @@ const ExampleComponent = ({ dataKey }: ExampleComponentProps) => {
                         │ Request data 2 ────► data2 response (setData(data2)) │
                         | isCancelled: false                                   | isCancelled: false, setData(data2)
 ```
-
-

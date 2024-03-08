@@ -38,6 +38,7 @@
     "type": "separator",
     "title": "Hooks"
   },
+  "use-abortable-effect": {},
   "use-clipboard": {},
   "use-composition-input": {},
   "use-debounced-state": {},
