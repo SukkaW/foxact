@@ -13,3 +13,49 @@ Try `@uiw/react-use-online`. This is a tiny, zero-dependency, SSR hook for respo
 - GitHub: https://github.com/uiwjs/react-use-online
 - NPM: https://www.npmjs.com/package/@uiw/react-use-online
 - React Concurrent Rendering Compatible: Yes (through `useSyncExternalStore`)
+
+## useAsyncFn
+
+Try `swr`. This is an ad-hoc library providing various hooks for data fetching, but it can also be used for any async operations.
+
+- Website: https://swr.vercel.app
+- GitHub: https://github.com/vercel/swr
+- NPM: https://www.npmjs.com/package/swr
+- React Concurrent Rendering Compatible: Yes (through `useSyncExternalStore`)
+
+Example:
+
+```tsx
+import useSWR from 'swr';
+// If you only want to execute the async function once, use `useSWRImmutable` instead.
+import useSWRImmutable from 'swr/immutable';
+
+const useBarcodeDetectorInstance = () => useSWRImmutable(
+  'get-barcode-detector',
+  async () => {
+    let isUseBrowserBuiltInBarcodeDetector = 'BarcodeDetector' in window;
+    if (isUseBrowserBuiltInBarcodeDetector) {
+      try {
+        window.BarcodeDetector.getSupportedFormats();
+      } catch {
+        isUseBrowserBuiltInBarcodeDetector = false;
+      }
+    }
+    try {
+      const BarcodeDetectorImpl = isUseBrowserBuiltInBarcodeDetector
+        ? window.BarcodeDetector
+        : (await import('@preflower/barcode-detector-polyfill')).BarcodeDetectorPolyfill;
+
+      const supportedFormats = await BarcodeDetectorImpl.getSupportedFormats();
+      if (supportedFormats.includes('qr_code')) {
+        return new BarcodeDetectorImpl({ formats: ['qr_code'] });
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
+);
+
+const { data: barcodeDetector, isLoading: isBarcodeDetectorLoading } = useBarcodeDetectorInstance();
+```
