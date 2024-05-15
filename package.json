@@ -32,21 +32,21 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "@eslint-sukka/node": "^6.0.0-beta.7",
-    "@eslint-sukka/react": "^6.0.0-beta.7",
-    "@eslint-sukka/ts": "^6.0.0-beta.7",
+    "@eslint-sukka/node": "^6.0.0-beta.9",
+    "@eslint-sukka/react": "^6.0.0-beta.9",
+    "@eslint-sukka/ts": "^6.0.0-beta.9",
     "@napi-rs/magic-string": "^0.3.4",
     "@sukka/listdir": "^0.3.1",
     "@swc-node/register": "^1.9.1",
-    "@swc/core": "^1.5.6",
+    "@swc/core": "^1.5.7",
     "@types/node": "^20.12.12",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.3.0",
     "brotli-size": "^4.0.0",
     "browserslist": "^4.23.0",
     "eslint": "^9.2.0",
-    "eslint-config-sukka": "^6.0.0-beta.7",
-    "eslint-formatter-sukka": "^6.0.0-beta.7",
+    "eslint-config-sukka": "^6.0.0-beta.9",
+    "eslint-formatter-sukka": "^6.0.0-beta.9",
     "gzip-size": "6.0.0",
     "next": "^14.2.3",
     "react-router-dom": "^6.23.1",
@@ -63,6 +63,7 @@
       "optional": true
     }
   },
+  "packageManager": "pnpm@9.1.1",
   "overrides": {
     "array-includes": "npm:@nolyfill/array-includes@latest",
     "array.prototype.findlastindex": "npm:@nolyfill/array.prototype.findlastindex@latest",
