@@ -30,7 +30,6 @@ jobs:
         with:
           node-version: 20
           check-latest: true
-          registry-url: "https://registry.npmjs.org"
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install

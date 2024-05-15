@@ -11,17 +11,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
         with:
-          node-version: 18
+          run_install: false
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
           check-latest: true
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
       - name: Install dependencies
-        run: npm install -g npm && npm install
+        run: pnpm install
       - name: Lint
-        run: npm run lint
+        run: pnpm run lint
       - name: Build
-        run: npm run build
+        run: pnpm run build
