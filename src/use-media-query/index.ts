@@ -32,7 +32,7 @@ const getServerSnapshotWithoutServerValue = () => {
 const useMediaQuery = (mq: string, serverValue?: boolean | undefined): boolean => {
   if (typeof window !== 'undefined' && !externalStore.has(mq)) {
     // This part of the code should only run once per media query, on client-side only
-    // we are not on the client-side, let's get initial value directly from DOM
+    // since we are on the client-side, let's get initial value directly from DOM
     externalStore.set(mq, window.matchMedia(mq).matches);
   }
 
@@ -43,7 +43,7 @@ const useMediaQuery = (mq: string, serverValue?: boolean | undefined): boolean =
     if (typeof window === 'undefined') {
       return false;
     }
-    return externalStore.get(mq) ?? false;
+    return externalStore.get(mq) ?? window.matchMedia(mq).matches;
   };
   const getServerSnapshot = serverValue !== undefined
     ? () => serverValue
