@@ -39,7 +39,12 @@ const useMediaQuery = (mq: string, serverValue?: boolean | undefined): boolean =
   // subscribe once per hook per media query
   const subscribe = useCallback((callback: VoidFunction) => subscribeToMediaQuery(mq, callback), [mq]);
 
-  const getSnapshot = () => externalStore.get(mq) ?? false;
+  const getSnapshot = () => {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+    return externalStore.get(mq) ?? false;
+  };
   const getServerSnapshot = serverValue !== undefined
     ? () => serverValue
     : getServerSnapshotWithoutServerValue;
