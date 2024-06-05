@@ -19,7 +19,7 @@
     "lint": "eslint --format=sukka .",
     "build": "rollup -c rollup.config.ts --configPlugin swc3 --bundleConfigAsCjs",
     "postbuild": "node -r @swc-node/register tools/postbuild.ts",
-    "prepublishOnly": "npm run build && echo \"This package is not meant to be published from root dir.\" && exit 1"
+    "prepublishOnly": "pnpm run build"
   },
   "keywords": [
     "React",
