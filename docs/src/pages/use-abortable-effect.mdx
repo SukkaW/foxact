@@ -42,8 +42,9 @@ useEffect(() => {
 // after
 useAbortableEffect((signal) => {
   someAsyncStuff().then(data => {
-    if (!signal.aborted) return
-    setData(data);
+    if (!signal.aborted) {
+      setData(data);
+    }
   });
 }, [dataKey]);
 ```
@@ -54,8 +55,9 @@ You can also pass the `signal` to your async function if it supports `AbortSigna
 useAbortableEffect((signal) => {
   someAsyncStuff({ signal })
     .then(data => {
-      if (!signal.aborted) return
-      setData(data);
+      if (!signal.aborted) {
+        setData(data);
+      }
     })
     .catch(error => {
       if (error.name === 'AbortError') return
