@@ -1,3 +1,26 @@
+# 0.2.34
+
+**Core Changes**
+
+- Add `useMediaQuery`
+- `useCompositionInput` now supports `<textarea />`
+
+    ```tsx
+    export const Example2 = () => {
+      const textareaProps = useCompositionInput<HTMLTextAreaElement>(useCallback((value: string) => {
+        // Do something with the value
+      }, []));
+
+      return (
+        <textarea
+          {...textareaProps}
+          // useCompositionInput is uncontrolled, so you might need to provide defaultValue
+          defaultValue={defaultValue}
+        />
+      );
+    }
+    ```
+
 # 0.2.33
 
 **Core Changes**
