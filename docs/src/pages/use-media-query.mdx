@@ -1,0 +1,31 @@
+---
+title: useMediaQuery
+---
+
+# useMediaQuery
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Tracking the state of a media query using [`window.matchMedia()` API](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia), with React concurrent rendering in mind.
+
+## Usage
+
+```tsx copy
+import { useMediaQuery } from 'foxact/use-media-query';
+
+export default function Component() {
+  const isPhone = useMediaQuery(
+    '(max-width: 768px)',
+    // server default value for SSR
+    false
+  );
+}
+```
+
+## Sever-side Rendering
+
+If the second argument (the initial value) is provided, React will use the initial value to render the UI and generate HTML on the server. The user will see the initial value (which might be stale) first. On the client, React will first use the initial value to hydrate the server-side rendered HTML, and then immediately re-render the component with the actual value (read from the browser's `matchMedia()` API) after the hydration. The user will see the latest value after both the hydration and the re-render.
+
+If the second argument is not present, React will find the closest `<Suspense>` boundary and render its `fallback` UI into the generated server HTML during the server-side rendering. The user will see the fallback UI at first. React will attempt to render the component during the hydration on the browser, where the actual value is read from the browser's `matchMedia()` API and the user will see the actual value after the hydration is finished. See also [\<Suspense\> Providing a fallback for server errors and client-only content](https://react.dev/reference/react/Suspense#providing-a-fallback-for-server-errors-and-client-only-content) at React docs.

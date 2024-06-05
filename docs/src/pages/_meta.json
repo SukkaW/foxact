@@ -48,6 +48,7 @@
   "use-is-client": {},
   "use-isomorphic-layout-effect": {},
   "use-local-storage": {},
+  "use-media-query": {},
   "use-retimer": {},
   "use-singleton": {},
   "use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired": {
