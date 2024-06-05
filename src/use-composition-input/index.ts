@@ -4,7 +4,12 @@ import { useSingleton } from '../use-singleton';
 
 export type UseCompositionInputCallback = (value: string) => void;
 export type UseCompositionInputReturnKey = 'onChange' | 'onCompositionStart' | 'onCompositionEnd';
-export type UseCompositionInputReturn = Pick<JSX.IntrinsicElements['input'], UseCompositionInputReturnKey>;
+
+export interface UseCompositionInputReturn<T extends HTMLInputElement | HTMLTextAreaElement> {
+  onChange: React.ChangeEventHandler<T>,
+  onCompositionStart: React.CompositionEventHandler<T>,
+  onCompositionEnd: React.CompositionEventHandler<T>
+}
 
 const getInitialRef = () => ({
   /** is"C"ompositioning */ c: false,
@@ -12,16 +17,17 @@ const getInitialRef = () => ({
 });
 
 /** @see https://foxact.skk.moe/use-composition-input */
-export const useCompositionInput = (cb: UseCompositionInputCallback): UseCompositionInputReturn => {
+export const useCompositionInput = <T extends HTMLInputElement | HTMLTextAreaElement = HTMLInputElement>(cb: UseCompositionInputCallback): UseCompositionInputReturn<T> => {
   const internalState = useSingleton(getInitialRef);
 
-  const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement> | React.CompositionEvent<HTMLInputElement>) => {
+  const onChange = useCallback((e: React.ChangeEvent<T> | React.CompositionEvent<T>) => {
     if ('value' in e.target) {
       const userInputValue = e.target.value;
 
       if (!internalState.current.c) {
         cb(userInputValue);
-        // eslint-disable-next-line react-compiler/react-compiler -- internalState is ref
+
+        // eslint-disable-next-line react-compiler/react-compiler -- useSingleton returns a ref
         internalState.current.e = true;
       } else {
         internalState.current.e = false;
@@ -29,12 +35,12 @@ export const useCompositionInput = (cb: UseCompositionInputCallback): UseComposi
     }
   }, [cb, internalState]);
 
-  const onCompositionStart = useCallback<React.CompositionEventHandler<HTMLInputElement>>(() => {
+  const onCompositionStart = useCallback<React.CompositionEventHandler<T>>(() => {
     internalState.current.c = true;
     internalState.current.e = false;
   }, [internalState]);
 
-  const onCompositionEnd = useCallback<React.CompositionEventHandler<HTMLInputElement>>((e) => {
+  const onCompositionEnd = useCallback<React.CompositionEventHandler<T>>((e) => {
     internalState.current.c = false;
     // fixed for Chrome v53+ and detect all Chrome
     // https://chromium.googlesource.com/chromium/src/+/afce9d93e76f2ff81baaa088a4ea25f67d1a76b3%5E%21/
