@@ -110,6 +110,7 @@ function useUrlHashState<T>(
       return;
     }
 
+    // eslint-disable-next-line react-compiler/react-compiler -- sync external state
     location.hash = newHash;
   }, [defaultValue, deserialized, key, serializer]);
 

@@ -116,9 +116,9 @@ const useNextLink = (
 
   const [isPending, startTransition] = useTransition();
 
-  const [setIntersectionRef, isVisible, resetVisible] = useIntersection({
+  const [setIntersectionRef, isVisible, resetVisible] = useIntersection(useMemo(() => ({
     rootMargin: '200px'
-  });
+  }), []));
 
   const resolvedHref = useMemo(() => (typeof hrefProp === 'string' ? hrefProp : formatUrl(hrefProp)), [hrefProp]);
   const [previousResolvedHref, setPreviousResolvedHref] = useState<string>(resolvedHref);
@@ -161,7 +161,7 @@ const useNextLink = (
       if (typeof ref === 'function') {
         ref(el);
       } else if (ref && el) {
-        // We are acting on React behalf to assign the passed-in ref
+        // eslint-disable-next-line react-compiler/react-compiler -- We are acting on React behalf to assign the passed-in ref
         (ref as React.MutableRefObject<HTMLAnchorElement>).current = el;
       }
     }, [ref, setIntersectionRef]),
