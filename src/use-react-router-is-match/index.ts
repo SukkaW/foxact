@@ -21,7 +21,7 @@ export const useReactRouterIsMatch = (to: To, {
 }: UseReactRouterIsMatchOption = {}) => {
   const { pathname: $locationPathname } = useLocation();
 
-  const { navigator: { encodeLocation = identity } } = useContext(UNSAFE_NavigationContext);
+  const { navigator: { encodeLocation = identity } } = useContext<React.ContextType<typeof UNSAFE_NavigationContext>>(UNSAFE_NavigationContext);
   const path = useResolvedPath(to, { relative });
 
   return useMemo(() => {
