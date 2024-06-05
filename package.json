@@ -38,20 +38,20 @@
     "@napi-rs/magic-string": "^0.3.4",
     "@sukka/listdir": "^0.3.1",
     "@swc-node/register": "^1.9.1",
-    "@swc/core": "^1.5.7",
-    "@types/node": "^20.12.12",
-    "@types/react": "^18.3.2",
+    "@swc/core": "^1.5.25",
+    "@types/node": "^20.14.2",
+    "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "brotli-size": "^4.0.0",
     "browserslist": "^4.23.0",
-    "eslint": "^9.2.0",
+    "eslint": "^9.4.0",
     "eslint-config-sukka": "^6.0.0-beta.21",
     "eslint-formatter-sukka": "^6.0.0-beta.21",
     "gzip-size": "6.0.0",
     "next": "^14.2.3",
     "react-router-dom": "^6.23.1",
-    "rollup": "^4.17.2",
-    "rollup-plugin-dts": "^6.1.0",
+    "rollup": "^4.18.0",
+    "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-swc3": "^0.11.2",
     "rollup-preserve-directives": "^1.1.1",
     "typescript": "^5.4.5"
@@ -64,7 +64,7 @@
       "optional": true
     }
   },
-  "packageManager": "pnpm@9.1.1",
+  "packageManager": "pnpm@9.1.4",
   "pnpm": {
     "overrides": {
       "array-includes": "npm:@nolyfill/array-includes@latest",

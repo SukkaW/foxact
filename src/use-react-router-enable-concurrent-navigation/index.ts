@@ -4,10 +4,11 @@ import 'client-only';
 
 import { useContext, useEffect, startTransition } from 'react';
 import { UNSAFE_NavigationContext } from 'react-router-dom';
+import type { Navigator } from 'react-router-dom';
 
 /** @see https://foxact.skk.moe/use-react-router-enable-concurrent-navigation */
 export const useReactRouterEnableConcurrentNavigation = () => {
-  const { navigator } = useContext(UNSAFE_NavigationContext);
+  const { navigator } = useContext<React.ContextType<typeof UNSAFE_NavigationContext>>(UNSAFE_NavigationContext);
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- type check
   if (!navigator) {
@@ -20,9 +21,9 @@ export const useReactRouterEnableConcurrentNavigation = () => {
     const originalNavigatorReplace = navigator.replace.bind(navigator);
 
     // eslint-disable-next-line react-compiler/react-compiler -- mutate context global
-    navigator.go = (...args) => startTransition(() => originalNavigatorGo.apply(navigator, args));
-    navigator.push = (...args) => startTransition(() => originalNavigatorPush.apply(navigator, args));
-    navigator.replace = (...args) => startTransition(() => originalNavigatorReplace.apply(navigator, args));
+    navigator.go = (...args: Parameters<Navigator['go']>) => startTransition(() => originalNavigatorGo.apply(navigator, args));
+    navigator.push = (...args: Parameters<Navigator['push']>) => startTransition(() => originalNavigatorPush.apply(navigator, args));
+    navigator.replace = (...args: Parameters<Navigator['replace']>) => startTransition(() => originalNavigatorReplace.apply(navigator, args));
 
     return () => {
       navigator.go = originalNavigatorGo;
