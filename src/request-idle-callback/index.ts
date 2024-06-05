@@ -1,3 +1,4 @@
+/* eslint-disable ssr-friendly/no-dom-globals-in-module-scope -- polyfilllg */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition -- polyfill */
 
 /** @see https://foxact.skk.moe/request-idle-callback */

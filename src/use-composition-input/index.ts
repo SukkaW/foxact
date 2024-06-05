@@ -6,12 +6,14 @@ export type UseCompositionInputCallback = (value: string) => void;
 export type UseCompositionInputReturnKey = 'onChange' | 'onCompositionStart' | 'onCompositionEnd';
 export type UseCompositionInputReturn = Pick<JSX.IntrinsicElements['input'], UseCompositionInputReturnKey>;
 
+const getInitialRef = () => ({
+  /** is"C"ompositioning */ c: false,
+  /** is"E"mitted */ e: false
+});
+
 /** @see https://foxact.skk.moe/use-composition-input */
 export const useCompositionInput = (cb: UseCompositionInputCallback): UseCompositionInputReturn => {
-  const internalState = useSingleton(() => ({
-    /** is"C"ompositioning */ c: false,
-    /** is"E"mitted */ e: false
-  }));
+  const internalState = useSingleton(getInitialRef);
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement> | React.CompositionEvent<HTMLInputElement>) => {
     if ('value' in e.target) {
@@ -19,6 +21,7 @@ export const useCompositionInput = (cb: UseCompositionInputCallback): UseComposi
 
       if (!internalState.current.c) {
         cb(userInputValue);
+        // eslint-disable-next-line react-compiler/react-compiler -- internalState is ref
         internalState.current.e = true;
       } else {
         internalState.current.e = false;

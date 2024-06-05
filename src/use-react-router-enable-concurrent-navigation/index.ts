@@ -19,6 +19,7 @@ export const useReactRouterEnableConcurrentNavigation = () => {
     const originalNavigatorPush = navigator.push.bind(navigator);
     const originalNavigatorReplace = navigator.replace.bind(navigator);
 
+    // eslint-disable-next-line react-compiler/react-compiler -- mutate context global
     navigator.go = (...args) => startTransition(() => originalNavigatorGo.apply(navigator, args));
     navigator.push = (...args) => startTransition(() => originalNavigatorPush.apply(navigator, args));
     navigator.replace = (...args) => startTransition(() => originalNavigatorReplace.apply(navigator, args));
