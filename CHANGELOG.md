@@ -1,3 +1,9 @@
+# 0.35
+
+**Misc Changes**
+
+- Improve the types of `useLocalStorage` and `useSessionStorage`.
+
 # 0.2.34
 
 **Core Changes**
