@@ -106,13 +106,13 @@ export function createStorage(type: StorageType) {
     key: string,
     serverValue: NotUndefined<T>,
     options?: UseStorageRawOption | UseStorageParserOption<T>
-  ): readonly [NotUndefined<T>, React.Dispatch<React.SetStateAction<T | null>>];
+  ): readonly [T, React.Dispatch<React.SetStateAction<T | null>>];
   // client-render only
   function useStorage<T>(
     key: string,
     serverValue?: undefined,
     options?: UseStorageRawOption | UseStorageParserOption<T>
-  ): readonly [NotUndefined<T> | null, React.Dispatch<React.SetStateAction<T | null>>];
+  ): readonly [T | null, React.Dispatch<React.SetStateAction<T | null>>];
   function useStorage<T>(
     key: string,
     serverValue?: NotUndefined<T> | undefined,
