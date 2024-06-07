@@ -1,7 +1,7 @@
 import 'client-only';
 import { useSyncExternalStore, useCallback, useMemo } from 'react';
 import { noop } from '../noop';
-import { useIsomorphicLayoutEffect } from '../use-isomorphic-layout-effect';
+import { useLayoutEffect } from '../use-isomorphic-layout-effect';
 import { noSSRError } from '../no-ssr';
 
 type StorageType = 'localStorage' | 'sessionStorage';
@@ -101,6 +101,18 @@ export function createStorage(type: StorageType) {
     [key, serializer]
   );
 
+  // ssr compatible
+  function useStorage<T>(
+    key: string,
+    serverValue: NotUndefined<T>,
+    options?: UseStorageRawOption | UseStorageParserOption<T>
+  ): readonly [NotUndefined<T>, React.Dispatch<React.SetStateAction<T | null>>];
+  // client-render only
+  function useStorage<T>(
+    key: string,
+    serverValue?: undefined,
+    options?: UseStorageRawOption | UseStorageParserOption<T>
+  ): readonly [NotUndefined<T> | null, React.Dispatch<React.SetStateAction<T | null>>];
   function useStorage<T>(
     key: string,
     serverValue?: NotUndefined<T> | undefined,
@@ -108,7 +120,7 @@ export function createStorage(type: StorageType) {
       serializer: JSON.stringify,
       deserializer: JSON.parse
     }
-  ) {
+  ): readonly [T | null, React.Dispatch<React.SetStateAction<T | null>>] | readonly [T, React.Dispatch<React.SetStateAction<T | null>>] {
     const subscribeToSpecificKeyOfLocalStorage = useCallback((callback: () => void) => {
       if (typeof window === 'undefined') {
         return noop;
@@ -174,7 +186,7 @@ export function createStorage(type: StorageType) {
       [key, serializer, deserialized]
     );
 
-    useIsomorphicLayoutEffect(() => {
+    useLayoutEffect(() => {
       if (
         getStorageItem(key) === null
         && serverValue !== undefined
@@ -183,7 +195,16 @@ export function createStorage(type: StorageType) {
       }
     }, [deserializer, key, serializer, serverValue]);
 
-    return [deserialized ?? serverValue ?? null, setState] as const;
+    const finalValue: T | null = deserialized === null
+      // storage doesn't have value
+      ? (serverValue === undefined
+        // no default value provided
+        ? null
+        : serverValue satisfies NotUndefined<T>)
+      // storage has value
+      : deserialized satisfies T;
+
+    return [finalValue, setState] as const;
   }
 
   return {
