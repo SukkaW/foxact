@@ -50,6 +50,7 @@
   "use-local-storage": {},
   "use-media-query": {},
   "use-retimer": {},
+  "use-session-storage": {},
   "use-singleton": {},
   "use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired": {
     "title": "useStableHandler"
