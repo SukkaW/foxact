@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2018",
+    "lib": ["DOM", "ES2018", "ESNext.WeakRef"],
     "jsx": "react-jsx",
     "module": "commonjs",
     "paths": {
@@ -11,7 +12,8 @@
     "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true
+    "strict": true,
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "rollup.config.ts", "tools/**/*.ts"],
   "exclude": ["docs"],
