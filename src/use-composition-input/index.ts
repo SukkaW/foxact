@@ -27,7 +27,6 @@ export const useCompositionInput = <T extends HTMLInputElement | HTMLTextAreaEle
       if (!internalState.current.c) {
         cb(userInputValue);
 
-        // eslint-disable-next-line react-compiler/react-compiler -- useSingleton returns a ref
         internalState.current.e = true;
       } else {
         internalState.current.e = false;

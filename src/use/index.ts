@@ -15,6 +15,7 @@ export const use
   ): T => {
     switch (promise.status) {
       case 'pending': {
+        // eslint-disable-next-line @typescript-eslint/only-throw-error -- React.use
         throw promise;
       }
       case 'fulfilled': {
@@ -25,6 +26,7 @@ export const use
       }
       default: {
         promise.status = 'pending';
+        // eslint-disable-next-line promise/catch-or-return -- React.use
         promise.then(
           (v) => {
             promise.status = 'fulfilled';
@@ -35,6 +37,7 @@ export const use
             promise.reason = e;
           }
         );
+        // eslint-disable-next-line @typescript-eslint/only-throw-error -- React.use
         throw promise;
       }
     }

@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 type ErrorLike = Error | undefined | null | boolean;
 
-const isTruthy = (value: ErrorLike): value is NonNullable<ErrorLike> => {
+const isTruthy = (value: ErrorLike): value is Error => {
   if (value === false) return false;
   if (value == null) return false;
 

@@ -20,7 +20,6 @@ export type Serializer<T> = (value: T) => string;
 export type Deserializer<T> = (value: string) => T;
 
 // This type utility is only used for workaround https://github.com/microsoft/TypeScript/issues/37663
-// eslint-disable-next-line @typescript-eslint/ban-types -- workaround TypeScript bug
 const isFunction = (x: unknown): x is Function => typeof x === 'function';
 
 const identity = (x: any) => x;

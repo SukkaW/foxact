@@ -38,7 +38,6 @@ const subscribe: Parameters<typeof useSyncExternalStore>[0] = (() => {
 })();
 
 // This type utility is only used for workaround https://github.com/microsoft/TypeScript/issues/37663
-// eslint-disable-next-line @typescript-eslint/ban-types -- workaround TypeScript bug
 const isFunction = (x: unknown): x is Function => typeof x === 'function';
 
 export type Serializer<T> = (value: T) => string;
@@ -110,7 +109,6 @@ function useUrlHashState<T>(
       return;
     }
 
-    // eslint-disable-next-line react-compiler/react-compiler -- sync external state
     location.hash = newHash;
   }, [defaultValue, deserialized, key, serializer]);
 

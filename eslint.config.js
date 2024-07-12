@@ -7,7 +7,9 @@ module.exports = require('eslint-config-sukka').sukka({
   ignores: {
     customGlobs: ['dist/**/*', 'docs/**/*', ...require('eslint-config-sukka').constants.GLOB_EXCLUDE]
   },
-  react: true,
+  react: {
+    nextjs: false
+  },
   ts: {
     enable: true,
     tsconfigPath

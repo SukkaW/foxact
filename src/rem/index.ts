@@ -5,7 +5,7 @@ function scaleRem(remValue: string, shouldScaleTo: string) {
 }
 
 function createConverter(units: string, shouldScaleTo: string | null = null) {
-  return function converter(value: number | string | number[] | string[]): string {
+  return function converter(value: number | string | number[]): string {
     if (Array.isArray(value)) {
       return value.map((val) => converter(val)).join(' ');
     }
@@ -35,7 +35,7 @@ function createConverter(units: string, shouldScaleTo: string | null = null) {
     }
 
     const replaced = Number(value.replace('px', ''));
-    // eslint-disable-next-line no-self-compare -- faster isNaN check
+
     if (replaced === replaced) {
       const val = `${replaced / 16}${units}`;
       return (shouldScaleTo && shouldScaleTo !== SIXTEEN_PX) ? scaleRem(val, shouldScaleTo) : val;

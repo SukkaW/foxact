@@ -37,7 +37,7 @@ export interface UseNextLinkOptions extends Omit<LinkProps,
   ref?: React.RefObject<HTMLAnchorElement> | React.RefCallback<HTMLAnchorElement> | null
 }
 
-export interface UseNextLinkReturnProps extends Partial<JSX.IntrinsicElements['a']> {
+export interface UseNextLinkReturnProps extends Partial<React.JSX.IntrinsicElements['a']> {
   ref: React.RefCallback<HTMLAnchorElement>,
   onTouchStart: React.TouchEventHandler<HTMLAnchorElement>,
   onMouseEnter: React.MouseEventHandler<HTMLAnchorElement>,
@@ -55,6 +55,7 @@ const isModifiedEvent = (event: React.MouseEvent<HTMLAnchorElement>) => {
     || event.ctrlKey
     || event.shiftKey
     || event.altKey // triggers resource download
+    // eslint-disable-next-line deprecation/deprecation -- back compat
     || (event.nativeEvent && event.nativeEvent.which === 2)
   );
 };
@@ -161,7 +162,6 @@ const useNextLink = (
       if (typeof ref === 'function') {
         ref(el);
       } else if (ref && el) {
-        // eslint-disable-next-line react-compiler/react-compiler -- We are acting on React behalf to assign the passed-in ref
         (ref as React.MutableRefObject<HTMLAnchorElement>).current = el;
       }
     }, [ref, setIntersectionRef]),

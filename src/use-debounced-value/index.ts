@@ -1,7 +1,6 @@
 import 'client-only';
 import { useEffect, useState, useRef } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/ban-types -- explicitly banning ALL functions
 type NotFunction<T> = T extends Function ? never : T;
 
 /** @see https://foxact.skk.moe/use-debounced-value */
