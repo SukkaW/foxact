@@ -1,4 +1,12 @@
-# 0.35
+# 0.2.36
+
+**Core Changes**
+
+- Add `foxact/types`
+- `createFixedArray` now supports GC-friendly array creation when `WeakRef` is available
+  - Created array will be garbage-collected if not used (e.g. all components that use the array are unmounted)
+
+# 0.2.35
 
 **Misc Changes**
 
