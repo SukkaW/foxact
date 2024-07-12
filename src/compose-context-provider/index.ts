@@ -1,6 +1,7 @@
 import { cloneElement, memo } from 'react';
+import type { Foxact } from '../types';
 
-export interface ContextComposeProviderProps extends React.PropsWithChildren {
+export interface ContextComposeProviderProps extends Foxact.PropsWithChildren {
   // eslint-disable-next-line @typescript-eslint/ban-types -- cloneElement
   contexts: React.ReactElement[]
 }

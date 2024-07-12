@@ -3,6 +3,7 @@ import 'client-only';
 
 import { createContext, useContext, useState } from 'react';
 import { noop } from '@/noop';
+import type { Foxact } from '../types';
 
 /** @see https://foxact.skk.moe/context-state */
 export function createContextState<T>(initialState: T) {
@@ -12,7 +13,7 @@ export function createContextState<T>(initialState: T) {
   const useValue = () => useContext(StateContext);
   const useSetValue = () => useContext(DispatchContext);
 
-  const Provider = ({ children }: React.PropsWithChildren) => {
+  const Provider = ({ children }: Foxact.PropsWithChildren) => {
     const [value, setValue] = useState(initialState);
 
     return (

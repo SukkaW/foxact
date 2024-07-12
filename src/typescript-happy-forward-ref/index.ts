@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 
 export interface TypeScriptHappyForwardRef {
-  <T, P = {}>(
+  <T, P = unknown>(
     render: (props: P, ref: React.ForwardedRef<T>) => React.ReactNode | null
   ): (props: P & React.RefAttributes<T>) => React.ReactNode | null
 }

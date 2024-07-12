@@ -5,6 +5,7 @@ import 'client-only';
 import { useContext, useEffect, startTransition } from 'react';
 import { UNSAFE_NavigationContext } from 'react-router-dom';
 import type { Navigator } from 'react-router-dom';
+import type { Foxact } from '../types';
 
 /** @see https://foxact.skk.moe/use-react-router-enable-concurrent-navigation */
 export const useReactRouterEnableConcurrentNavigation = () => {
@@ -33,7 +34,7 @@ export const useReactRouterEnableConcurrentNavigation = () => {
   }, [navigator]);
 };
 
-export const ReactRouterConcurrentNavigationProvider = ({ children }: React.PropsWithChildren) => {
+export const ReactRouterConcurrentNavigationProvider = ({ children }: Foxact.PropsWithChildren) => {
   useReactRouterEnableConcurrentNavigation();
 
   return children;
