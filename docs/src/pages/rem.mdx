@@ -16,23 +16,32 @@ Convert string or number values in px to `rem` or `em`.
 import { rem, em, mantine_rem } from 'foxact/rem';
 
 // numbers and values in px are converted to rem
-rem(32); // -> 2rem
-em(32); // -> 2em
-mantine_rem(32); // -> calc(2rem * var(--mantine-scale))
+rem(32); // '2rem'
+em(32); // '2em'
+mantine_rem(32); // 'calc(2rem * var(--mantine-scale))'
 
-rem('16px') // -> 1rem
-em('16px'); // -> 1em
-mantine_rem('16px'); // -> calc(1rem * var(--mantine-scale))
+// supports multiple values
+rem([32, 16]) // '2rem 1rem'
+em('32px 16px') // '2em 1em'
 
-rem('2rem'); // -> 2rem
-em('2rem'); // -> 2rem
-mantine_rem('2rem'); // -> calc(2rem * var(--mantine-scale))
+// supports values with "px" unit
+rem('16px') // '1rem'
+em('16px'); // '1em'
+mantine_rem('16px'); // 'calc(1rem * var(--mantine-scale))'
 
-rem('50%'); // -> 50%
-em('50%'); // -> 50%
-mantine_rem('50%'); // -> 50%
+// all non convertable values are returned as is
+rem('2rem'); // '2rem'
+em('2rem'); // '2rem'
+mantine_rem('2rem'); // 'calc(2rem * var(--mantine-scale))'
 
-rem('5vh'); // -> 5vh
-em('5vh'); // -> 5vh
-mantine_rem('5vh'); // -> 5vh
+rem('5vh'); // '5vh'
+em('5vh'); // '5vh'
+mantine_rem('5vh'); // '5vh'
+
+rem('var(--size)'); // 'var(--size)'
+em('var(--size)'); // 'var(--size)'
+
+rem('50%'); // '50%'
+em('50%'); // '50%'
+mantine_rem('50%'); // '50%'
 ```
