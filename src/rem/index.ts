@@ -1,8 +1,11 @@
 const SIXTEEN_PX = '16px';
 
-function scaleRem(remValue: string, shouldScaleTo: string) {
-  return `calc(${remValue} * ${shouldScaleTo})`;
-}
+const scaleRem = (remValue: string, shouldScaleTo: '16px' | (string & {}) | null = null) => {
+  if (shouldScaleTo && shouldScaleTo !== SIXTEEN_PX) {
+    return `calc(${remValue} * ${shouldScaleTo})`;
+  }
+  return remValue;
+};
 
 export function createConverter(units: string, shouldScaleTo: '16px' | (string & {}) | null = null, htmlFontSize = 16) {
   return function converter(this: void, value: number | string | number[]): string {
@@ -16,7 +19,7 @@ export function createConverter(units: string, shouldScaleTo: '16px' | (string &
 
     if (typeof value === 'number') {
       const val = `${value / htmlFontSize}${units}`;
-      return (shouldScaleTo && shouldScaleTo !== SIXTEEN_PX) ? scaleRem(val, shouldScaleTo) : val;
+      return scaleRem(val, shouldScaleTo);
     }
 
     if (value.includes('calc(') || value.includes('var(') || value.includes('clamp(')) {
@@ -31,14 +34,14 @@ export function createConverter(units: string, shouldScaleTo: '16px' | (string &
     }
 
     if (value.includes(units)) {
-      return (shouldScaleTo && shouldScaleTo !== SIXTEEN_PX) ? scaleRem(value, shouldScaleTo) : value;
+      return scaleRem(value, shouldScaleTo);
     }
 
     const replaced = Number(value.replace('px', ''));
     // Replaced is not NaN
     if (replaced === replaced) {
       const val = `${replaced / htmlFontSize}${units}`;
-      return (shouldScaleTo && shouldScaleTo !== SIXTEEN_PX) ? scaleRem(val, shouldScaleTo) : val;
+      return scaleRem(val, shouldScaleTo);
     }
 
     return value;
