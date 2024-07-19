@@ -4,10 +4,10 @@ function scaleRem(remValue: string, shouldScaleTo: string) {
   return `calc(${remValue} * ${shouldScaleTo})`;
 }
 
-function createConverter(units: string, shouldScaleTo: string | null = null) {
-  return function converter(value: number | string | number[]): string {
+export function createConverter(units: string, shouldScaleTo: '16px' | (string & {}) | null = null, htmlFontSize = 16) {
+  return function converter(this: void, value: number | string | number[]): string {
     if (Array.isArray(value)) {
-      return value.map((val) => converter(val)).join(' ');
+      return value.map(converter).join(' ');
     }
 
     if (value === 0 || value === '0') {
@@ -15,7 +15,7 @@ function createConverter(units: string, shouldScaleTo: string | null = null) {
     }
 
     if (typeof value === 'number') {
-      const val = `${value / 16}${units}`;
+      const val = `${value / htmlFontSize}${units}`;
       return (shouldScaleTo && shouldScaleTo !== SIXTEEN_PX) ? scaleRem(val, shouldScaleTo) : val;
     }
 
@@ -26,7 +26,7 @@ function createConverter(units: string, shouldScaleTo: string | null = null) {
     if (value.includes(' ')) {
       return value
         .split(' ')
-        .map((val) => converter(val))
+        .map(converter)
         .join(' ');
     }
 
@@ -35,9 +35,9 @@ function createConverter(units: string, shouldScaleTo: string | null = null) {
     }
 
     const replaced = Number(value.replace('px', ''));
-
+    // Replaced is not NaN
     if (replaced === replaced) {
-      const val = `${replaced / 16}${units}`;
+      const val = `${replaced / htmlFontSize}${units}`;
       return (shouldScaleTo && shouldScaleTo !== SIXTEEN_PX) ? scaleRem(val, shouldScaleTo) : val;
     }
 
@@ -45,6 +45,6 @@ function createConverter(units: string, shouldScaleTo: string | null = null) {
   };
 }
 
-export const rem = createConverter('rem', SIXTEEN_PX);
-export const mantine_rem = createConverter('rem', 'var(--mantine-scale)');
-export const em = createConverter('em');
+export const rem = createConverter('rem', SIXTEEN_PX, 16);
+export const mantine_rem = createConverter('rem', 'var(--mantine-scale)', 16);
+export const em = createConverter('em', SIXTEEN_PX, 16);
