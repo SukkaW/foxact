@@ -1,3 +1,10 @@
+# 0.2.37
+
+**Core Changes**
+
+- `foxact/rem` now also exports converter factory function
+- `foxact/rem` now supports customize html font size
+
 # 0.2.36
 
 **Core Changes**
