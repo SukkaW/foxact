@@ -13,7 +13,7 @@ Convert string or number values in px to `rem` or `em`.
 ## Usage
 
 ```tsx copy
-import { rem, em, mantine_rem } from 'foxact/rem';
+import { rem, em, mantine_rem, createConverter } from 'foxact/rem';
 
 // numbers and values in px are converted to rem
 rem(32); // '2rem'
@@ -44,4 +44,11 @@ em('var(--size)'); // 'var(--size)'
 rem('50%'); // '50%'
 em('50%'); // '50%'
 mantine_rem('50%'); // '50%'
+
+// you can create your own converter
+const rem = createConverter(
+  'rem', // the target unit you want to convert to
+  '16px', // the value you want to scale to, e.g. `var(--mantine-scale)`, default to null
+  16 // The font size of html, default to 16
+)
 ```
