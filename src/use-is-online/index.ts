@@ -19,7 +19,8 @@ const getSnapshot: Parameters<typeof useSyncExternalStore>[1] = () => {
   return navigator.onLine;
 };
 
-export function usePageVisibility() {
+/** @see https://foxact.skk.moe/use-is-online */
+export function useIsOnline() {
   return useSyncExternalStore(
     subscribe,
     getSnapshot,

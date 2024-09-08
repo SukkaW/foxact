@@ -17,6 +17,7 @@ const getSnapshot: Parameters<typeof useSyncExternalStore>[1] = () => {
   return !document.hidden;
 };
 
+/** @see https://foxact.skk.moe/use-page-visibility */
 export function usePageVisibility() {
   return useSyncExternalStore(
     handlePageVisibilityChange,
