@@ -1,0 +1,49 @@
+---
+title: useTypeScriptHappyCallback
+---
+
+# useTypeScriptHappyCallback
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+`@types/react` [uses a more general type (`Function`) to avoid breaking changes](https://github.com/DefinitelyTyped/DefinitelyTyped/issues/52873#issuecomment-845806435) for `useCallback`. `useTypeScriptHappyCallback` declared a more specific types, allows TypeScript to infer the types of callback's arguments and return value.
+
+## Usage
+
+```tsx copy
+import { useTypeScriptHappyCallback } from 'foxact/use-typescript-happy-callback';
+
+<input
+  onChange={useTypeScriptHappyCallback(
+    (event) => {
+  // ^? React.ChangeEvent<HTMLInputElement>
+      console.log(event.target.value); // Here the type of `event` is inferred
+    },
+    []
+  )}
+/>
+```
+
+Note that [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) requires extra configuration in order to check dependency array for third-party hooks:
+
+```json filename=".eslintrc.json" copy
+{
+  "rules": {
+    "react-hooks/exhaustive-deps": [
+      "warn",
+      {
+        "additionalHooks": "useTypeScriptHappyCallback"
+      }
+    ]
+  }
+}
+```
+
+But if you do not want to configure it, `foxact/use-typescript-happy-callback` also provides another named export `useCallback` as an alias of `useTypeScriptHappyCallback`:
+
+```diff
+- import { useCallback } from 'react';
++ import { useCallback } from 'foxact/use-typescript-happy-callback';
+```

@@ -1,0 +1,19 @@
+---
+title: usePageVisibility
+---
+
+# usePageVisibility
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Simple React Hook for checking if the app is in the foreground or background. It uses `useSyncExternalStore` under the hood to support React 18 concurrent rendering and server-side rendering.
+
+## Usage
+
+```tsx copy
+import { usePageVisibility } from 'foxact/use-page-visibility';
+
+usePageVisibility(); // Returns a boolean value
+```

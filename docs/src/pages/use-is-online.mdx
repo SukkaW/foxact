@@ -1,0 +1,19 @@
+---
+title: useIsOnline
+---
+
+# useIsOnline
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Simple React Hook for checking if you're connected to the internet. It uses `useSyncExternalStore` under the hood to support React 18 concurrent rendering and server-side rendering.
+
+## Usage
+
+```tsx copy
+import { useIsOnline } from 'foxact/use-is-online';
+
+useIsOnline(); // Returns a boolean value
+```
