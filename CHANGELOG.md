@@ -1,3 +1,9 @@
+# 0.2.38
+
+**Core Changes**
+
+- Add `useIsOnline`, `usePageVisibility` and `useTypeScriptHappyCallback`
+
 # 0.2.37
 
 **Core Changes**
