@@ -46,9 +46,9 @@ export const useMediaQuery = (mq: string, serverValue?: boolean | undefined): bo
     }
     return externalStore.get(mq) ?? window.matchMedia(mq).matches;
   };
-  const getServerSnapshot = serverValue !== undefined
-    ? () => serverValue
-    : getServerSnapshotWithoutServerValue;
+  const getServerSnapshot = serverValue === undefined
+    ? getServerSnapshotWithoutServerValue
+    : () => serverValue;
 
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot); // Use useSyncExternalStore to manage the subscription and state
 };

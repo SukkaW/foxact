@@ -11,6 +11,7 @@ export const ComposeContextProvider = memo(({
   contexts,
   children
 }: ContextComposeProviderProps) => contexts.reduceRight<React.ReactNode>(
+  // eslint-disable-next-line @eslint-react/no-clone-element -- Composing elements based on props
   (children: React.ReactNode, parent) => cloneElement(
     parent,
     { children }

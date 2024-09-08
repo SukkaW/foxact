@@ -18,8 +18,11 @@ export function useDebouncedValue<T>(value: NotFunction<T>, wait: number, leadin
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- false positive of useEffect
     if (!isCancelled) {
-      if (leadingRef.current && leading) {
+      if (leading && leadingRef.current) {
         leadingRef.current = false;
+        // This only happens when leading is enabled
+        // This won't trigger infinitly re-render as long as value is stable
+        // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect -- see above
         setOutputValue(value);
       } else {
         timeout = window.setTimeout(() => {

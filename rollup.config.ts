@@ -2,7 +2,7 @@ import { defineConfig } from 'rollup';
 import { swc, preserveUseDirective } from 'rollup-plugin-swc3';
 import { dts } from 'rollup-plugin-dts';
 
-import fsp from 'fs/promises';
+import fsp from 'node:fs/promises';
 
 import pkgJson from './package.json';
 import browserslist from 'browserslist';

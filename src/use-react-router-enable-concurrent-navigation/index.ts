@@ -11,6 +11,7 @@ import type { Foxact } from '../types';
 export const useReactRouterEnableConcurrentNavigation = () => {
   const { navigator } = useContext<React.ContextType<typeof UNSAFE_NavigationContext>>(UNSAFE_NavigationContext);
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- It can be undefined
   if (!navigator) {
     throw new TypeError('[foxact/use-react-router-enable-concurrent-navigation] must be used under <RouterProvider /> or a Router component (e.g. <BrowserRouter />)');
   }

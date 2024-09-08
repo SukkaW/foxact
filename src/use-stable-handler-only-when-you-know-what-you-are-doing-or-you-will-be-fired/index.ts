@@ -3,11 +3,11 @@ import reactExports, { useCallback, useEffect, useLayoutEffect, useRef } from 'r
 
 // useIsomorphicInsertionEffect
 const useInsertionEffect
-  = typeof window !== 'undefined'
-    // useInsertionEffect is only available in React 18+
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- see above
-    ? reactExports.useInsertionEffect || useLayoutEffect
-    : useEffect;
+  = typeof window === 'undefined'
+  // useInsertionEffect is only available in React 18+
+
+    ? useEffect
+    : reactExports.useInsertionEffect || useLayoutEffect;
 
 /**
  * @see https://foxact.skk.moe/use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired

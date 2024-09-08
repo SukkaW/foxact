@@ -1,10 +1,16 @@
 import 'client-only';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef } from 'react';
 import { noop } from '../noop';
 import { useStableHandler } from '../use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired';
+import { useCallback } from '../use-typescript-happy-callback';
 
-export class UseClipboardError extends Error { }
+export class UseClipboardError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'UseClipboardError';
+  }
+}
 
 interface UseClipboardOption {
   timeout?: number,

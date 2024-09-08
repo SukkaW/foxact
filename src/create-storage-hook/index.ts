@@ -43,14 +43,15 @@ export function createStorage(type: StorageType) {
 
   const foxactHookName = type === 'localStorage' ? 'foxact/use-local-storage' : 'foxact/use-session-storage';
 
-  const dispatchStorageEvent = typeof window !== 'undefined'
-    ? (key: string) => {
+  const dispatchStorageEvent = typeof window === 'undefined'
+    ? noop
+    : (key: string) => {
       window.dispatchEvent(new CustomEvent<string>(FOXACT_LOCAL_STORAGE_EVENT_KEY, { detail: key }));
-    }
-    : noop;
+    };
 
-  const setStorageItem = typeof window !== 'undefined'
-    ? (key: string, value: string) => {
+  const setStorageItem = typeof window === 'undefined'
+    ? noop
+    : (key: string, value: string) => {
       try {
         window[type].setItem(key, value);
       } catch {
@@ -58,11 +59,11 @@ export function createStorage(type: StorageType) {
       } finally {
         dispatchStorageEvent(key);
       }
-    }
-    : noop;
+    };
 
-  const removeStorageItem = typeof window !== 'undefined'
-    ? (key: string) => {
+  const removeStorageItem = typeof window === 'undefined'
+    ? noop
+    : (key: string) => {
       try {
         window[type].removeItem(key);
       } catch {
@@ -70,8 +71,7 @@ export function createStorage(type: StorageType) {
       } finally {
         dispatchStorageEvent(key);
       }
-    }
-    : noop;
+    };
 
   const getStorageItem = (key: string) => {
     if (typeof window === 'undefined') {
@@ -115,7 +115,9 @@ export function createStorage(type: StorageType) {
   function useStorage<T>(
     key: string,
     serverValue?: NotUndefined<T> | undefined,
+    // eslint-disable-next-line sukka/unicorn/no-object-as-default-parameter -- two different shape of options
     options: UseStorageRawOption | UseStorageParserOption<T> = {
+      raw: false,
       serializer: JSON.stringify,
       deserializer: JSON.parse
     }
@@ -154,9 +156,9 @@ export function createStorage(type: StorageType) {
 
     // If the serverValue is provided, we pass it to useSES' getServerSnapshot, which will be used during SSR
     // If the serverValue is not provided, we don't pass it to useSES, which will cause useSES to opt-in client-side rendering
-    const getServerSnapshot = serverValue !== undefined
-      ? () => serializer(serverValue)
-      : getServerSnapshotWithoutServerValue;
+    const getServerSnapshot = serverValue === undefined
+      ? getServerSnapshotWithoutServerValue
+      : () => serializer(serverValue);
 
     const store = useSyncExternalStore(
       subscribeToSpecificKeyOfLocalStorage,

@@ -24,12 +24,12 @@ export const useCompositionInput = <T extends HTMLInputElement | HTMLTextAreaEle
     if ('value' in e.target) {
       const userInputValue = e.target.value;
 
-      if (!internalState.current.c) {
+      if (internalState.current.c) {
+        internalState.current.e = false;
+      } else {
         cb(userInputValue);
 
         internalState.current.e = true;
-      } else {
-        internalState.current.e = false;
       }
     }
   }, [cb, internalState]);

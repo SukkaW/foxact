@@ -1,10 +1,10 @@
-import fsp from 'fs/promises';
-import path from 'path';
+import fsp from 'node:fs/promises';
+import path from 'node:path';
 import { getEntries } from './get-entries';
 import gzipSize from 'gzip-size';
 import { file as brotliSizeFile } from 'brotli-size';
 
-import zlib from 'zlib';
+import zlib from 'node:zlib';
 
 const rootDir = process.cwd();
 const distDir = path.resolve(rootDir, 'dist');

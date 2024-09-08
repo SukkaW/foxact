@@ -1,7 +1,7 @@
 import 'client-only';
 
 import type { LinkProps } from 'next/link';
-import { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
+import { useEffect, useMemo, useState, useTransition, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { formatUrl } from 'next/dist/shared/lib/router/utils/format-url';
@@ -55,7 +55,7 @@ const isModifiedEvent = (event: React.MouseEvent<HTMLAnchorElement>) => {
     || event.ctrlKey
     || event.shiftKey
     || event.altKey // triggers resource download
-    // eslint-disable-next-line deprecation/deprecation -- back compat
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/no-deprecated -- back compat
     || (event.nativeEvent && event.nativeEvent.which === 2)
   );
 };

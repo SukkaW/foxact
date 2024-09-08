@@ -61,7 +61,9 @@ const getServerSnapshotWithoutServerValue = () => {
 function useUrlHashState<T>(
   key: string,
   defaultValue?: NotUndefined<T> | undefined,
+  // eslint-disable-next-line sukka/unicorn/no-object-as-default-parameter -- two different shape of options
   options: UseUrlHashStateRawOption | UseUrlHashStateParserOption<T> = {
+    raw: false,
     serializer: identity,
     deserializer: identity
   }
@@ -73,9 +75,9 @@ function useUrlHashState<T>(
 
   // If the serverValue is provided, we pass it to useSES' getServerSnapshot, which will be used during SSR
   // If the serverValue is not provided, we don't pass it to useSES, which will cause useSES to opt-in client-side rendering
-  const getServerSnapshot = defaultValue !== undefined
-    ? () => serializer(defaultValue)
-    : getServerSnapshotWithoutServerValue;
+  const getServerSnapshot = defaultValue === undefined
+    ? getServerSnapshotWithoutServerValue
+    : () => serializer(defaultValue);
 
   const store = useSyncExternalStore(
     subscribe,

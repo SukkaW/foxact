@@ -1,5 +1,6 @@
 import 'client-only';
-import { useCallback, useReducer, useRef } from 'react';
+import { useReducer, useRef } from 'react';
+import { useCallback } from '../use-typescript-happy-callback';
 
 const identity = <V>(value: V) => value;
 
