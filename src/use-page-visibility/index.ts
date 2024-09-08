@@ -9,11 +9,18 @@ const handlePageVisibilityChange: Parameters<typeof useSyncExternalStore>[0] = (
   };
 };
 
+const getSnapshot: Parameters<typeof useSyncExternalStore>[1] = () => {
+  if (typeof document === 'undefined') {
+    return false;
+  }
+
+  return !document.hidden;
+};
+
 export function usePageVisibility() {
   return useSyncExternalStore(
     handlePageVisibilityChange,
-    () => !document.hidden,
-    // On server, we always return false
-    () => false
+    getSnapshot,
+    getSnapshot
   );
 }
