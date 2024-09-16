@@ -35,7 +35,7 @@
     "@eslint-sukka/node": "^6.4.1",
     "@eslint-sukka/react": "^6.4.1",
     "@napi-rs/magic-string": "^0.3.4",
-    "@package-json/types": "^0.0.6",
+    "@package-json/types": "^0.0.7",
     "@swc-node/register": "^1.10.9",
     "@swc/core": "^1.7.24",
     "@types/node": "^20.16.5",
