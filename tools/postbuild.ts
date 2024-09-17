@@ -6,6 +6,8 @@ import { file as brotliSizeFile } from 'brotli-size';
 
 import zlib from 'node:zlib';
 
+import type { PackageJson } from '@package-json/types';
+
 const rootDir = process.cwd();
 const distDir = path.resolve(rootDir, 'dist');
 
@@ -31,7 +33,7 @@ const copyAndCreateFiles = () => {
 const createPackageJson = async (entries: Record<string, string>) => {
   const packageJsonCopy = JSON.parse(
     await fsp.readFile(path.resolve(rootDir, 'package.json'), 'utf-8')
-  ) as Partial<typeof import('../package.json')> & { exports: any, typeVersions: any };
+  ) as PackageJson;
 
   delete packageJsonCopy.devDependencies;
   delete packageJsonCopy.private;
@@ -52,6 +54,10 @@ const createPackageJson = async (entries: Record<string, string>) => {
   };
 
   Object.keys(entries).forEach(entryName => {
+    // This is an unnecessary check to make TypeScript happy
+    // For some reason TypeScript ignores the assignment above
+    packageJsonCopy.exports ??= {};
+
     packageJsonCopy.exports[`./${entryName}`] = {
       types: `./${entryName}/index.d.ts`,
       import: {
