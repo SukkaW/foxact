@@ -5,7 +5,7 @@ const stlProp = Object.getOwnPropertyDescriptor(
 const hasSTL = stlProp?.writable && typeof stlProp.value === 'number';
 
 /** @private */
-export const noSSRError = (errorMessage?: string | undefined, nextjsDigest = 'BAILOUT_TO_CLIENT_SIDE_RENDERING') => {
+export const noSSRError = (errorMessage?: string, nextjsDigest = 'BAILOUT_TO_CLIENT_SIDE_RENDERING') => {
   const originalStackTraceLimit = Error.stackTraceLimit;
 
   /**

@@ -60,7 +60,7 @@ const getServerSnapshotWithoutServerValue = () => {
 /** @see https://foxact.skk.moe/use-url-hash-state */
 function useUrlHashState<T>(
   key: string,
-  defaultValue?: NotUndefined<T> | undefined,
+  defaultValue?: NotUndefined<T>,
   // eslint-disable-next-line sukka/unicorn/no-object-as-default-parameter -- two different shape of options
   options: UseUrlHashStateRawOption | UseUrlHashStateParserOption<T> = {
     raw: false,

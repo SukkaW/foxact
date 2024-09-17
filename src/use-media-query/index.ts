@@ -30,7 +30,7 @@ const getServerSnapshotWithoutServerValue = () => {
 };
 
 /** @see https://foxact.skk.moe/use-media-query */
-export const useMediaQuery = (mq: string, serverValue?: boolean | undefined): boolean => {
+export const useMediaQuery = (mq: string, serverValue?: boolean): boolean => {
   if (typeof window !== 'undefined' && !externalStore.has(mq)) {
     // This part of the code should only run once per media query, on client-side only
     // since we are on the client-side, let's get initial value directly from DOM

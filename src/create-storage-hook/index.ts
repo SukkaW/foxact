@@ -114,7 +114,7 @@ export function createStorage(type: StorageType) {
   ): readonly [T | null, React.Dispatch<React.SetStateAction<T | null>>];
   function useStorage<T>(
     key: string,
-    serverValue?: NotUndefined<T> | undefined,
+    serverValue?: NotUndefined<T>,
     // eslint-disable-next-line sukka/unicorn/no-object-as-default-parameter -- two different shape of options
     options: UseStorageRawOption | UseStorageParserOption<T> = {
       raw: false,
