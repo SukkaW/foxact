@@ -11,7 +11,7 @@
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
   "dependencies": {
-    "next": "^14.2.3",
+    "next": "^14.2.11",
     "nextra": "^2.13.4",
     "nextra-theme-docs": "^2.13.4",
     "react": "^18.3.1",
@@ -19,11 +19,11 @@
     "swr": "^2.2.5"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^14.2.3",
-    "@types/react": "^18.3.1",
+    "@next/eslint-plugin-next": "^14.2.11",
+    "@types/react": "^18.3.7",
     "@types/react-dom": "^18.3.0",
     "eslint-plugin-mdx": "^3.1.5",
-    "tailwindcss": "^3.4.3"
+    "tailwindcss": "^3.4.11"
   },
   "overrides": {
     "has": "npm:@nolyfill/has@latest"
