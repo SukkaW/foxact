@@ -55,7 +55,7 @@ If you need to edit other components' states, write it like this:
 
 ```js
 useComponentWillReceiveUpdate(() => {
-  setLocalState(false)
-  flushSync(() => props.setParentState(false))
+  flushSync(() => setLocalState(false))
+  props.setParentState(false)
 }, [state])
 ```
