@@ -32,7 +32,7 @@ If you're using useEffect like this:
   useEffect(() => setState(false), [props.someProp])
 ```
 
-Don't do it. See [Adjusting some state when a prop changes](https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes)
+Don't do it. See [Adjusting some state when a prop changes](https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes) or [Storing information from previous renders](https://react.dev/reference/react/useState#storing-information-from-previous-renders)
 It should be like this:
 ```js
   const [prev, setPrev] = useState(state)
@@ -50,9 +50,8 @@ useComponentWillReceiveUpdate(() => setState(false), [state])
 
 This only applies to states of the current component.
 Modifying states from other components causes React reporting errors.
-You may also want to read [(Avoid) Notifying parent components about state changes](https://react.dev/learn/you-might-not-need-an-effect#notifying-parent-components-about-state-changes)
-and [(Avoid) Passing data to the parent](https://react.dev/learn/you-might-not-need-an-effect#passing-data-to-the-parent).
-If you really need to edit other components' states, write it like this:
+You may also want to read [(Avoid) Notifying parent components about state changes](https://react.dev/learn/you-might-not-need-an-effect#notifying-parent-components-about-state-changes) and [(Avoid) Passing data to the parent](https://react.dev/learn/you-might-not-need-an-effect#passing-data-to-the-parent).
+If you need to edit other components' states, write it like this:
 
 ```js
 useComponentWillReceiveUpdate(() => {
