@@ -55,7 +55,11 @@ If you need to edit other components' states, write it like this:
 
 ```js
 useComponentWillReceiveUpdate(() => {
+  // Force React to immediately flush scheduled/batched updates
   flushSync(() => setLocalState(false))
+  // By the time flushSync finishes and reaches this line, the DOM update
+  // for local state change has finished, you can now safely trigger parent
+  // components' re-render.
   props.setParentState(false)
 }, [state])
 ```
