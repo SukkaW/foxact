@@ -35,11 +35,11 @@ If you're using useEffect like this:
 Don't do it. See [Adjusting some state when a prop changes](https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes) or [Storing information from previous renders](https://react.dev/reference/react/useState#storing-information-from-previous-renders)
 It should be like this:
 ```js
-  const [prev, setPrev] = useState(state)
-  if (prev !== state) {
-    setPrev(state)
-    setState(false)
-  }
+const [prev, setPrev] = useState(state)
+if (prev !== state) {
+  setPrev(state)
+  setState(false)
+}
 ```
 
 This hook is a helper for the above pattern.
@@ -56,6 +56,6 @@ If you need to edit other components' states, write it like this:
 ```js
 useComponentWillReceiveUpdate(() => {
   setLocalState(false)
-  Promise.resolve().then(() => props.setParentState(false))
+  flushSync(() => props.setParentState(false))
 }, [state])
 ```
