@@ -1,0 +1,66 @@
+---
+title: useComponentWillReceiveUpdate
+---
+
+# useComponentWillReceiveUpdate
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Change states based on changed props during a re-render. The name of the hook comes from [`UNSAFE_componentWillReceiveProps` method of class components](https://react.dev/reference/react/Component#unsafe_componentwillreceiveprops).
+
+## Usage
+
+```js
+import { useComponentWillReceiveUpdate } from 'foxact/use-abortable-effect';
+
+function Component(props) {
+  const [a, setA] = useState('')
+  const [b, setB] = useState('')
+  // when props.x changed, only reset a, not b
+  useComponentWillReceiveUpdate(() => {
+    setA('')
+  }, [props.x]);
+}
+```
+
+If you're using useEffect like this:
+
+```js
+  const [state, setState] = useState(false)
+  useEffect(() => setState(false), [props.someProp])
+```
+
+Don't do it. See [Adjusting some state when a prop changes](https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes) or [Storing information from previous renders](https://react.dev/reference/react/useState#storing-information-from-previous-renders)
+It should be like this:
+```js
+const [prev, setPrev] = useState(state)
+if (prev !== state) {
+  setPrev(state)
+  setState(false)
+}
+```
+
+This hook is a helper for the above pattern.
+
+```js
+useComponentWillReceiveUpdate(() => setState(false), [state])
+```
+
+This should only apply to states of the current component. Modifying states of other components causes React reporting errors. You may also want to read [(Avoid) Notifying parent components about state changes](https://react.dev/learn/you-might-not-need-an-effect#notifying-parent-components-about-state-changes) and [(Avoid) Passing data to the parent](https://react.dev/learn/you-might-not-need-an-effect#passing-data-to-the-parent).
+
+If you really need to directly modify other components' states (E.g. when working with third-party libraries/components/SDKs where you don't have control of that code), use `flushSync` to separate two state updates:
+
+```js
+import { flushSync } from 'react-dom'
+
+useComponentWillReceiveUpdate(() => {
+  // Force React to immediately flush scheduled/batched updates
+  flushSync(() => setLocalState(false))
+  // By the time flushSync finishes and reaches this line, the DOM update
+  // for local state change has finished, you can now safely trigger parent
+  // components' re-render.
+  props.setParentState(false)
+}, [state])
+```
