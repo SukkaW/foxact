@@ -5,7 +5,7 @@ const stlProp = Object.getOwnPropertyDescriptor(
 const hasSTL = stlProp?.writable && typeof stlProp.value === 'number';
 
 /** @private */
-export const noSSRError = (errorMessage?: string, nextjsDigest = 'BAILOUT_TO_CLIENT_SIDE_RENDERING') => {
+export function noSSRError(errorMessage?: string, nextjsDigest = 'BAILOUT_TO_CLIENT_SIDE_RENDERING') {
   const originalStackTraceLimit = Error.stackTraceLimit;
 
   /**
@@ -35,11 +35,11 @@ export const noSSRError = (errorMessage?: string, nextjsDigest = 'BAILOUT_TO_CLI
   (error as any).recoverableError = 'NO_SSR';
 
   return error;
-};
+}
 
 /** @see https://foxact.skk.moe/no-ssr */
-export const noSSR = (extraMessage?: string) => {
+export function noSSR(extraMessage?: string) {
   if (typeof window === 'undefined') {
     throw noSSRError(extraMessage);
   }
-};
+}

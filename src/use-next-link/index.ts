@@ -45,7 +45,7 @@ export interface UseNextLinkReturnProps extends Partial<React.JSX.IntrinsicEleme
   href?: string
 }
 
-const isModifiedEvent = (event: React.MouseEvent<HTMLAnchorElement>) => {
+function isModifiedEvent(event: React.MouseEvent<HTMLAnchorElement>) {
   const eventTarget = event.currentTarget;
   const target = eventTarget.getAttribute('target');
   return (
@@ -58,17 +58,15 @@ const isModifiedEvent = (event: React.MouseEvent<HTMLAnchorElement>) => {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/no-deprecated -- back compat
     || (event.nativeEvent && event.nativeEvent.which === 2)
   );
-};
+}
 
 // https://github.com/vercel/next.js/blob/39589ff35003ba73f92b7f7b349b3fdd3458819f/packages/next/src/client/components/router-reducer/router-reducer-types.ts#L148
 const PREFETCH_APPROUTER_AUTO = 'auto';
 const PREFETCH_APPROUTER_FULL = 'full';
 
-const prefetch = (
-  router: ReturnType<typeof useRouter>,
+function prefetch(router: ReturnType<typeof useRouter>,
   href: string,
-  options: AppRouterPrefetchOptions
-) => {
+  options: AppRouterPrefetchOptions) {
   if (typeof window === 'undefined') {
     return;
   }
@@ -83,11 +81,10 @@ const prefetch = (
       throw err;
     }
   });
-};
+}
 
 /** @see https://foxact.skk.moe/use-next-link */
-const useNextLink = (
-  hrefProp: string | UrlObject,
+function useNextLink(hrefProp: string | UrlObject,
   {
     prefetch: prefetchProp,
     ref,
@@ -97,8 +94,7 @@ const useNextLink = (
     scroll: routerScroll = true,
     replace = false,
     ...restProps // Record<string, never>
-  }: UseNextLinkOptions
-): [isPending: boolean, linkProps: UseNextLinkReturnProps] => {
+  }: UseNextLinkOptions): [isPending: boolean, linkProps: UseNextLinkReturnProps] {
   // Type guard to make sure there is no more props left in restProps
   if (process.env.NODE_ENV === 'development') {
     const _: Record<string, never> = restProps;
@@ -239,6 +235,6 @@ const useNextLink = (
     isPending,
     childProps
   ] as const;
-};
+}
 
 export const unstable_useNextLink = useNextLink;

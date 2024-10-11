@@ -4,7 +4,7 @@ import 'client-only';
 import { useCallback, useRef } from 'react';
 
 /** @see https://foxact.skk.moe/use-retimer */
-export const useRetimer = () => {
+export function useRetimer() {
   const timerIdRef = useRef<number>();
 
   return useCallback((timerId?: number) => {
@@ -13,4 +13,4 @@ export const useRetimer = () => {
     }
     timerIdRef.current = timerId;
   }, []);
-};
+}

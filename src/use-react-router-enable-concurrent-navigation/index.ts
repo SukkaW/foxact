@@ -8,7 +8,7 @@ import type { Navigator } from 'react-router-dom';
 import type { Foxact } from '../types';
 
 /** @see https://foxact.skk.moe/use-react-router-enable-concurrent-navigation */
-export const useReactRouterEnableConcurrentNavigation = () => {
+export function useReactRouterEnableConcurrentNavigation() {
   const { navigator } = useContext<React.ContextType<typeof UNSAFE_NavigationContext>>(UNSAFE_NavigationContext);
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- It can be undefined
@@ -31,10 +31,10 @@ export const useReactRouterEnableConcurrentNavigation = () => {
       navigator.replace = originalNavigatorReplace;
     };
   }, [navigator]);
-};
+}
 
-export const ReactRouterConcurrentNavigationProvider = ({ children }: Foxact.PropsWithChildren) => {
+export function ReactRouterConcurrentNavigationProvider({ children }: Foxact.PropsWithChildren) {
   useReactRouterEnableConcurrentNavigation();
 
   return children;
-};
+}

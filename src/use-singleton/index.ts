@@ -7,7 +7,7 @@ export interface SingletonRefObject<T> {
 }
 
 /** @see https://foxact.skk.moe/use-singleton */
-export const useSingleton = <T>(initializor: () => T): SingletonRefObject<T> => {
+export function useSingleton<T>(initializor: () => T): SingletonRefObject<T> {
   const r = useRef<T>();
   if (!r.current) {
     r.current = initializor();
@@ -18,4 +18,4 @@ export const useSingleton = <T>(initializor: () => T): SingletonRefObject<T> => 
   // should not be written by anyone else anymore
   // @ts-expect-error -- see above
   return r;
-};
+}

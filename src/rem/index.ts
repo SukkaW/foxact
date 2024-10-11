@@ -1,11 +1,11 @@
 const SIXTEEN_PX = '16px';
 
-const scaleRem = (remValue: string, shouldScaleTo: '16px' | (string & {}) | null = null) => {
+function scaleRem(remValue: string, shouldScaleTo: '16px' | (string & {}) | null = null) {
   if (shouldScaleTo && shouldScaleTo !== SIXTEEN_PX) {
     return `calc(${remValue} * ${shouldScaleTo})`;
   }
   return remValue;
-};
+}
 
 export function createConverter(units: string, shouldScaleTo: '16px' | (string & {}) | null = null, htmlFontSize = 16) {
   return function converter(this: void, value: number | string | number[]): string {

@@ -4,7 +4,7 @@ import path from 'node:path';
 const rootDir = process.cwd();
 const srcDir = path.join(rootDir, 'src');
 
-export const getEntries = async () => {
+export async function getEntries() {
   const files = await new Fdir()
     .withRelativePaths()
     .crawl(srcDir)
@@ -19,4 +19,4 @@ export const getEntries = async () => {
     }
     return prev;
   }, {});
-};
+}

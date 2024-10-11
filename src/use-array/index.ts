@@ -1,7 +1,7 @@
 import 'client-only';
 import { useCallback, useState } from 'react';
 
-export const useArray = <T>(initialState: T[] | (() => T[]) = () => []) => {
+export function useArray<T>(initialState: T[] | (() => T[]) = () => []) {
   const [array, setArray] = useState<T[]>(initialState);
 
   const add = useCallback((v: T) => setArray((prevArray) => prevArray.concat(v)), []);
@@ -17,4 +17,4 @@ export const useArray = <T>(initialState: T[] | (() => T[]) = () => []) => {
   }), []);
 
   return [array, add, reset, removeByIndex] as const;
-};
+}

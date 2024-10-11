@@ -16,7 +16,7 @@ interface GzipStats {
   exports: Record<string, { raw: number, gzip: number, br: number }>
 }
 
-const copyAndCreateFiles = () => {
+function copyAndCreateFiles() {
   return Promise.all([
     fsp.copyFile(
       path.resolve(rootDir, 'LICENSE'),
@@ -28,9 +28,9 @@ const copyAndCreateFiles = () => {
     ),
     fsp.writeFile(path.resolve(distDir, 'ts_version_4.8_and_above_is_required.d.ts'), '')
   ]);
-};
+}
 
-const createPackageJson = async (entries: Record<string, string>) => {
+async function createPackageJson(entries: Record<string, string>) {
   const packageJsonCopy = JSON.parse(
     await fsp.readFile(path.resolve(rootDir, 'package.json'), 'utf-8')
   ) as PackageJson;
@@ -73,9 +73,9 @@ const createPackageJson = async (entries: Record<string, string>) => {
     path.resolve(distDir, 'package.json'),
     JSON.stringify(packageJsonCopy, null, 2)
   );
-};
+}
 
-const createSizesJson = async (entries: Record<string, string>) => {
+async function createSizesJson(entries: Record<string, string>) {
   const gzipSizeStat: GzipStats = {
     total: { raw: 0, gzip: 0, br: 0 },
     exports: {}
@@ -113,7 +113,7 @@ const createSizesJson = async (entries: Record<string, string>) => {
     path.resolve(distDir, 'sizes.json'),
     JSON.stringify(gzipSizeStat)
   );
-};
+}
 
 (async () => {
   const entriesPromise = getEntries();

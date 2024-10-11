@@ -53,9 +53,9 @@ export interface UseUrlHashStateParserOption<T> {
   deserializer: Deserializer<T>
 }
 
-const getServerSnapshotWithoutServerValue = () => {
+function getServerSnapshotWithoutServerValue() {
   throw noSSRError('useUrlHashState cannot be used on the server without a serverValue');
-};
+}
 
 /** @see https://foxact.skk.moe/use-url-hash-state */
 function useUrlHashState<T>(

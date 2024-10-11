@@ -1,6 +1,7 @@
 'use strict';
 
 const { resolve } = require('node:path');
+
 const tsconfigPath = resolve(__dirname, 'tsconfig.json');
 
 module.exports = require('eslint-config-sukka').sukka({

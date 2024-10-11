@@ -4,7 +4,7 @@ import { useRouter } from 'next/router.js';
 import { useMemo } from 'react';
 
 /** @see https://foxact.skk.moe/use-next-pathname */
-export const useNextPathname = (ensureTrailingSlash = false) => {
+export function useNextPathname(ensureTrailingSlash = false) {
   const { asPath } = useRouter();
   return useMemo(() => {
     const path = asPath.split(/[#?]/)[0];
@@ -13,4 +13,4 @@ export const useNextPathname = (ensureTrailingSlash = false) => {
     }
     return path;
   }, [ensureTrailingSlash, asPath]);
-};
+}

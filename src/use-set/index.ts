@@ -1,7 +1,7 @@
 import 'client-only';
 import { useCallback, useState } from 'react';
 
-export const useSet = <T>(initialState: Set<T> | (() => Set<T>) = () => new Set<T>()) => {
+export function useSet<T>(initialState: Set<T> | (() => Set<T>) = () => new Set<T>()) {
   const [set, setSet] = useState(initialState);
 
   const add = useCallback((item: T) => setSet((prevSet) => {
@@ -23,4 +23,4 @@ export const useSet = <T>(initialState: Set<T> | (() => Set<T>) = () => new Set<
   const setAll = useCallback((s: Set<T>) => setSet(s), []);
 
   return [set, add, remove, reset, setAll] as const;
-};
+}

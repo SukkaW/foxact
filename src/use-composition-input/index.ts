@@ -11,13 +11,15 @@ export interface UseCompositionInputReturn<T extends HTMLInputElement | HTMLText
   onCompositionEnd: React.CompositionEventHandler<T>
 }
 
-const getInitialRef = () => ({
+function getInitialRef() {
+  return {
   /** is"C"ompositioning */ c: false,
-  /** is"E"mitted */ e: false
-});
+    /** is"E"mitted */ e: false
+  };
+}
 
 /** @see https://foxact.skk.moe/use-composition-input */
-export const useCompositionInput = <T extends HTMLInputElement | HTMLTextAreaElement = HTMLInputElement>(cb: UseCompositionInputCallback): UseCompositionInputReturn<T> => {
+export function useCompositionInput<T extends HTMLInputElement | HTMLTextAreaElement = HTMLInputElement>(cb: UseCompositionInputCallback): UseCompositionInputReturn<T> {
   const internalState = useSingleton(getInitialRef);
 
   const onChange = useCallback((e: React.ChangeEvent<T> | React.CompositionEvent<T>) => {
@@ -55,4 +57,4 @@ export const useCompositionInput = <T extends HTMLInputElement | HTMLTextAreaEle
     onCompositionStart,
     onCompositionEnd
   };
-};
+}

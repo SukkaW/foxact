@@ -7,7 +7,7 @@ import { useCallback, useSyncExternalStore } from 'react';
 
 const externalStore = new Map<string, boolean>(); // External store to hold the state of each media query
 
-const subscribeToMediaQuery = (mq: string, callback: VoidFunction) => {
+function subscribeToMediaQuery(mq: string, callback: VoidFunction) {
   if (typeof window === 'undefined') return noop;
 
   const mediaQueryList = window.matchMedia(mq);
@@ -23,14 +23,15 @@ const subscribeToMediaQuery = (mq: string, callback: VoidFunction) => {
   return () => {
     mediaQueryList.removeEventListener('change', handleChange); // Cleanup function to remove listener
   };
-};
+}
 
-const getServerSnapshotWithoutServerValue = () => {
+function getServerSnapshotWithoutServerValue(): never {
   throw noSSRError('useMediaQuery cannot be used on the server without a serverValue');
-};
+}
 
 /** @see https://foxact.skk.moe/use-media-query */
-export const useMediaQuery = (mq: string, serverValue?: boolean): boolean => {
+// eslint-disable-next-line sukka/bool-param-default -- serveValue is intentionally optional
+export function useMediaQuery(mq: string, serverValue?: boolean): boolean {
   if (typeof window !== 'undefined' && !externalStore.has(mq)) {
     // This part of the code should only run once per media query, on client-side only
     // since we are on the client-side, let's get initial value directly from DOM
@@ -51,4 +52,4 @@ export const useMediaQuery = (mq: string, serverValue?: boolean): boolean => {
     : () => serverValue;
 
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot); // Use useSyncExternalStore to manage the subscription and state
-};
+}

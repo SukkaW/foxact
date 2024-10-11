@@ -14,9 +14,9 @@ const externalModules = Object.keys(pkgJson.dependencies)
     'react-router-dom',
     'next'
   ]);
-const external = (id: string) => {
+function external(id: string) {
   return externalModules.some((name) => id === name || id.startsWith(`${name}/`));
-};
+}
 
 // Same target as Next.js 13
 const targets = browserslist([

@@ -3,7 +3,7 @@ import 'client-only';
 import { useEffect, useState } from 'react';
 
 /** @see https://foxact.skk.moe/use-is-client */
-export const useIsClient = () => {
+export function useIsClient() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -13,4 +13,4 @@ export const useIsClient = () => {
   }, []);
 
   return mounted;
-};
+}

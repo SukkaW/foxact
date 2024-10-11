@@ -34,9 +34,9 @@ export interface UseStorageParserOption<T> {
   deserializer: Deserializer<T>
 }
 
-const getServerSnapshotWithoutServerValue = () => {
+function getServerSnapshotWithoutServerValue() {
   throw noSSRError('useLocalStorage cannot be used on the server without a serverValue');
-};
+}
 
 export function createStorage(type: StorageType) {
   const FOXACT_LOCAL_STORAGE_EVENT_KEY = type === 'localStorage' ? 'foxact-use-local-storage' : 'foxact-use-session-storage';
