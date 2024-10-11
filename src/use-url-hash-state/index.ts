@@ -53,7 +53,7 @@ export interface UseUrlHashStateParserOption<T> {
   deserializer: Deserializer<T>
 }
 
-function getServerSnapshotWithoutServerValue() {
+function getServerSnapshotWithoutServerValue(): never {
   throw noSSRError('useUrlHashState cannot be used on the server without a serverValue');
 }
 

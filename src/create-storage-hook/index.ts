@@ -34,7 +34,7 @@ export interface UseStorageParserOption<T> {
   deserializer: Deserializer<T>
 }
 
-function getServerSnapshotWithoutServerValue() {
+function getServerSnapshotWithoutServerValue(): never {
   throw noSSRError('useLocalStorage cannot be used on the server without a serverValue');
 }
 
