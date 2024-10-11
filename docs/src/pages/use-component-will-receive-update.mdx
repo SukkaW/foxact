@@ -54,6 +54,8 @@ You may also want to read [(Avoid) Notifying parent components about state chang
 If you need to edit other components' states, write it like this:
 
 ```js
+import { flushSync } from 'react-dom'
+
 useComponentWillReceiveUpdate(() => {
   // Force React to immediately flush scheduled/batched updates
   flushSync(() => setLocalState(false))
