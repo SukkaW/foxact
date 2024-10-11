@@ -1,3 +1,9 @@
+# 0.2.39
+
+**Core Changes**
+
+- Add `useComponentWillReceiveUpdate` which mimics the behavior of `UNSAFE_componentWillReceiveProps`.
+
 # 0.2.38
 
 **Core Changes**
