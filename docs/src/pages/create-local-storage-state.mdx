@@ -1,0 +1,69 @@
+---
+title: Create localStorage State
+---
+
+# Create localStorage State
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Store your shared state that lives in localStorage and synchronize the state of a component with the data stored in the `localStorage`. Lift your state up and passing them deeply into your React app without worrying about performance.
+
+## Usage
+
+First, create a shared hooks with `createLocalStorageState`. It is recommended to place them in a separate file:
+
+```tsx filename="src/context/sidebar-active.tsx" copy
+import { createLocalStorageState } from 'foxact/create-local-storage-state';
+
+const [useSidebarActive, useSidebarActiveValue] = createLocalStorageState(
+  'sidebar-active', // The localStorage key
+  /**
+   * The initial value to use if there is no item in the local storage with the provided key,
+   * the undefined value will be used if no initial value is provided.
+   *
+   * Also, the initial value will also be used during the server-side rendering, see below.
+   */
+  false,
+  /**
+   * Optional configuration object enables the customization of value serialization before it's stored in local storage.
+   */
+  {
+    // Optional, default to false. When set to "true", the value will be passed to the localStorage API as is.
+    raw: false,
+    // Optional, default to "JSON.stringify". Can only be specified when the "raw" is set to false (which is the default).
+    serializer: JSON.stringify,
+    // Optional, default to "JSON.parse". Can only be specified when the "raw" is set to false (which is the default).
+    deserializer: JSON.parse,
+  }
+);
+
+export { useSidebarActive, useSidebarActiveValue };
+```
+
+And now you can use the getter and setter hooks anywhere in your app:
+
+```tsx filename="src/components/sidebar.tsx" copy
+import { memo } from 'react';
+import { useSidebarActive, useSidebarActiveValue } from '../context/sidebar-active';
+
+function Sidebar() {
+  const [sidebarActive, setSidebarActive] = useSidebarActive();
+  // If you only need the value, you can use `useSidebarActiveValue` instead:
+  const sidebarActive = useSidebarActiveValue();
+
+  return (
+    <div className={`sidebar ${sidebarActive ? 'active' : ''}`}>
+      <button onClick={() => setSidebarActive(false)}>Close Sidebar</button>
+    </div>
+  );
+}
+
+export default memo(Sidebar);
+```
+
+## Sever-side Rendering
+
+If the second argument (the initial value) is provided, React will use the initial value to render the UI and generate HTML on the server, otherwise React will find the closest `<Suspense>` boundary and render its `fallback` UI into the generated server HTML on the server. See 
+[`useLocalStorage`](/use-local-storage#sever-side-rendering) for more information.

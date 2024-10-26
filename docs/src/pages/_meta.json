@@ -70,6 +70,8 @@
     "title": "Utilities"
   },
   "context-state": {},
+  "context-local-storage-state": {},
+  "context-session-storage-state": {},
   "create-fixed-array": {},
   "invariant-nullthrow": {},
   "noop": {},

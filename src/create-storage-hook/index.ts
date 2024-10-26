@@ -4,8 +4,10 @@ import { noop } from '../noop';
 import { useLayoutEffect } from '../use-isomorphic-layout-effect';
 import { noSSRError } from '../no-ssr';
 
-type StorageType = 'localStorage' | 'sessionStorage';
-type NotUndefined<T> = T extends undefined ? never : T;
+export type StorageType = 'localStorage' | 'sessionStorage';
+export type NotUndefined<T> = T extends undefined ? never : T;
+
+export type StateHookTuple<T> = readonly [T, React.Dispatch<React.SetStateAction<T | null>>];
 
 // StorageEvent is deliberately not fired on the same document, we do not want to change that
 type CustomStorageEvent = CustomEvent<string>;
@@ -105,13 +107,13 @@ export function createStorage(type: StorageType) {
     key: string,
     serverValue: NotUndefined<T>,
     options?: UseStorageRawOption | UseStorageParserOption<T>
-  ): readonly [T, React.Dispatch<React.SetStateAction<T | null>>];
+  ): StateHookTuple<T>;
   // client-render only
   function useStorage<T>(
     key: string,
     serverValue?: undefined,
     options?: UseStorageRawOption | UseStorageParserOption<T>
-  ): readonly [T | null, React.Dispatch<React.SetStateAction<T | null>>];
+  ): StateHookTuple<T | null>;
   function useStorage<T>(
     key: string,
     serverValue?: NotUndefined<T>,
@@ -121,7 +123,7 @@ export function createStorage(type: StorageType) {
       serializer: JSON.stringify,
       deserializer: JSON.parse
     }
-  ): readonly [T | null, React.Dispatch<React.SetStateAction<T | null>>] | readonly [T, React.Dispatch<React.SetStateAction<T | null>>] {
+  ): StateHookTuple<T> | StateHookTuple<T | null> {
     const subscribeToSpecificKeyOfLocalStorage = useCallback((callback: () => void) => {
       if (typeof window === 'undefined') {
         return noop;
