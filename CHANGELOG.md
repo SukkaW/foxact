@@ -1,3 +1,62 @@
+# 0.2.40
+
+**Core Changes**
+
+- Add `createLocalStorageState` and `createSessionStorageState`. Example usage:
+
+```tsx
+// src/context/sidebar-active.tsx
+import { createLocalStorageState } from 'foxact/create-local-storage-state';
+
+const [useSidebarActive, useSidebarActiveValue] = createLocalStorageState(
+  'sidebar-active', // The localStorage key
+  /**
+   * The initial value to use if there is no item in the local storage with the provided key,
+   * the undefined value will be used if no initial value is provided.
+   *
+   * Also, the initial value will also be used during the server-side rendering, see below.
+   */
+  false,
+  /**
+   * Optional configuration object enables the customization of value serialization before it's stored in local storage.
+   */
+  {
+    // Optional, default to false. When set to "true", the value will be passed to the localStorage API as is.
+    raw: false,
+    // Optional, default to "JSON.stringify". Can only be specified when the "raw" is set to false (which is the default).
+    serializer: JSON.stringify,
+    // Optional, default to "JSON.parse". Can only be specified when the "raw" is set to false (which is the default).
+    deserializer: JSON.parse,
+  }
+);
+
+export { useSidebarActive, useSidebarActiveValue };
+```
+
+And now you can use the getter and setter hooks anywhere in your app:
+
+```tsx
+// src/components/sidebar.tsx
+import { memo } from 'react';
+import { useSidebarActive, useSidebarActiveValue } from '../context/sidebar-active';
+
+function Sidebar() {
+  const [sidebarActive, setSidebarActive] = useSidebarActive();
+  // If you only need the value, you can use `useSidebarActiveValue` instead:
+  const sidebarActive = useSidebarActiveValue();
+
+  return (
+    <div className={`sidebar ${sidebarActive ? 'active' : ''}`}>
+      <button onClick={() => setSidebarActive(false)}>Close Sidebar</button>
+    </div>
+  );
+}
+
+export default memo(Sidebar);
+```
+
+See the documentation for more information.
+
 # 0.2.39
 
 **Core Changes**
