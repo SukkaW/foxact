@@ -48,6 +48,25 @@ This hook is a helper for the above pattern.
 useComponentWillReceiveUpdate(() => setState(false), [state])
 ```
 
+Since React will re-execute the component function immediately in response to the state change, you can early return your component, so React can re-execute the component function earlier.
+
+```jsx
+const changed = useComponentWillReceiveUpdate(() => setState(false), [state]);
+// some other hooks
+const handleChange = useCallback(() => {
+  // do something
+}, []);
+
+// early return to skip the JSX creation
+if (changed) {
+  return null;
+}
+
+return <button onClick={handleChange}>Click me</button>;
+```
+
+----
+
 This should only apply to states of the current component. Modifying states of other components causes React reporting errors. You may also want to read [(Avoid) Notifying parent components about state changes](https://react.dev/learn/you-might-not-need-an-effect#notifying-parent-components-about-state-changes) and [(Avoid) Passing data to the parent](https://react.dev/learn/you-might-not-need-an-effect#passing-data-to-the-parent).
 
 If you really need to directly modify other components' states (E.g. when working with third-party libraries/components/SDKs where you don't have control of that code), use `flushSync` to separate two state updates:
