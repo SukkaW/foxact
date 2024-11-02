@@ -15,4 +15,6 @@ export function useComponentWillReceiveUpdate(callback: () => void, deps: readon
     setPrev(deps);
     callback();
   }
+
+  return changed;
 }
