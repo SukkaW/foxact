@@ -1,3 +1,7 @@
+# 0.2.41
+
+- `useComponentWillReceiveUpdate` now returns whether the props have changed. You can early return your component to skip the JSX creation, so React can re-execute the component function earlier.
+
 # 0.2.40
 
 **Core Changes**
