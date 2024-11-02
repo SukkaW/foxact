@@ -40,6 +40,7 @@
   },
   "use-abortable-effect": {},
   "use-clipboard": {},
+  "use-component-will-receive-update": {},
   "use-composition-input": {},
   "use-debounced-state": {},
   "use-debounced-value": {},
