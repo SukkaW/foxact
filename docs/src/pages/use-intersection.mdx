@@ -18,31 +18,25 @@ Here is an example of a `<Thumbnail />` component that uses the `useIntersection
 import { useState, useCallback } from 'react';
 import { useIntersection } from 'foxact/use-intersection';
 
+// A foxact hook that can be used to reset the state when the props changes
+// see: https://foxact.skk.moe/use-component-will-receive-update
+import { useComponentWillReceiveUpdate } from 'foxact/use-component-will-receive-update';
+
 interface ThumbnailProps {
   src: string;
   isLazy?: boolean;
 }
 
 const Thumbnail = ({ src, isLazy }: ThumbnailProps) => {
-  const [previousSrc, setPreviousSrc] = useState<string>(src);
   const [setIntersection, isIntersected, resetIsIntersected] = useIntersection<HTMLImageElement>({
     rootRef: null, // optional, the ref of the ancestor element
     rootMargin: '200px', // optional
     disabled: !isLazy // optional, allows to create reusable thumbnail component that supports both lazy and eager loading
   });
 
-  // This is a known pattern that mimics React class component's `getDerivedStateFromProps`
-  // (https://react.dev/reference/react/Component#static-getderivedstatefromprops).
-  // When the `src` prop changes, the `Thumbnail` component will re-render but not re-mount.
-  // So to reset the `isIntersected` state (to lazy load the new image), we need to track the
-  // the `src` prop's value, and reset the `isIntersected` state when the `src` prop changes.
-  if (previousSrc !== src) {
-    // It is safe to set the state during render, as long as it won't trigger an infinite render loop.
-    // React will render the component with the current state, then throws away the render result
-    // and immediately re-executes the component function with the updated state.
-    setPreviousSrc(src);
-    resetIsIntersected();
-  }
+  // Reset the `isIntersected` state when the `src` prop changes
+  // You can find the docs about `useComponentWillReceiveUpdate` here: https://foxact.skk.moe/use-component-will-receive-update
+  useComponentWillReceiveUpdate(resetIsIntersected, [src])
 
   return (
     <img
