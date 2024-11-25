@@ -74,6 +74,7 @@
   "context-local-storage-state": {},
   "context-session-storage-state": {},
   "create-fixed-array": {},
+  "fetch-jsonp": {},
   "invariant-nullthrow": {},
   "noop": {},
   "no-ssr": {},

@@ -1,0 +1,22 @@
+---
+title: fetchJsonp
+---
+
+# CurrentYear
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Resolve JSONP request with a promise.
+
+## Usage
+
+```tsx copy
+import { fetchJsonp } from 'foxact/fetch-jsonp';
+
+const data = await fetchJsonp<T>(
+  // the `getUrl` function that passes the callback name
+  (callbackName) => 'https://api.example.com/data?callback=' + callbackName
+);
+```

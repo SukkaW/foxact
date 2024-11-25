@@ -6,6 +6,7 @@ declare global {
 
 const INTERNAL = '__foxact_jsonp_callbacks__SECRET_INTERNAL_DO_NOT_USE_OR_YOU_WILL_BE_FIRED';
 
+/** @see https://foxact.skk.moe/fetch-jsonp */
 export function fetchJsonp<T>(getUrl: (callbackName: string) => string) {
   if (typeof window === 'undefined') {
     throw new TypeError('fetchJsonp is only available in the browser');
