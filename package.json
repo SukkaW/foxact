@@ -32,29 +32,29 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "@eslint-sukka/node": "^6.7.0",
-    "@eslint-sukka/react": "^6.7.0",
+    "@eslint-sukka/node": "^6.12.0",
+    "@eslint-sukka/react": "^6.12.0",
     "@napi-rs/magic-string": "^0.3.4",
     "@package-json/types": "^0.0.11",
     "@swc-node/register": "^1.10.9",
-    "@swc/core": "^1.7.35",
-    "@types/node": "^22.7.5",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.0",
+    "@swc/core": "^1.9.3",
+    "@types/node": "^22.9.3",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
     "brotli-size": "^4.0.0",
-    "browserslist": "^4.24.0",
-    "eslint": "^9.12.0",
-    "eslint-config-sukka": "^6.7.0",
-    "eslint-formatter-sukka": "^6.7.0",
-    "fdir": "^6.4.0",
+    "browserslist": "^4.24.2",
+    "eslint": "^9.15.0",
+    "eslint-config-sukka": "^6.12.0",
+    "eslint-formatter-sukka": "^6.12.0",
+    "fdir": "^6.4.2",
     "gzip-size": "6.0.0",
-    "next": "^14.2.15",
+    "next": "^15.0.3",
     "react-router-dom": "^6.26.2",
-    "rollup": "^4.24.0",
+    "rollup": "^4.27.4",
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-swc3": "^0.12.1",
-    "rollup-preserve-directives": "^1.1.2",
-    "typescript": "^5.6.3"
+    "rollup-preserve-directives": "^1.1.3",
+    "typescript": "^5.7.2"
   },
   "peerDependencies": {
     "react": "*"
@@ -64,7 +64,7 @@
       "optional": true
     }
   },
-  "packageManager": "pnpm@9.10.0",
+  "packageManager": "pnpm@9.14.2",
   "pnpm": {
     "overrides": {
       "array-includes": "npm:@nolyfill/array-includes@latest",
