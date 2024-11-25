@@ -1,11 +1,12 @@
 import 'client-only';
 
 import type { LinkProps } from 'next/link';
-import { useEffect, useMemo, useState, useTransition, useCallback } from 'react';
+import { useEffect, useMemo, useTransition, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { formatUrl } from 'next/dist/shared/lib/router/utils/format-url';
 import { useIntersection } from '../use-intersection';
+import { useComponentWillReceiveUpdate } from '../use-component-will-receive-update';
 
 import type {
   PrefetchOptions as AppRouterPrefetchOptions
@@ -118,15 +119,7 @@ function useNextLink(hrefProp: string | UrlObject,
   }), []));
 
   const resolvedHref = useMemo(() => (typeof hrefProp === 'string' ? hrefProp : formatUrl(hrefProp)), [hrefProp]);
-  const [previousResolvedHref, setPreviousResolvedHref] = useState<string>(resolvedHref);
-
-  if (previousResolvedHref !== resolvedHref) {
-    // It is safe to set the state during render, as long as it won't trigger an infinite render loop.
-    // React will render the component with the current state, then throws away the render result
-    // and immediately re-executes the component function with the updated state.
-    setPreviousResolvedHref(resolvedHref);
-    resetVisible();
-  }
+  useComponentWillReceiveUpdate(resetVisible, [resolvedHref]);
 
   // Prefetch the URL if we haven't already and it's visible.
   useEffect(() => {
