@@ -1,3 +1,9 @@
+# 0.2.42
+
+**Core Changes**
+
+- Add `fetchJsonp` utility function
+
 # 0.2.41
 
 - `useComponentWillReceiveUpdate` now returns whether the props have changed. You can early return your component to skip the JSX creation, so React can re-execute the component function earlier.
