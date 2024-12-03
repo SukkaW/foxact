@@ -21,7 +21,7 @@ export function useDebouncedValue<T>(value: NotFunction<T>, wait: number, leadin
         leadingRef.current = false;
         // This only happens when leading is enabled
         // This won't trigger infinitly re-render as long as value is stable
-
+        // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect -- see above
         setOutputValue(value);
       } else {
         timeout = window.setTimeout(() => {
