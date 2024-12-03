@@ -22,7 +22,7 @@ export function fetchJsonp<T>(getUrl: (callbackName: string) => string) {
     });
   }
 
-  const callbackName = `$${Date.now()}_${Math.random().toString().slice(2)}$`;
+  const callbackName = `__${Date.now()}_${Math.random().toString().slice(2)}__`;
   const fullCallbackName = `window.${INTERNAL}.${callbackName}`;
   // eslint-disable-next-line prefer-object-has-own -- conflict check
   if (Object.prototype.hasOwnProperty.call(window[INTERNAL], callbackName)) {
