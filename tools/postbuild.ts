@@ -65,7 +65,7 @@ async function createPackageJson(entries: Record<string, string>) {
         default: `./${entryName}/index.mjs`
       },
       require: `./${entryName}/index.cjs`,
-      default: `./${entryName}/index.js`
+      default: `./${entryName}/index.cjs`
     };
   });
 
