@@ -20,7 +20,8 @@ import { Callout } from 'nextra/components'
 
 The hook **IS ONLY FOR**:
 
-- Passing event handlers to custom React Hooks that does not use `useEffect`
+- Passing event handlers that does not use `useEffect` and do not change the state.
+  - For exmaple, you are triggering a metric report with an `onClick` handler that also reports the current state/prop (which won't change the state).
   - The passed event handler **must not be** fired inside `useEffect`, which you should use React's `useEffectEvent` instead.
   - https://react.dev/learn/reusing-logic-with-custom-hooks#passing-event-handlers-to-custom-hooks
 
@@ -28,6 +29,10 @@ The hook **IS NOT FOR**:
 
 - Replacing the `useCallback`
 - Replacing the `useEffectEvent`
+- Updating state in response to an event
+  - You can always use `useReducer` w/ inline reducer to avoid adding current state to `useCallback`'s dependencies array
+  - See [Why `useReducer` Is the Cheat Mode of Hooks](https://overreacted.io/a-complete-guide-to-useeffect/#:~:text=Why%20useReducer%20Is%20the%20Cheat%20Mode%20of%20Hooks)
+  - Also see [`sukkaw/foxact @ 5934ed8`](https://github.com/SukkaW/foxact/commit/5934ed8f27f6a3acba4cb332b431c9e820fceeda) for an example, where I drop the `useStableHandler` from foxact's [`useUncontrolled`](/use-uncontrolled).
 - Memoizing selector function of global state management libraries
   - Use `useSyncExternalStoreWithSelector` instead
   - https://github.com/reactwg/react-18/discussions/86
@@ -45,7 +50,7 @@ The hook **IS NOT FOR**:
 
 ## When you don't need `useStableHandler`
 
-You don't necessarily need `useStableHandler` if you are just passing a reducer-like function to a custom hook.
+You don't necessarily need `useStableHandler` if you are just updating a state based on other states or current props.
 
 See this GitHub commit [`sukkaw/foxact @ 5934ed8`](https://github.com/SukkaW/foxact/commit/5934ed8f27f6a3acba4cb332b431c9e820fceeda) for an example, where I drop the `useStableHandler` from foxact's [`useUncontrolled`](/use-uncontrolled).
 
