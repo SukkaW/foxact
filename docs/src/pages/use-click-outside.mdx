@@ -8,7 +8,7 @@ import ExportMetaInfo from '../components/export-meta-info';
 
 <ExportMetaInfo />
 
-`useClickOutside` calls the callback you provide when a click event occurs outside the element associated with the returned ref
+`useClickOutside` calls the callback you provide when a click event occurs outside the element associated with the returned ref callback
 
 ### Usage
 
@@ -16,7 +16,7 @@ import ExportMetaInfo from '../components/export-meta-info';
 import { useClickOutside } from 'foxact/use-click-outside';
 
 function Component() {
-  const ref = useClickOutside<HTMLDivHTML>(() => {
+  const ref = useClickOutside<HTMLDivElement>(() => {
     console.log('clicked outside the div');
   });
   return <div ref={ref}>...</div>
