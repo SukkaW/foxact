@@ -1,13 +1,11 @@
 import 'client-only';
-import type { RefObject } from 'react';
-import { useRef, useEffect } from 'react';
+import { useCallback } from 'react';
+import type { RefCallback } from 'react';
 
-export function useClickOutside<T extends HTMLElement>(cb: () => void): RefObject<T> {
-  const ref = useRef<T>(null);
-
-  useEffect(() => {
+export function useClickOutside<T extends HTMLElement>(cb: () => void): RefCallback<T> {
+  return useCallback((node) => {
     const handleClick = ({ target }: MouseEvent) => {
-      if (target && ref.current && !ref.current.contains(target as Node)) {
+      if (target && node && !node.contains(target as Node)) {
         cb();
       }
     };
@@ -16,6 +14,4 @@ export function useClickOutside<T extends HTMLElement>(cb: () => void): RefObjec
       document.removeEventListener('click', handleClick);
     };
   }, [cb]);
-
-  return ref;
 }
