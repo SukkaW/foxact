@@ -3,11 +3,13 @@ import 'client-only';
 
 import { useCallback, useRef } from 'react';
 
+type Timer = number | ReturnType<typeof setTimeout>;
+
 /** @see https://foxact.skk.moe/use-retimer */
 export function useRetimer() {
-  const timerIdRef = useRef<number>();
+  const timerIdRef = useRef<Timer>();
 
-  return useCallback((timerId?: number | ReturnType<typeof setTimeout>) => {
+  return useCallback((timerId?: Timer) => {
     if (typeof timerIdRef.current === 'number') {
       clearTimeout(timerIdRef.current);
     }
