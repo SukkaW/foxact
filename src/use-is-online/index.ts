@@ -11,7 +11,7 @@ const subscribe: Parameters<typeof useSyncExternalStore>[0] = (callback) => {
   };
 };
 
-const getSnapshot: Parameters<typeof useSyncExternalStore>[1] = () => {
+const getSnapshot: Parameters<typeof useSyncExternalStore<boolean>>[1] = () => {
   if (typeof window === 'undefined') {
     return false;
   }
