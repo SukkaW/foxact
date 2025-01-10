@@ -2,22 +2,22 @@
 
 import { useSyncExternalStore } from 'react';
 
-const subscribe: Parameters<typeof useSyncExternalStore>[0] = (callback) => {
-  window.addEventListener('online', callback);
-  window.addEventListener('offline', callback);
+function subscribe(onStoreChange: () => void): () => void {
+  window.addEventListener('online', onStoreChange);
+  window.addEventListener('offline', onStoreChange);
   return () => {
-    window.removeEventListener('online', callback);
-    window.removeEventListener('offline', callback);
+    window.removeEventListener('online', onStoreChange);
+    window.removeEventListener('offline', onStoreChange);
   };
-};
+}
 
-const getSnapshot: Parameters<typeof useSyncExternalStore<boolean>>[1] = () => {
+function getSnapshot() {
   if (typeof window === 'undefined') {
     return false;
   }
 
   return navigator.onLine;
-};
+}
 
 /** @see https://foxact.skk.moe/use-is-online */
 export function useIsOnline() {
