@@ -8,7 +8,7 @@ import ExportMetaInfo from '../components/export-meta-info';
 
 <ExportMetaInfo />
 
-Store your shared state that lives in sessionStorage and synchronize the state of a component with the data stored in the `localStorage`. Lift your state up and passing them deeply into your React app without worrying about performance.
+Store your shared state that lives in sessionStorage and synchronize the state of a component with the data stored in the `sessionStorage`. Lift your state up and passing them deeply into your React app without worrying about performance.
 
 ## Usage
 
@@ -16,7 +16,7 @@ Store your shared state that lives in sessionStorage and synchronize the state o
 import { createSessionStorageState } from 'foxact/create-session-storage-state';
 
 const [useSidebarActive, useSidebarActiveValue] = createSessionStorageState(
-  'sidebar-active', // The localStorage key
+  'sidebar-active', // The sessionStorage key
   /**
    * The initial value to use if there is no item in the local storage with the provided key,
    * the undefined value will be used if no initial value is provided.
@@ -28,7 +28,7 @@ const [useSidebarActive, useSidebarActiveValue] = createSessionStorageState(
    * Optional configuration object enables the customization of value serialization before it's stored in local storage.
    */
   {
-    // Optional, default to false. When set to "true", the value will be passed to the localStorage API as is.
+    // Optional, default to false. When set to "true", the value will be passed to the sessionStorage API as is.
     raw: false,
     // Optional, default to "JSON.stringify". Can only be specified when the "raw" is set to false (which is the default).
     serializer: JSON.stringify,

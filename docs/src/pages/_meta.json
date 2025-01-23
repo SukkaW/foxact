@@ -71,8 +71,8 @@
     "title": "Utilities"
   },
   "context-state": {},
-  "context-local-storage-state": {},
-  "context-session-storage-state": {},
+  "create-local-storage-state": {},
+  "create-session-storage-state": {},
   "create-fixed-array": {},
   "fetch-jsonp": {},
   "invariant-nullthrow": {},
