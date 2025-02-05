@@ -1,3 +1,9 @@
+# 0.2.44
+
+**Core Changes**
+
+- Add `useFastClick`
+
 # 0.2.43
 
 **Core Changes**
