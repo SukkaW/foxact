@@ -24,17 +24,13 @@ jobs:
         with:
           node-version: 20
           check-latest: true
-      - name: Install dependencies
-        run: npm install
-      - name: Install dependencies for docs folder
+      - run: npm install
+      - run: npm install
         working-directory: docs
-        run: npm install
-      - name: Build
+      - run: npm run build
         working-directory: docs
-        run: npm run build
-      - uses: actions/upload-pages-artifact@v1
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: docs/out
-      - name: Deploy
+      - uses: actions/deploy-pages@v4
         id: deployment
-        uses: actions/deploy-pages@v2
