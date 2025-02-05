@@ -1,0 +1,29 @@
+---
+title: useFastClick
+---
+
+# useFastClick
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+While you might be using `onClick` all the time in your React components, the `click` event will fire at a delay of about 100ms to 300ms (check yours at [InstantClick's Click test](http://instantclick.io/click-test)) after the `mousedown` event on non-touch devices. InstantClick and Next.js's `<Link />` component benefit from this behavior by prefetching the page on the `mousedown` (or `mousenter`) event and then performing navigation on the `click` event, making the navigation feels instant. Yet, we can make the app feel smoother by removing this delay on non-navigation user interactions (like clicking a button to show a dialog or menu). Here is where `useFastClick` comes in.
+
+## Usage
+
+```tsx copy
+import { useFastClick } from 'foxact/use-fast-click';
+
+<button
+  {...useFastClick(useCallback<React.MouseEventHandler<HTMLButtonElement>>(e => {
+    // Do something
+  }, []))}
+/>
+```
+
+On non-touch devices, `useFastClick` returns `{ onMouseDown }`. The event handler will be invoked on the `mousedown` event so there will be no delay.
+
+On touch devices (detected with `(pointer: coarse)` media query), `useFastClick` returns `{ onClick }`, because `mousedown` event will break scrolling on touch devices.
+
+`useFastClick` should only be used on `<div />` or `<button />` elements. During development, `useFastClick` will validate the element type and warn you if you use it on other elements. The validation is disabled (and will be tree-shaken away) in a production build.

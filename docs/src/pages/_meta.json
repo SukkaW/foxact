@@ -45,6 +45,7 @@
   "use-debounced-state": {},
   "use-debounced-value": {},
   "use-error-boundary": {},
+  "use-fast-click": {},
   "use-intersection": {},
   "use-is-client": {},
   "use-is-online": {},
