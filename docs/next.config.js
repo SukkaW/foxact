@@ -6,6 +6,7 @@ const withNextra = require('nextra')({
 module.exports = withNextra(/** @type {import('next').NextConfig} */({
   output: 'export',
   reactStrictMode: true,
+  trailingSlash: true,
   images: {
     unoptimized: true
   }
