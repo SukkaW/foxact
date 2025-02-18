@@ -39,6 +39,7 @@
     "title": "Hooks"
   },
   "use-abortable-effect": {},
+  "use-click-outside": {},
   "use-clipboard": {},
   "use-component-will-receive-update": {},
   "use-composition-input": {},
