@@ -1,10 +1,9 @@
 import { useConfig } from 'nextra-theme-docs';
-// import { CurrentYear } from './src/components/current-year';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
 import type { DocsThemeConfig } from 'nextra-theme-docs';
-import CurrentYear from './src/components/current-year';
+import { CurrentYear } from 'foxact/current-year';
 
 const config: DocsThemeConfig = {
   logo: (
@@ -90,7 +89,11 @@ const config: DocsThemeConfig = {
           {' '}|{' '}
           <span className="mx-1">&copy;</span>
           {' '}
-          <CurrentYear defaultYear={2023} />
+          <span>2023</span>
+          {' '}
+          <span className="mx-1">-</span>
+          {' '}
+          <CurrentYear defaultYear={2025} />
         </>
       );
     }

@@ -26,9 +26,6 @@
     "./**/*.tsx",
     "theme.config.tsx"
   ],
-  "ts-node": {
-    "swc": true
-  },
   "mdx": {
     "plugins": [
       [

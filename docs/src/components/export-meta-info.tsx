@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useLatestExportsSizes } from '../hooks/use-latest-exports-sizes';
 import { useMemo } from 'react';
 import { humanReadableSize } from '../libs/sizes';
+import { withoutLeadingSlash, withoutTrailingSlash } from 'ufo';
 
 interface ExportMetaInfoProps {
   slug?: string;
@@ -12,7 +13,7 @@ export default function ExportMetaInfo({ slug: _slug }: ExportMetaInfoProps) {
   const router = useRouter();
 
   const _ = (_slug || router.asPath.split(/[?#]/)[0]);
-  const slug = _.startsWith('/') ? _.slice(1) : _;
+  const slug = withoutTrailingSlash(withoutLeadingSlash(_));
 
   const [humanReadableRawSize, humanReadableGzipSize, humanReadableBrotliSize] = useMemo(() => {
     if (!data) return ['loading...', 'loading...'];
