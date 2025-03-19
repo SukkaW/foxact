@@ -1,3 +1,9 @@
+# 0.2.45
+
+**Core Changes**
+
+- Add `openInNewTab` and `isSafari`
+
 # 0.2.44
 
 **Core Changes**
