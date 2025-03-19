@@ -32,29 +32,29 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "@eslint-sukka/node": "^6.12.0",
-    "@eslint-sukka/react": "^6.12.0",
+    "@eslint-sukka/node": "^6.17.1",
+    "@eslint-sukka/react": "^6.17.1",
     "@napi-rs/magic-string": "^0.3.4",
     "@package-json/types": "^0.0.11",
-    "@swc-node/register": "^1.10.9",
-    "@swc/core": "^1.9.3",
-    "@types/node": "^22.10.1",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@swc-node/register": "^1.10.10",
+    "@swc/core": "^1.11.11",
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.11",
+    "@types/react-dom": "^19.0.4",
     "brotli-size": "^4.0.0",
-    "browserslist": "^4.24.2",
-    "eslint": "^9.16.0",
-    "eslint-config-sukka": "^6.12.0",
-    "eslint-formatter-sukka": "^6.12.0",
-    "fdir": "^6.4.2",
+    "browserslist": "^4.24.4",
+    "eslint": "^9.22.0",
+    "eslint-config-sukka": "^6.17.1",
+    "eslint-formatter-sukka": "^6.17.1",
+    "fdir": "^6.4.3",
     "gzip-size": "6.0.0",
-    "next": "^15.0.3",
+    "next": "^15.2.3",
     "react-router-dom": "^6.26.2",
-    "rollup": "^4.28.0",
-    "rollup-plugin-dts": "^6.1.1",
+    "rollup": "^4.36.0",
+    "rollup-plugin-dts": "^6.2.0",
     "rollup-plugin-swc3": "^0.12.1",
     "rollup-preserve-directives": "^1.1.3",
-    "typescript": "^5.7.2"
+    "typescript": "^5.8.2"
   },
   "peerDependencies": {
     "react": "*"
@@ -64,7 +64,7 @@
       "optional": true
     }
   },
-  "packageManager": "pnpm@9.14.4",
+  "packageManager": "pnpm@10.6.4",
   "pnpm": {
     "overrides": {
       "array-includes": "npm:@nolyfill/array-includes@latest",
@@ -82,8 +82,11 @@
       "object.groupby": "npm:@nolyfill/object.groupby@latest",
       "object.hasown": "npm:@nolyfill/object.hasown@latest",
       "object.values": "npm:@nolyfill/object.values@latest",
-      "string.prototype.matchall": "npm:@nolyfill/string.prototype.matchall@latest",
-      "rollup": "$rollup"
-    }
+      "rollup": "$rollup",
+      "string.prototype.matchall": "npm:@nolyfill/string.prototype.matchall@latest"
+    },
+    "onlyBuiltDependencies": [
+      "@swc/core"
+    ]
   }
 }
