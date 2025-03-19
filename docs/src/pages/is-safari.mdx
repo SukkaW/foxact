@@ -1,0 +1,19 @@
+---
+title: isSafari
+---
+
+# isSafari
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Since Safari browser is a known modern Internet Explorer, you should just check if the browser is Safari and apply the necessary polyfills or special logics.
+
+## Usage
+
+```tsx copy
+import { isSafari } from 'foxact/is-safari';
+
+isSafari(); // true or false
+```

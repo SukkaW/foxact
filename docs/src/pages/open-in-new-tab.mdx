@@ -1,0 +1,19 @@
+---
+title: Open in New Tab
+---
+
+# Open in New Tab
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Open a URL in a new tab. Use `window.open` on the Safari browser (since nowadays Safari is known as a modern Internet Explorer) and `document.createElement('a')` on other browsers.
+
+## Usage
+
+```tsx copy
+import { openInNewTab } from 'foxact/open-in-new-tab';
+
+openInNewTab('https://skk.moe');
+```

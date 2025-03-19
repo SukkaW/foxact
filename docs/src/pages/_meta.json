@@ -82,6 +82,7 @@
   "rem": {},
   "request-idle-callback": {},
   "typescript-happy-forward-ref": {},
+  "is-safari": {},
   "-- separator extensions": {
     "type": "separator",
     "title": "Extensions"
