@@ -16,9 +16,5 @@
     "strictNullChecks": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "rollup.config.ts", "tools/**/*.ts"],
-  "exclude": ["docs"],
-  "ts-node": {
-    "swc": true
-  }
+  "include": ["packages/*/src/**/*.ts", "packages/*/src/**/*.tsx", "packages/*/rollup.config.ts", "packages/*/tools/**/*.ts"]
 }

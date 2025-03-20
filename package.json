@@ -1,70 +1,14 @@
 {
-  "name": "foxact",
-  "version": "0.2.45",
+  "name": "foxact-monorepo",
+  "version": "0.0.0",
   "private": true,
-  "description": "React Hooks/Utils done right. For browser, SSR, and React Server Components.",
-  "homepage": "https://foxact.skk.moe",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SukkaW/foxact.git"
-  },
-  "bugs": {
-    "url": "https://github.com/SukkaW/foxact/issues"
-  },
-  "files": [
-    "**"
-  ],
-  "sideEffects": false,
+  "description": "",
   "scripts": {
-    "lint": "eslint --format=sukka .",
-    "build": "rollup -c rollup.config.ts --configPlugin swc3 --bundleConfigAsCjs",
-    "postbuild": "node -r @swc-node/register tools/postbuild.ts",
-    "prepublishOnly": "pnpm run build"
+    "build": "turbo build"
   },
-  "keywords": [
-    "React",
-    "Hooks"
-  ],
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
-  "dependencies": {
-    "client-only": "^0.0.1",
-    "server-only": "^0.0.1"
-  },
-  "devDependencies": {
-    "@eslint-sukka/node": "^6.17.1",
-    "@eslint-sukka/react": "^6.17.1",
-    "@napi-rs/magic-string": "^0.3.4",
-    "@package-json/types": "^0.0.11",
-    "@swc-node/register": "^1.10.10",
-    "@swc/core": "^1.11.11",
-    "@types/node": "^22.13.10",
-    "@types/react": "^19.0.11",
-    "@types/react-dom": "^19.0.4",
-    "brotli-size": "^4.0.0",
-    "browserslist": "^4.24.4",
-    "eslint": "^9.22.0",
-    "eslint-config-sukka": "^6.17.1",
-    "eslint-formatter-sukka": "^6.17.1",
-    "fdir": "^6.4.3",
-    "gzip-size": "6.0.0",
-    "next": "^15.2.3",
-    "react-router-dom": "^6.26.2",
-    "rollup": "^4.36.0",
-    "rollup-plugin-dts": "^6.2.0",
-    "rollup-plugin-swc3": "^0.12.1",
-    "rollup-preserve-directives": "^1.1.3",
-    "typescript": "^5.8.2"
-  },
-  "peerDependencies": {
-    "react": "*"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    }
-  },
-  "packageManager": "pnpm@10.6.4",
+  "packageManager": "pnpm@10.6.5",
   "pnpm": {
     "overrides": {
       "array-includes": "npm:@nolyfill/array-includes@latest",
@@ -82,11 +26,14 @@
       "object.groupby": "npm:@nolyfill/object.groupby@latest",
       "object.hasown": "npm:@nolyfill/object.hasown@latest",
       "object.values": "npm:@nolyfill/object.values@latest",
-      "rollup": "$rollup",
       "string.prototype.matchall": "npm:@nolyfill/string.prototype.matchall@latest"
     },
     "onlyBuiltDependencies": [
-      "@swc/core"
+      "@swc/core",
+      "sharp"
     ]
+  },
+  "devDependencies": {
+    "turbo": "^2.4.4"
   }
 }

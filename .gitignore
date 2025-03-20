@@ -11,13 +11,13 @@ yarn.lock
 /coverage
 
 # next.js
-/docs/.next/
-/docs/out/
+.next/
+out/
 next-env.d.ts
 
 # production
 /build
-/dist
+dist
 
 # misc
 .DS_Store
@@ -38,3 +38,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
+# turborepo
+.turbo
+
+# misc
+.DS_Store
