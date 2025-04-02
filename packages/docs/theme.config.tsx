@@ -16,7 +16,7 @@ const config: DocsThemeConfig = {
     link: 'https://github.com/sukkaw/foxact'
   },
   i18n: [],
-  docsRepositoryBase: 'https://github.com/sukkaw/foxact/blob/master/docs/',
+  docsRepositoryBase: 'https://github.com/SukkaW/foxact/tree/master/packages/docs/',
   gitTimestamp() {
     return null;
   },

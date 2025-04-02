@@ -38,7 +38,7 @@ export default function ExportMetaInfo({ slug: _slug }: ExportMetaInfoProps) {
         <div>{humanReadableBrotliSize}</div>
         <div className="font-bold">Source Code</div>
         <a
-          href={`https://github.com/SukkaW/foxact/tree/master/src/${slug}/`}
+          href={`https://github.com/SukkaW/foxact/blob/master/packages/foxact/src/${slug}/`}
           className="underline underline-offset-1"
           target="_blank"
           rel="noopener noreferrer"
