@@ -8,7 +8,7 @@
   },
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
-  "packageManager": "pnpm@10.6.5",
+  "packageManager": "pnpm@10.10.0",
   "pnpm": {
     "overrides": {
       "array-includes": "npm:@nolyfill/array-includes@latest",
@@ -30,10 +30,11 @@
     },
     "onlyBuiltDependencies": [
       "@swc/core",
-      "sharp"
+      "sharp",
+      "unrs-resolver"
     ]
   },
   "devDependencies": {
-    "turbo": "^2.4.4"
+    "turbo": "^2.5.2"
   }
 }
