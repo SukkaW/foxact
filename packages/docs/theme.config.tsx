@@ -5,6 +5,8 @@ import { useMemo } from 'react';
 import type { DocsThemeConfig } from 'nextra-theme-docs';
 import { CurrentYear } from 'foxact/current-year';
 
+import { withTrailingSlash } from 'ufo';
+
 const config: DocsThemeConfig = {
   logo: (
     <div className="flex items-center">
@@ -48,7 +50,7 @@ const config: DocsThemeConfig = {
     const description = config.frontMatter.description ? config.frontMatter.description : 'React Hooks/Utils done right. For browser, SSR, and React Server Components. Made by Sukka (https://skk.moe)';
 
     const { route } = useRouter();
-    const canonical = useMemo(() => new URL(route.endsWith('/') ? route : `${route}/`, 'https://foxact.skk.moe').href, [route]);
+    const canonical = useMemo(() => new URL(withTrailingSlash(route), 'https://foxact.skk.moe').href, [route]);
 
     return {
       defaultTitle: 'foxact - Made by Sukka',
