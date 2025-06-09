@@ -1,18 +1,25 @@
 'use strict';
 
-const { resolve } = require('node:path');
-
-const tsconfigPath = resolve(__dirname, 'tsconfig.json');
-
 module.exports = require('eslint-config-sukka').sukka({
   ignores: {
     customGlobs: ['dist/**/*', 'docs/**/*', ...require('eslint-config-sukka').constants.GLOB_EXCLUDE]
   },
   react: {
     nextjs: false
-  },
-  ts: {
-    enable: true,
-    tsconfigPath
+  }
+}, {
+  rules: {
+    'paths/alias': 'off'
+  }
+}, {
+  // next.js/nextra naming convention
+  files: [
+    '**/app/**/_*.cjs',
+    String.raw`**/app/**/\[*.?([cm])[j]s?(x)`,
+    '**/pages/_app.?([cm])[jt]s?(x)',
+    '**/pages/document.?([cm])[jt]s?(x)'
+  ],
+  rules: {
+    '@eslint-react/naming-convention/filename': 'off'
   }
 });

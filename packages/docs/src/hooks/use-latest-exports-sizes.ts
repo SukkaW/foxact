@@ -7,11 +7,11 @@ interface ExportsStats {
   exports: Record<string, { raw: number, gzip: number, br: number }>
 }
 
-export const useLatestExportsSizes = () => {
+export function useLatestExportsSizes() {
   return useSWRImmutable<ExportsStats>(
     'https://unpkg.com/foxact@latest/sizes.json',
     () => {
-      const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const controller = typeof AbortController === 'undefined' ? null : new AbortController();
       const signal = controller?.signal;
 
       const responseToJson = async (response: Response) => {
@@ -29,12 +29,12 @@ export const useLatestExportsSizes = () => {
       ]);
     }
   );
-};
+}
 
-export const useLatestTotalExportsSize = () => {
+export function useLatestTotalExportsSize() {
   const { data } = useLatestExportsSizes();
   return useMemo(() => {
     if (!data) return 'about 5 KiB';
     return humanReadableSize(data.total.gzip);
   }, [data]);
-};
+}

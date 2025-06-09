@@ -5,14 +5,14 @@ import { humanReadableSize } from '../libs/sizes';
 import { withoutLeadingSlash, withoutTrailingSlash } from 'ufo';
 
 interface ExportMetaInfoProps {
-  slug?: string;
+  slug?: string
 }
 
 export default function ExportMetaInfo({ slug: _slug }: ExportMetaInfoProps) {
   const { data } = useLatestExportsSizes();
   const router = useRouter();
 
-  const _ = (_slug || router.asPath.split(/[?#]/)[0]);
+  const _ = (_slug || router.asPath.split(/[#?]/)[0]);
   const slug = withoutTrailingSlash(withoutLeadingSlash(_));
 
   const [humanReadableRawSize, humanReadableGzipSize, humanReadableBrotliSize] = useMemo(() => {

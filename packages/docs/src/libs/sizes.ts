@@ -1,5 +1,5 @@
 const units = ['B', 'KiB', 'MiB', 'GiB', 'TiB'];
-export const humanReadableSize = (bytes: number) => {
+export function humanReadableSize(bytes: number) {
   let results = bytes;
   let i = 0;
   while (results >= 1024 && i < units.length) {
@@ -7,4 +7,4 @@ export const humanReadableSize = (bytes: number) => {
     ++i;
   }
   return `${i === 0 ? results : results.toFixed(2)} ${units[i]}`;
-};
+}

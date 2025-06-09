@@ -2,12 +2,12 @@ import 'client-only';
 // useState is React Client Component only
 
 import { createContext, useContext, useState } from 'react';
-import { noop } from '@/noop';
+import { noop } from '../noop';
 import type { Foxact } from '../types';
 
 /** @see https://foxact.skk.moe/context-state */
 export function createContextState<T>(initialState: T): [
-  Provider: React.FC<Foxact.PropsWithChildren>,
+  Provider: React.ComponentType<Foxact.PropsWithChildren>,
   useValue: () => T,
   useSetValue: () => React.Dispatch<React.SetStateAction<T>>,
   StateContext: React.Context<T>

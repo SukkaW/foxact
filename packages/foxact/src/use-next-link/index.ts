@@ -33,8 +33,7 @@ export interface UseNextLinkOptions extends Omit<LinkProps,
   | 'legacyBehavior' // Dropping `legacyBehavior` prop can simplify things a lot
   | 'shallow' // `shallow` is only for Next.js Pages Router
   | 'passHref' // Also `legacyBehavior`
-  | 'locale' // For Next.js Pages Router's built-in i18n only, Next.js App Router doesn't implement i18n yet
-> {
+  | 'locale'> {
   ref?: React.RefObject<HTMLAnchorElement> | React.RefCallback<HTMLAnchorElement> | null
 }
 

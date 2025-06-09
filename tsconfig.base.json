@@ -3,10 +3,8 @@
     "target": "es2018",
     "lib": ["DOM", "ES2018", "ESNext.WeakRef"],
     "jsx": "react-jsx",
-    "module": "commonjs",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "declaration": true,
     "outDir": "./dist",
@@ -15,6 +13,5 @@
     "strict": true,
     "strictNullChecks": true,
     "skipLibCheck": true
-  },
-  "include": ["packages/*/src/**/*.ts", "packages/*/src/**/*.tsx", "packages/*/rollup.config.ts", "packages/*/tools/**/*.ts"]
+  }
 }

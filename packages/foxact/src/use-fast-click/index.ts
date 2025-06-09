@@ -13,10 +13,8 @@ export function useFastClick<T extends HTMLDivElement | HTMLButtonElement>(callb
 
     if (
       process.env.NODE_ENV === 'development'
-      && !(
-        e.currentTarget instanceof HTMLDivElement
-        || e.currentTarget instanceof HTMLButtonElement
-      )
+      && !(e.currentTarget instanceof HTMLDivElement)
+      && !(e.currentTarget instanceof HTMLButtonElement)
     ) {
       // eslint-disable-next-line no-console -- in dev only warning
       console.warn('[foxact/use-fast-click] You should only use "useFastClick" on <div /> or <button /> elements');

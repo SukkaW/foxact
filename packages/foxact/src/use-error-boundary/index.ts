@@ -6,7 +6,7 @@ import { useState } from 'react';
 type ErrorLike = Error | undefined | null | boolean;
 
 function isTruthy(value: ErrorLike): value is Error {
-  return !(value === false || value == null);
+  return value !== false && value != null;
 }
 
 /** @see https://foxact.skk.moe/use-error-boundary */
