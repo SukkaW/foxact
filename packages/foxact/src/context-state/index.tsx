@@ -6,7 +6,12 @@ import { noop } from '@/noop';
 import type { Foxact } from '../types';
 
 /** @see https://foxact.skk.moe/context-state */
-export function createContextState<T>(initialState: T) {
+export function createContextState<T>(initialState: T): [
+  Provider: React.FC<Foxact.PropsWithChildren>,
+  useValue: () => T,
+  useSetValue: () => React.Dispatch<React.SetStateAction<T>>,
+  StateContext: React.Context<T>
+] {
   const StateContext = createContext<T>(initialState);
   const DispatchContext = createContext<React.Dispatch<React.SetStateAction<T>>>(noop);
 
