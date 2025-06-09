@@ -1,3 +1,9 @@
+# 0.2.46
+
+**Core Changes**
+
+- Improve types of `context-state`
+
 # 0.2.45
 
 **Core Changes**
