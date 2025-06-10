@@ -10,12 +10,21 @@ interface ProviderProps<T> {
 }
 
 /** @see https://foxact.skk.moe/context-state */
+// Option 1: Use `createContextState<T>(initialState: T)`
 export function createContextState<T>(initialState: T): [
   Provider: React.ComponentType<ProviderProps<T>>,
   useValue: () => T,
   useSetValue: () => React.Dispatch<React.SetStateAction<T>>,
   StateContext: React.Context<T>
 ];
+// Option 2: Use `createContextState<T>(initialState: T)`, call initialState in `<Provider>` is optional
+export function createContextState<T>(initialState: T): [
+  Provider: React.ComponentType<Foxact.PropsWithChildren<ProviderProps<T>>>,
+  useValue: () => T,
+  useSetValue: () => React.Dispatch<React.SetStateAction<T>>,
+  StateContext: React.Context<T>
+];
+// Option 3: Use `createContextState<T>()`, call `<Provider initialState={...}>`
 export function createContextState<T>(): [
   Provider: React.ComponentType<Foxact.PropsWithChildren<Required<ProviderProps<T>>>>,
   useValue: () => T,
