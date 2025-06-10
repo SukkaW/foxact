@@ -17,7 +17,7 @@ Compose multiple React context providers together.
 import { createContextState } from 'foxact/context-state';
 import { SWRConfig } from 'swr';
 
-const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive] = createContextState(false);
+const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive] = createContextState();
 const [AuthTokenProvider, useAuthToken, useSetAuthToken] = createContextState(false);
 
 const MySWRProvider = ({ config, children }: React.PropsWithChildren<{ config: any }>) => {
@@ -43,14 +43,15 @@ export {
 Normally, to use multiple context providers, you would have to nest them like this:
 
 ```tsx filename="src/app/layout.tsx" copy
+import { cookies } from 'next/headers'
 import { SidebarActiveProvider, AuthTokenProvider, MySWRProvider } from 'src/context';
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
   return (
     <html>
       <head />
       <body>
-        <SidebarActiveProvider>
+        <SidebarActiveProvider initialState={await cookie().get('sidebar-active') === 'true'}>
           <AuthTokenProvider>
             {/** provider nesting hell */}
             <MySWRProvider config={{ fetcher }}>
