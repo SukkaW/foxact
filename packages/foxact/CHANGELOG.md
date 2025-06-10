@@ -1,3 +1,9 @@
+# 0.2.47
+
+**Core Changes**
+
+- `context-state` now supports reading default state from within the React (a.k.a. through providers' props). This allows you to set default state from within React.
+
 # 0.2.46
 
 **Core Changes**
