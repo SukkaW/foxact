@@ -1,3 +1,8 @@
+# 0.2.49
+
+**Bug Fixes**
+
+- Fix a type error introduced by @himself65 in 0.2.48
 
 # 0.2.48
 
