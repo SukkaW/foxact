@@ -5,7 +5,7 @@ import { createContext, useContext, useState } from 'react';
 import { noop } from '../noop';
 import type { Foxact } from '../types';
 
-interface ProviderProps<T> {
+export interface ProviderProps<T> {
   initialState?: T | (() => T)
 }
 
