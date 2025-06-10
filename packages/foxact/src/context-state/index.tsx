@@ -5,9 +5,9 @@ import { createContext, useContext, useState } from 'react';
 import { noop } from '../noop';
 import type { Foxact } from '../types';
 
-type ProviderProps<T> = Foxact.PropsWithChildren<{
-  initialState?: T
-}>;
+interface ProviderProps<T> {
+  initialState?: T | (() => T)
+}
 
 /** @see https://foxact.skk.moe/context-state */
 export function createContextState<T>(initialState: T): [
@@ -17,7 +17,7 @@ export function createContextState<T>(initialState: T): [
   StateContext: React.Context<T>
 ];
 export function createContextState<T>(): [
-  Provider: React.ComponentType<Required<ProviderProps<T>>>,
+  Provider: React.ComponentType<Foxact.PropsWithChildren<Required<ProviderProps<T>>>>,
   useValue: () => T,
   useSetValue: () => React.Dispatch<React.SetStateAction<T>>,
   StateContext: React.Context<T>
@@ -29,7 +29,7 @@ export function createContextState(initialState?: unknown): unknown {
   const useValue = () => useContext(StateContext);
   const useSetValue = () => useContext(DispatchContext);
 
-  const Provider = ({ children, initialState: initialStateFromProps }: ProviderProps<unknown>) => {
+  const Provider = ({ children, initialState: initialStateFromProps }: Foxact.PropsWithChildren<ProviderProps<unknown>>) => {
     const [value, setValue] = useState((initialStateFromProps ?? initialState));
 
     return (
