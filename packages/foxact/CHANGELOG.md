@@ -1,3 +1,10 @@
+
+# 0.2.48
+
+**Bug Fixes**
+
+- Fix the incorrect types of `context-state`
+
 # 0.2.47
 
 **Core Changes**
