@@ -53,7 +53,7 @@ const Comp = () => {
 };
 ```
 
-## Sever-side Rendering
+## Server-side Rendering
 
 If the second argument (the initial value) is provided, React will use the initial value to render the UI and generate HTML on the server. The user will see the initial value (which might be stale) first. On the client, React will first use the initial value to hydrate the server-side rendered HTML, and then immediately re-render the component with the actual value (read from the browser's `localStorage`) after the hydration. The user will see the latest value stored in the browser's `localStorage` after both the hydration and the re-render.
 
