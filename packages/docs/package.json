@@ -11,18 +11,18 @@
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
   "dependencies": {
-    "foxact": "workspace:*",
+    "foxact": "link:../foxact/dist",
     "next": "^15.5.4",
     "nextra": "^2.13.4",
     "nextra-theme-docs": "^2.13.4",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
     "swr": "^2.3.6",
     "ufo": "^1.6.1"
   },
   "devDependencies": {
-    "@types/react": "^18.3.24",
-    "@types/react-dom": "^18.3.7",
+    "@types/react": "^19.1.15",
+    "@types/react-dom": "^19.1.9",
     "eslint-plugin-mdx": "^3.6.2",
     "tailwindcss": "^3.4.17"
   }

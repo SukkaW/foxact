@@ -5,7 +5,7 @@ import { requestIdleCallback, cancelIdleCallback } from '../request-idle-callbac
 
 type UseIntersectionObserverInit = Pick<IntersectionObserverInit, 'rootMargin' | 'root'>;
 
-type UseIntersectionArgs = { disabled?: boolean } & UseIntersectionObserverInit & {
+export type UseIntersectionArgs = { disabled?: boolean } & UseIntersectionObserverInit & {
   rootRef?: React.RefObject<HTMLElement> | null
 };
 type ObserveCallback = (isVisible: boolean) => void;

@@ -9,7 +9,9 @@ module.exports = require('eslint-config-sukka').sukka({
   }
 }, {
   rules: {
-    'paths/alias': 'off'
+    'paths/alias': 'off',
+    '@eslint-react/no-use-context': 'off',
+    '@eslint-react/no-context-provider': 'off'
   }
 }, {
   // next.js/nextra naming convention

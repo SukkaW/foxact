@@ -2,8 +2,8 @@
 import reactExports, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 
 // useIsomorphicInsertionEffect
-const useInsertionEffect
-  = typeof window === 'undefined'
+const useInsertionEffect =
+  typeof window === 'undefined'
   // useInsertionEffect is only available in React 18+
 
     ? useEffect

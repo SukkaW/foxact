@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import { formatUrl } from 'next/dist/shared/lib/router/utils/format-url';
 import { useIntersection } from '../use-intersection';
+import type { UseIntersectionArgs } from '../use-intersection';
 import { useComponentWillReceiveUpdate } from '../use-component-will-receive-update';
 
 import type {
@@ -83,6 +84,8 @@ function prefetch(router: ReturnType<typeof useRouter>,
   });
 }
 
+const intersectionArgs: UseIntersectionArgs = { rootMargin: '200px' };
+
 /** @see https://foxact.skk.moe/use-next-link */
 function useNextLink(hrefProp: string | UrlObject,
   {
@@ -95,11 +98,6 @@ function useNextLink(hrefProp: string | UrlObject,
     replace = false,
     ...restProps // Record<string, never>
   }: UseNextLinkOptions): [isPending: boolean, linkProps: UseNextLinkReturnProps] {
-  // Type guard to make sure there is no more props left in restProps
-  if (process.env.NODE_ENV === 'development') {
-    const _: Record<string, never> = restProps;
-  }
-
   /**
     * The possible states for prefetch are:
     * - null: this is the default "auto" mode, where we will prefetch partially if the link is in the viewport
@@ -113,9 +111,7 @@ function useNextLink(hrefProp: string | UrlObject,
 
   const [isPending, startTransition] = useTransition();
 
-  const [setIntersectionRef, isVisible, resetVisible] = useIntersection(useMemo(() => ({
-    rootMargin: '200px'
-  }), []));
+  const [setIntersectionRef, isVisible, resetVisible] = useIntersection(intersectionArgs);
 
   const resolvedHref = useMemo(() => (typeof hrefProp === 'string' ? hrefProp : formatUrl(hrefProp)), [hrefProp]);
   useComponentWillReceiveUpdate(resetVisible, [resolvedHref]);
