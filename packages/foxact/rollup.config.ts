@@ -1,6 +1,7 @@
 import { defineConfig } from 'rollup';
 import { swc, preserveUseDirective } from 'rollup-plugin-swc3';
 import { dts } from 'rollup-plugin-dts';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 import fsp from 'node:fs/promises';
 
@@ -74,17 +75,21 @@ export default async function () {
           targets
         }
       }),
-      preserveUseDirective()
+      preserveUseDirective(),
+      nodeResolve({
+        exportConditions: ['import', 'module']
+      })
     ],
     external,
     cache: true
   }, {
     input,
+    external,
     output: {
       dir: 'dist',
       format: 'commonjs',
       entryFileNames: '[name]/index.d.ts'
     },
-    plugins: [dts()]
+    plugins: [dts({ respectExternal: true })],
   }]);
 }

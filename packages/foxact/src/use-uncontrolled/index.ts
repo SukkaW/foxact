@@ -1,8 +1,7 @@
 import 'client-only';
 import { useReducer, useRef } from 'react';
 import { useCallback } from '../use-typescript-happy-callback';
-
-const identity = <V>(value: V) => value;
+import { identity } from 'foxts/identity';
 
 /** @see https://foxact.skk.moe/use-uncontrolled */
 export function useUncontrolled<T, E extends HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement = HTMLInputElement>(initialValue: T, transformValue: (value: T) => T = identity) {

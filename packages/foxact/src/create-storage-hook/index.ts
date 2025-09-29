@@ -4,6 +4,9 @@ import { noop } from '../noop';
 import { useLayoutEffect } from '../use-isomorphic-layout-effect';
 import { noSSRError } from '../no-ssr';
 
+import { identity } from 'foxts/identity';
+import { isFunction } from 'foxts/is-function';
+
 export type StorageType = 'localStorage' | 'sessionStorage';
 export type NotUndefined<T> = T extends undefined ? never : T;
 
@@ -20,11 +23,6 @@ declare global {
 
 export type Serializer<T> = (value: T) => string;
 export type Deserializer<T> = (value: string) => T;
-
-// This type utility is only used for workaround https://github.com/microsoft/TypeScript/issues/37663
-const isFunction = (x: unknown): x is Function => typeof x === 'function';
-
-const identity = (x: any) => x;
 
 export interface UseStorageRawOption {
   raw: true

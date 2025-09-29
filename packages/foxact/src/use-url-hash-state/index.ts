@@ -4,9 +4,10 @@ import { useCallback, useMemo, useSyncExternalStore } from 'react';
 import { noop } from '../noop';
 import { noSSRError } from '../no-ssr';
 
-type NotUndefined<T> = T extends undefined ? never : T;
+import { identity } from 'foxts/identity';
+import { isFunction } from 'foxts/is-function';
 
-const identity = (x: any) => x;
+type NotUndefined<T> = T extends undefined ? never : T;
 
 const subscribe: Parameters<typeof useSyncExternalStore>[0] = (() => {
   if (typeof window === 'undefined') {
@@ -36,9 +37,6 @@ const subscribe: Parameters<typeof useSyncExternalStore>[0] = (() => {
     };
   };
 })();
-
-// This type utility is only used for workaround https://github.com/microsoft/TypeScript/issues/37663
-const isFunction = (x: unknown): x is Function => typeof x === 'function';
 
 export type Serializer<T> = (value: T) => string;
 export type Deserializer<T> = (value: string) => T;

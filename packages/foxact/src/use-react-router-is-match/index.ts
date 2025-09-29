@@ -1,5 +1,7 @@
 import 'client-only';
 
+import { identity } from 'foxts/identity';
+
 import { useContext, useMemo } from 'react';
 import { useResolvedPath, UNSAFE_NavigationContext, useLocation } from 'react-router-dom';
 
@@ -10,8 +12,6 @@ interface UseReactRouterIsMatchOption {
   caseSensitive?: boolean,
   end?: boolean
 }
-
-const identity = <V>(value: V) => value;
 
 /** @see https://foxact.skk.moe/use-react-router-is-match */
 export function useReactRouterIsMatch(to: To, {

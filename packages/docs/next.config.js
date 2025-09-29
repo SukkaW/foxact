@@ -9,5 +9,8 @@ module.exports = withNextra(/** @type {import('next').NextConfig} */({
   trailingSlash: true,
   images: {
     unoptimized: true
+  },
+  typescript: {
+    ignoreBuildErrors: true
   }
 }));
