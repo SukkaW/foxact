@@ -1,4 +1,4 @@
-<img src="https://pic.skk.moe/gh/foxact.gif" alt="foxact logo" width="128" height="128" align="right" />
+<img src="https://img.skk.moe/gh/foxact.gif" alt="foxact logo" width="128" height="128" align="right" />
 
 # foxact
 

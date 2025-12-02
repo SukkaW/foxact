@@ -330,9 +330,9 @@ See the documentation for more information.
   <details>
   <summary>Screenshots</summary>
 
-  ![](https://pic.skk.moe/misc/HdUAUWOEQFVs9Tk0MvRqq.png)
-  ![](https://pic.skk.moe/misc/lO3aKLfXBo3hcAwJoGCED.jpeg)
-  ![](https://pic.skk.moe/misc/4bWD1kBv65_8oYRlU7rsg.jpeg)
+  ![](https://img.skk.moe/misc/HdUAUWOEQFVs9Tk0MvRqq.png)
+  ![](https://img.skk.moe/misc/lO3aKLfXBo3hcAwJoGCED.jpeg)
+  ![](https://img.skk.moe/misc/4bWD1kBv65_8oYRlU7rsg.jpeg)
 
   </details>
 

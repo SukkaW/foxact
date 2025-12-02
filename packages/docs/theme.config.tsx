@@ -10,7 +10,7 @@ import { withTrailingSlash } from 'ufo';
 const config: DocsThemeConfig = {
   logo: (
     <div className="flex items-center">
-      <img src="https://pic.skk.moe/gh/foxact.gif" width={600} height={600} className="h-8 w-8" />
+      <img src="https://img.skk.moe/gh/foxact.gif" width={600} height={600} className="h-8 w-8" />
       <span className="font-bold text-xl ml-2 tracking-wide">foxact</span>
     </div>
   ),
@@ -38,7 +38,7 @@ const config: DocsThemeConfig = {
         <link rel="mask-icon" href="https://cdn.skk.moe/favicon/safari-pinned-tab.svg" color="#211b24" />
         <link rel="preconnect" href="https://unpkg.com" />
         <link rel="preconnect" href="https://esm.sh" />
-        <link rel="preconnect" href="https://pic.skk.moe" />
+        <link rel="preconnect" href="https://img.skk.moe" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link rel="preconnect" href="https://fastly.jsdelivr.net" />
       </>
@@ -63,7 +63,7 @@ const config: DocsThemeConfig = {
         siteName: 'foxact - React Hooks/Utils library made by Sukka',
         images: [
           {
-            url: 'https://pic.skk.moe/gh/foxact-og.png',
+            url: 'https://img.skk.moe/gh/foxact-og.png',
             type: 'image/png',
             width: 1200,
             height: 675
