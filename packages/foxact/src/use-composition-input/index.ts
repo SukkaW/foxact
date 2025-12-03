@@ -27,6 +27,7 @@ export function useCompositionInput<T extends HTMLInputElement | HTMLTextAreaEle
       const userInputValue = e.target.value;
 
       if (internalState.current.c) {
+        // eslint-disable-next-line react-hooks/immutability -- returned value is a ref object
         internalState.current.e = false;
       } else {
         cb(userInputValue);
@@ -37,11 +38,13 @@ export function useCompositionInput<T extends HTMLInputElement | HTMLTextAreaEle
   }, [cb, internalState]);
 
   const onCompositionStart = useCallback<React.CompositionEventHandler<T>>(() => {
+    // eslint-disable-next-line react-hooks/immutability -- returned value is a ref object
     internalState.current.c = true;
     internalState.current.e = false;
   }, [internalState]);
 
   const onCompositionEnd = useCallback<React.CompositionEventHandler<T>>((e) => {
+    // eslint-disable-next-line react-hooks/immutability -- returned value is a ref object
     internalState.current.c = false;
     // fixed for Chrome v53+ and detect all Chrome
     // https://chromium.googlesource.com/chromium/src/+/afce9d93e76f2ff81baaa088a4ea25f67d1a76b3%5E%21/

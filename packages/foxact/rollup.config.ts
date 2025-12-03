@@ -90,6 +90,6 @@ export default async function () {
       format: 'commonjs',
       entryFileNames: '[name]/index.d.ts'
     },
-    plugins: [dts({ respectExternal: true })],
+    plugins: [dts({ respectExternal: true })]
   }]);
 }

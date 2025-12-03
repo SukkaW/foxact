@@ -57,7 +57,7 @@ function isModifiedEvent(event: React.MouseEvent<HTMLAnchorElement>) {
     || event.shiftKey
     || event.altKey // triggers resource download
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/no-deprecated -- back compat
-    || (event.nativeEvent && event.nativeEvent.which === 2)
+    || (event.nativeEvent?.which === 2)
   );
 }
 
@@ -146,7 +146,8 @@ function useNextLink(hrefProp: string | UrlObject,
       if (typeof ref === 'function') {
         ref(el);
       } else if (ref && el) {
-        (ref as React.MutableRefObject<HTMLAnchorElement>).current = el;
+        // eslint-disable-next-line react-hooks/immutability -- this in inside a callback ref
+        ref.current = el;
       }
     }, [ref, setIntersectionRef]),
     onClick: useCallback((e) => {

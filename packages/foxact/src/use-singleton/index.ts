@@ -8,8 +8,8 @@ export interface SingletonRefObject<T> {
 
 /** @see https://foxact.skk.moe/use-singleton */
 export function useSingleton<T>(initializor: () => T): SingletonRefObject<T> {
-  const r = useRef<T>();
-  if (!r.current) {
+  const r = useRef<T>(null);
+  if (r.current == null) {
     r.current = initializor();
   }
 
