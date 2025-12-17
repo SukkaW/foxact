@@ -1,8 +1,9 @@
 import { useConfig } from 'nextra-theme-docs';
+import type { DocsThemeConfig } from 'nextra-theme-docs';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
+import type { PageOpts } from 'nextra';
 
-import type { DocsThemeConfig } from 'nextra-theme-docs';
 import { CurrentYear } from 'foxact/current-year';
 
 import { withTrailingSlash } from 'ufo';
@@ -18,14 +19,19 @@ const config: DocsThemeConfig = {
     link: 'https://github.com/sukkaw/foxact'
   },
   i18n: [],
-  docsRepositoryBase: 'https://github.com/SukkaW/foxact/tree/master/packages/docs/',
+  docsRepositoryBase: 'https://github.com/SukkaW/foxact/tree/master/packages/docs',
   gitTimestamp() {
     return null;
   },
   head() {
-    // Custom <head /> goes here
-    // const config = useConfig();
-    // const { route } = useRouter();
+    const config = useConfig();
+    const { route } = useRouter();
+
+    const title = config.frontMatter.title ? `${config.frontMatter.title} | foxact - Made by Sukka` : 'foxact - Made by Sukka';
+    const description = config.frontMatter.description ? config.frontMatter.description : 'React Hooks/Utils done right. For browser, SSR, and React Server Components. Made by Sukka (https://skk.moe)';
+    const canonical = new URL(withTrailingSlash(route), 'https://foxact.skk.moe').href;
+    const image = 'https://img.skk.moe/gh/foxact-og.png';
+
     return (
       <>
         <meta key="viewport" name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -41,42 +47,25 @@ const config: DocsThemeConfig = {
         <link rel="preconnect" href="https://img.skk.moe" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link rel="preconnect" href="https://fastly.jsdelivr.net" />
+
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonical} />
+
+        <meta property="og:url" content={canonical} />
+        <meta property="og:title" content={title} />
+        <meta property="og:site_name" content="foxact - React Hooks/Utils library made by Sukka" />
+        <meta property="og:image" content={image} />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="675" />
+
+        <meta name="twitter:card" content="summary_large_image" />
       </>
     );
   },
-  useNextSeoProps() {
-    const config = useConfig();
-    const title = config.frontMatter.title ? `${config.frontMatter.title} | foxact - Made by Sukka` : 'foxact - Made by Sukka';
-    const description = config.frontMatter.description ? config.frontMatter.description : 'React Hooks/Utils done right. For browser, SSR, and React Server Components. Made by Sukka (https://skk.moe)';
-
-    const { route } = useRouter();
-    const canonical = useMemo(() => new URL(withTrailingSlash(route), 'https://foxact.skk.moe').href, [route]);
-
-    return {
-      defaultTitle: 'foxact - Made by Sukka',
-      title,
-      description,
-      canonical,
-      openGraph: {
-        url: canonical,
-        title,
-        siteName: 'foxact - React Hooks/Utils library made by Sukka',
-        images: [
-          {
-            url: 'https://img.skk.moe/gh/foxact-og.png',
-            type: 'image/png',
-            width: 1200,
-            height: 675
-          }
-        ]
-      },
-      twitter: {
-        cardType: 'summary_large_image'
-      }
-    };
-  },
   footer: {
-    text() {
+    content() {
       return (
         <>
           MIT License
@@ -96,6 +85,7 @@ const config: DocsThemeConfig = {
           {' '}
           <span className="mx-1">-</span>
           {' '}
+          {/* @ts-expect-error -- react version mismatch */}
           <CurrentYear defaultYear={2025} />
         </>
       );

@@ -2,7 +2,7 @@
 title: Getting Started
 ---
 
-import { Tabs, Tab } from 'nextra-theme-docs'
+import { Tabs } from 'nextra/components'
 
 # Getting Started
 
@@ -11,21 +11,21 @@ import { Tabs, Tab } from 'nextra-theme-docs'
 Inside your React project directory, run the following:
 
 <Tabs items={['npm', 'pnpm', 'yarn']}>
-  <Tab>
+  <Tabs.Tab>
     ```bash
     npm i foxact
     ```
-  </Tab>
-  <Tab>
+  </Tabs.Tab>
+  <Tabs.Tab>
     ```bash
     pnpm add foxact
     ```
-  </Tab>
-  <Tab>
+  </Tabs.Tab>
+  <Tabs.Tab>
     ```bash
     yarn add foxact
     ```
-  </Tab>
+  </Tabs.Tab>
 </Tabs>
 
 ## Usage Example
