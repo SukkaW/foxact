@@ -12,11 +12,11 @@
   "license": "MIT",
   "dependencies": {
     "foxact": "link:../foxact/dist",
-    "next": "^15.5.6",
-    "nextra": "^3.3.1",
-    "nextra-theme-docs": "^3.3.1",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
+    "next": "16.0.7",
+    "nextra": "^4.6.1",
+    "nextra-theme-docs": "^4.6.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "swr": "^2.3.7",
     "ufo": "^1.6.1"
   },

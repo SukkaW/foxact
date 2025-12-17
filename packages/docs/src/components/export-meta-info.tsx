@@ -1,4 +1,6 @@
-import { useRouter } from 'next/router';
+'use client';
+
+import { usePathname } from 'next/navigation';
 import { useLatestExportsSizes } from '../hooks/use-latest-exports-sizes';
 import { useMemo } from 'react';
 import { humanReadableSize } from '../libs/sizes';
@@ -10,9 +12,9 @@ interface ExportMetaInfoProps {
 
 export default function ExportMetaInfo({ slug: _slug }: ExportMetaInfoProps) {
   const { data } = useLatestExportsSizes();
-  const router = useRouter();
+  const pathname = usePathname();
 
-  const _ = (_slug || router.asPath.split(/[#?]/)[0]);
+  const _ = (_slug || pathname);
   const slug = withoutTrailingSlash(withoutLeadingSlash(_));
 
   const [humanReadableRawSize, humanReadableGzipSize, humanReadableBrotliSize] = useMemo(() => {
@@ -47,7 +49,7 @@ export default function ExportMetaInfo({ slug: _slug }: ExportMetaInfoProps) {
         </a>
         <div className="font-bold">Docs</div>
         <a
-          href={`https://github.com/SukkaW/foxact/blob/master/docs/src/pages/${slug}.mdx`}
+          href={`https://github.com/SukkaW/foxact/blob/master/packages/docs/src/app/${slug}/page.mdx`}
           className="underline underline-offset-1"
         >
           Edit this page

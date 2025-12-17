@@ -1,0 +1,55 @@
+---
+title: Rem
+---
+
+# Rem
+
+
+import ExportMetaInfo from '../../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Convert string or number values in px to `rem` or `em`.
+
+## Usage
+
+```tsx copy
+import { rem, em, mantine_rem, createConverter } from 'foxact/rem';
+
+// numbers and values in px are converted to rem
+rem(32); // '2rem'
+em(32); // '2em'
+mantine_rem(32); // 'calc(2rem * var(--mantine-scale))'
+
+// supports multiple values
+rem([32, 16]) // '2rem 1rem'
+em('32px 16px') // '2em 1em'
+
+// supports values with "px" unit
+rem('16px') // '1rem'
+em('16px'); // '1em'
+mantine_rem('16px'); // 'calc(1rem * var(--mantine-scale))'
+
+// all non convertable values are returned as is
+rem('2rem'); // '2rem'
+em('2rem'); // '2rem'
+mantine_rem('2rem'); // 'calc(2rem * var(--mantine-scale))'
+
+rem('5vh'); // '5vh'
+em('5vh'); // '5vh'
+mantine_rem('5vh'); // '5vh'
+
+rem('var(--size)'); // 'var(--size)'
+em('var(--size)'); // 'var(--size)'
+
+rem('50%'); // '50%'
+em('50%'); // '50%'
+mantine_rem('50%'); // '50%'
+
+// you can create your own converter
+const rem = createConverter(
+  'rem', // the target unit you want to convert to
+  '16px', // the value you want to scale to, e.g. `var(--mantine-scale)`, default to null
+  16 // The font size of html, default to 16
+)
+```
