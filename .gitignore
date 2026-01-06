@@ -41,5 +41,4 @@ yarn-error.log*
 # turborepo
 .turbo
 
-# misc
-.DS_Store
+.idea/
