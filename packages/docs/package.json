@@ -5,8 +5,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build"
+    "dev": "next",
+    "build": "next build",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
   },
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
@@ -21,6 +22,7 @@
     "ufo": "^1.6.1"
   },
   "devDependencies": {
+    "pagefind": "^1.4.0",
     "@types/react": "18.3.27",
     "@types/react-dom": "18.3.7",
     "eslint-plugin-mdx": "^3.6.2",
