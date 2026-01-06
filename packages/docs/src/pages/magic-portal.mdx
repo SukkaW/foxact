@@ -1,0 +1,135 @@
+---
+title: Magic Portal
+---
+
+# Magic Portal
+
+import ExportMetaInfo from '../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Magic Portal allows you to perform "child component updates/decides what parent component should render" pattern, without breaking the React's fundermental top-down one-way data flow or triggering double-renders.
+
+## When to Use
+
+Sometimes when building complex UIs, you may eventually want to render the "layout" or "container" differently based on some child components.
+
+One of the most notable example would be having a page title component and/or a breadcrumb navigation component inside the global layout's header, yet you want to update/customize the page title and breadcrumb navigation from page components, that are typically children of the layout:
+
+import NextImage from 'next/image';
+import FoxactMagicPortalExampleImage from '../images/foxact-magic-portal-example.png';
+
+<br />
+<NextImage src={FoxactMagicPortalExampleImage} alt="An example of update both page title and breadcrumb navigation in the global layout header from page components." />
+
+## Usage
+
+Let's get started with an example of updating global layout's header with a dynamic page title from a page component.
+
+First, create a portal provider, portal target, and portal containter with `createMagicPortal`. It is recommended to place them in a separate file:
+
+```tsx filename="src/portal/sidebar-active.tsx" copy
+'use client';
+
+import { createMagicPortal } from 'foxact/magic-portal';
+// createMagicPortal is also available from `foxact/create-magic-portal`:
+// import { createMagicPortal } from 'foxact/create-magic-portal';
+
+// By retutning an array, `createMagicPortal` allows you to name your provider and components as you like:
+export const [
+  // Holding the necessary states via a React Context
+  DashboardLayoutHeaderPortalProvider,
+  // Where the portal content will be rendered into
+  DashboardLayoutHeaderPortalTarget,
+  // The portal content to be rendered in the target
+  useSetDashboardLayoutHeaderPortalContent
+] = createMagicPortal(
+  // An optional name, allows easier debugging in React DevTools
+  'DashboardLayoutHeader'
+);
+```
+
+You don't have to wrap your entire app with the portal provider, you can wrap only the part where you want to use the portal, as long as the portal provider is a parent of both the portal target component and the portal content component:
+
+```tsx filename="src/global-layout/dashboard-layout.tsx" copy
+import { DashboardLayoutHeaderPortalTarget, DashboardLayoutHeaderPortalProvider } from '@/portal/dashboard-layout-header-portal';
+
+export default function DashboardLayout({ children }: React.PropsWithChildren) {
+  return (
+    <div>
+      <nav>
+        <DashboardSidebar />
+      </nav>
+      <div>
+        {/** you can wrap only the part where you want to use the portal */}
+        <DashboardLayoutHeaderPortalProvider>
+          <header>
+            {/** place portal target where you want to render */}
+            <DashboardLayoutHeaderPortalTarget
+              // by default the target is an empty div, but you can specify any component you wish via the `as` prop
+              as="div"
+              // you can pass other props to the target component as well
+              // they are type-safe with the `as` props
+              className="header-portal-target"
+            />
+
+            <SomeOtherHeaderContent />
+          </header>
+          <main>
+            {children}
+          </main>
+        </DashboardLayoutHeaderPortalProvider>
+      </div>
+    </div>
+  );
+}
+```
+
+And now you can use the portal content component in your page to render content into the portal target in the layout:
+
+```tsx filename="src/app/projects/page.tsx" copy
+import { DashboardLayoutHeaderPortalContent } from '@/portal/dashboard-layout-header-portal';
+
+export default function ProjectsPage() {
+  return (
+    <div>
+      {/** place portal content anywhere under the provider */}
+      <DashboardLayoutHeaderPortalContent>
+        <h1>Projects</h1>
+      </DashboardLayoutHeaderPortalContent>
+
+      <div>List of projects will go here...</div>
+    </div>
+  );
+}
+```
+
+```tsx filename="src/app/settings/page.tsx" copy
+import { DashboardLayoutHeaderPortalContent } from '@/portal/dashboard-layout-header-portal';
+
+export default function SettingsPage() {
+  return (
+    <div>
+      {/** place portal content anywhere under the provider */}
+      <DashboardLayoutHeaderPortalContent>
+        <h1>AccountSettings</h1>
+      </DashboardLayoutHeaderPortalContent>
+
+      <div>There goes your account settings...</div>
+    </div>
+  );
+}
+```
+
+By having your page title component live inside your page component, you acheive better co-location of code, enabling better DX and maintainability, while it is still rendered inside the global layout's header.
+
+## Under the Hood
+
+`createMagicPortal` is built on top of foxact's [`createContextState`](/context-state) and React DOM's `createPortal` API.
+
+`<PortalProvider />` holds the dom node (`HTMLElement`) as a state, where it can be passed to `createPortal` later.
+
+`<PortalTarget />` renders the container element (by default is an empty `<div />`, but you can specify any component you wish via the `as` prop) and cature and stores the actual DOM node into the context state via a `ref` callback.
+
+`<PortalContent />` then reads the target DOM node from the context state and passes it to `createPortal` to render its children into the target DOM node.
+
