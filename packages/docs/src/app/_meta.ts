@@ -9,6 +9,7 @@ export default {
     type: 'page',
     title: 'Home',
     theme: {
+      copyPage: false,
       breadcrumb: false,
       footer: true,
       sidebar: false,
@@ -24,8 +25,7 @@ export default {
   'change-log': {
     title: 'Change Log',
     href: 'https://github.com/sukkaw/foxact/releases',
-    type: 'page',
-    newWindow: true
+    type: 'page'
   },
   '-- separator guide': {
     type: 'separator',
