@@ -2,6 +2,12 @@
 
 **Core Changes**
 
+- `createMagicPortal` now supports SSR fallback. Instead of rendering nothing on the server, you can now provide a fallback content to be rendered during server-side rendering via `ssrFallback` prop of `PortalTarget`. See the documentation for more information.
+
+# 0.2.50
+
+**Core Changes**
+
 - New `createMagicPortal` API, allows you practice "child component update what parent component renders" pattern, without breaking React fundermentals (of top-down one-way data flow).
 
 # 0.2.49
