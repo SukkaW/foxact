@@ -32,7 +32,7 @@ Let's get started with an example of updating global layout's header with a dyna
 
 First, create a portal provider, portal target, and portal containter with `createMagicPortal`. It is recommended to place them in a separate file:
 
-```tsx filename="src/portal/sidebar-active.tsx" copy
+```tsx filename="src/portal/dashboard-layout-header-portal.tsx" copy
 'use client';
 
 import { createMagicPortal } from 'foxact/magic-portal';
@@ -46,7 +46,7 @@ export const [
   // Where the portal content will be rendered into
   DashboardLayoutHeaderPortalTarget,
   // The portal content to be rendered in the target
-  useSetDashboardLayoutHeaderPortalContent
+  DashboardLayoutHeaderPortalContent
 ] = createMagicPortal(
   // An optional name, allows easier debugging in React DevTools
   'DashboardLayoutHeader'
@@ -137,3 +137,39 @@ By having your page title component live inside your page component, you acheive
 
 `<PortalContent />` then reads the target DOM node from the context state and passes it to `createPortal` to render its children into the target DOM node.
 
+## Server-Side Rendering
+
+`createMagicPortal` relies on React DOM's `createPortal` API, which doesn't support server-side rendering (SSR), because there will be no target DOM node to render the portal content into.
+
+Therefore, the `<PortalTarget />` component only renders the container element (by default, an empty `<div />`) on the server, without any portal content being emitted to the server HTML.
+
+You can, however, provide a fallback UI (ideally a skeleton or placeholder) to be rendered during server-side rendering by adding the `ssrFallback` prop to your `<PortalTarget />`:
+
+```tsx filename="src/app/layout.tsx" copy
+import { PortalProvider, PortalTarget } from '@/portal';
+
+export default function Layout({ children }: React.PropsWithChildren) {
+  return (
+    <div>
+      <nav />
+      <div>
+        <PortalProvider>
+          <header>
+            <PortalTarget ssrFallback={<Skeleton_Or_PlaceHolder />}>
+          </header>
+          <main>
+            {children}
+          </main>
+        </PortalProvider>
+      </div>
+      <footer />
+    </div>
+  );
+}
+```
+
+With a non-nullish `ssrFallback` prop, on the server, the fallback UI you provided will be emitted to the server HTML, which provides better UX during the initial load.
+
+After React finishes the hydration in the browser, the actual portal content will be rendered into the portal target as usual and replace the fallback UI.
+
+> Under the hood, `ssrFallback` uses foxact's [`noSSR`](/no-ssr) utility and the `<Suspense />`. You can read [more about how `noSSR()` works](/no-ssr), but in a nutshell, it allows portal target to completely opt-out/skip the server-side rendering, and force React to emit the nearest `<Suspense />` boundary's fallback UI (i.e. the `ssrFallback` you provided) into the server HTML. During the client hydration, React will attempt to render the portal target component again. With the portal target now being rendered on the client, the portal content can be rendered into the target as usual.
