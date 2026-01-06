@@ -14,13 +14,17 @@ Magic Portal allows you to perform "child component updates/decides what parent 
 
 Sometimes when building complex UIs, you may eventually want to render the "layout" or "container" differently based on some child components.
 
-One of the most notable example would be having a page title component and/or a breadcrumb navigation component inside the global layout's header, yet you want to update/customize the page title and breadcrumb navigation from page components, that are typically children of the layout:
+One of the most notable example would be having a page title component and/or a breadcrumb navigation component inside the global layout's header, where they actually depend on the current page (which is typically layout's children) being rendered.
 
 import NextImage from 'next/image';
 import FoxactMagicPortalExampleImage from '../images/foxact-magic-portal-example.png';
 
 <br />
 <NextImage src={FoxactMagicPortalExampleImage} alt="An example of update both page title and breadcrumb navigation in the global layout header from page components." />
+
+Having your page title component live inside your page component, you achieve better co-location of code, enabling better DX and maintainability. But this can easily result in breaking the React's fundermental top-down one-way data flow or triggering double-renders.
+
+With Magic Portal, you can achieve this pattern in a simple and clean way, without breaking React's fundermental principles, without extra renders.
 
 ## Usage
 
@@ -85,7 +89,7 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
 }
 ```
 
-And now you can use the portal content component in your page to render content into the portal target in the layout:
+And now you can declares what to render in the dashboard layout header, by using the portal content component in your page components:
 
 ```tsx filename="src/app/projects/page.tsx" copy
 import { DashboardLayoutHeaderPortalContent } from '@/portal/dashboard-layout-header-portal';
