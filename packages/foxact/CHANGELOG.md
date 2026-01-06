@@ -1,3 +1,9 @@
+# 0.2.50
+
+**Core Changes**
+
+- New `createMagicPortal` API, allows you practice "child component update what parent component renders" pattern, without breaking React fundermentals (of top-down one-way data flow).
+
 # 0.2.49
 
 **Bug Fixes**
