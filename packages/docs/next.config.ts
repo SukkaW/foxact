@@ -10,6 +10,7 @@ export default withNextra({})({
   typescript: {
     ignoreBuildErrors: true
   },
+  reactCompiler: true,
   turbopack: {
     resolveAlias: {
       // Path to your `mdx-components` file with extension
