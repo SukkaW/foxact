@@ -77,6 +77,7 @@ export default {
   'create-fixed-array': {},
   'fetch-jsonp': {},
   'invariant-nullthrow': {},
+  'magic-portal': {},
   noop: {},
   'no-ssr': {},
   rem: {},
