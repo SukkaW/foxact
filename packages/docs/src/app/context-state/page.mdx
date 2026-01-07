@@ -1,0 +1,183 @@
+---
+title: Context State
+---
+
+# Context State
+
+
+import ExportMetaInfo from '../../components/export-meta-info';
+
+<ExportMetaInfo />
+
+You don't need a global state management library like Redux or Zustand for every state in your app. Just store your shared state that lives only in React (without using any global state management library). Lift your state up and passing them deeply into your React app with [React Context](https://react.dev/learn/passing-data-deeply-with-context), without worrying about performance.
+
+> Looking for a state-management with a similar API, that can persisting state into `localStorage` or `sessionStorage`? Check out [`createLocalStorageState`](/create-local-storage-state) and [`createSessionStorageState`](/create-session-storage-state).
+
+## Usage
+
+First, create a shared state provider along with getter and setter hooks with `createContextState`. It is recommended to place them in a separate file:
+
+```tsx filename="src/context/sidebar-active.tsx" copy
+'use client';
+
+import { createContextState } from 'foxact/context-state';
+// createContextState is also available from `foxact/create-context-state`:
+// import { createContextState } from 'foxact/create-context-state';
+
+// By retutning an array, `createContextState` allows you to name your provider and hooks as you like:
+export const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive] = createContextState(false);
+
+// You can also create your own hooks on top of the getter and setter hooks:
+export const useToggleSidebarActive = () => {
+  const setSidebarActive = useSetSidebarActive();
+  // always use `useCallback` to memoize returned function, just like what `foxact` does:
+  return useCallback(() => setSidebarActive(prevSidebarActive => !prevSidebarActive), [setSidebarActive]);
+  // you can safely add it to the dependency array since `setSidebarActive` is also memoized
+};
+```
+
+Then, wrap your app with the provider:
+
+```tsx filename="src/layout/main-layout.tsx" copy
+import { memo } from 'react';
+import { SidebarActiveProvider } from '../context/sidebar-active';
+
+function MainLayout({ children }: React.PropsWithChildren) {
+  return (
+    <SidebarActiveProvider>
+      <div>
+        {children}
+      </div>
+    </SidebarActiveProvider>
+  );
+}
+
+export default memo(MainLayout);
+```
+
+And now you can use the getter and setter hooks anywhere in your app:
+
+```tsx filename="s../../components/sidebar.tsx" copy
+import { memo } from 'react';
+import { useSidebarActive, useSetSidebarActive } from '../context/sidebar-active';
+
+function Sidebar() {
+  const sidebarActive = useSidebarActive();
+  const setSidebarActive = useSetSidebarActive();
+
+  return (
+    <div className={`sidebar ${sidebarActive ? 'active' : ''}`}>
+      <button onClick={() => setSidebarActive(false)}>Close Sidebar</button>
+    </div>
+  );
+}
+
+export default memo(Sidebar);
+```
+
+```tsx filename="s../../components/navbar.tsx" copy
+import { memo } from 'react';
+import { useToggleSidebarActive } from '../context/sidebar-active';
+
+function Navbar() {
+  const toggleSidebarActive = useToggleSidebarActive();
+
+  return (
+    <div className="navbar">
+      <button onClick={toggleSidebarActive}>Menu Button</button>
+    </div>
+  );
+}
+
+export default memo(Navbar);
+```
+
+And when the sidebar active state is changed, only the component that uses `useSidebarActive()` hook will be re-rendered, in this case the only affected component is `<Sidebar />`.
+
+## Read context state conditionally
+
+Normally, you can not read context state conditionally per Rules of Hooks:
+
+> **Only Call Hooks at the Top Level**: Don’t call Hooks inside loops, conditions, or nested functions.
+
+However, if you do need to read the context state conditionally, you can use the new `React.use` introduced in React 18.3:
+
+```tsx filename="src/context/sidebar-active.tsx" copy
+import { createContextState } from 'foxact/context-state';
+// createContextState is also available from `foxact/create-context-state`:
+// import { createContextState } from 'foxact/create-context-state';
+
+export const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive, SidebarActiveContext] = createContextState(false);
+```
+
+```tsx filename="s../../components/sidebar.tsx" copy
+import { memo, use } from 'react';
+import { SidebarActiveContext } from '../context/sidebar-active';
+
+interface SidebarProps {
+  loggedIn: boolean
+}
+
+function Sidebar({ loggedIn }: SidebarProps) {
+  // This is only for the demonstration purpose to show `React.use` can be called conditionally
+  if (!loggedIn) {
+    return (
+      <div className="sidebar">
+        <div>Hello!</div>
+      </div>
+    )
+  }
+
+  // Here we are using `use` to read the context state conditionally
+  const sidebarActive = use(SidebarActiveContext);
+
+  return (
+    <div className={`sidebar ${sidebarActive ? 'active' : ''}`}>
+      <div>Welcome back, Sukka!</div>
+    </div>
+  );
+}
+
+export default memo(Sidebar);
+```
+
+If you are not able to upgrade to React 18.3 or above, you can use the following risky approach by wielding the ancient dark magic of `React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED`:
+
+```tsx filename="s../../components/sidebar.tsx" copy
+import reactExports, { memo, use } from 'react';
+import { SidebarActiveContext } from '../context/sidebar-active';
+
+interface ReactInternal {
+  __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: {
+    ReactCurrentDispatcher: React.RefObject<{ readContext<T>(context: React.Context<T>): T }>
+  }
+}
+
+interface SidebarProps {
+  loggedIn: boolean
+}
+
+function Sidebar({ loggedIn }: SidebarProps) {
+  if (!loggedIn) {
+    return (
+      <div className="sidebar">
+        <div>Hello!</div>
+      </div>
+    )
+  }
+
+  // I'm sure you want me to tell you how safe and stable it is, right?
+  const sidebarActive = (reactExports as unknown as ReactInternal)
+    .__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentDispatcher
+    ?.current
+    ?.readContext(SidebarActiveContext))
+
+  return (
+    <div className={`sidebar ${sidebarActive ? 'active' : ''}`}>
+      <div>Welcome back, Sukka!</div>
+    </div>
+  );
+}
+
+export default memo(Sidebar);
+```

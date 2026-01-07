@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'docs/**/*'
+      - 'packages/**/*'
 jobs:
   deploy:
     runs-on: ubuntu-latest

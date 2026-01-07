@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 import useSWRImmutable from 'swr/immutable';
 import { humanReadableSize } from '../libs/sizes';
