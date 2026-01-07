@@ -1,6 +1,7 @@
 import { Footer, Layout, Navbar } from 'nextra-theme-docs';
 import { Head } from 'nextra/components';
 import { getPageMap } from 'nextra/page-map';
+import { LastUpdated } from '../last-updated';
 
 import '../styles/main.css';
 
@@ -86,15 +87,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           pageMap={pageMap}
           docsRepositoryBase="https://github.com/SukkaW/foxact/tree/master/packages/docs"
           footer={footer}
-          lastUpdated={<NoopComponent />}
+          lastUpdated={<LastUpdated />}
         >
           {children}
         </Layout>
       </body>
     </html>
   );
-}
-
-export function NoopComponent() {
-  return null;
 }
