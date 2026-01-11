@@ -34,6 +34,7 @@ The hook **IS NOT FOR**:
   - You can always use `useReducer` w/ inline reducer to avoid adding current state to `useCallback`'s dependencies array
   - See [Why `useReducer` Is the Cheat Mode of Hooks](https://overreacted.io/a-complete-guide-to-useeffect/#:~:text=Why%20useReducer%20Is%20the%20Cheat%20Mode%20of%20Hooks)
   - Also see [`sukkaw/foxact @ 5934ed8`](https://github.com/SukkaW/foxact/commit/5934ed8f27f6a3acba4cb332b431c9e820fceeda) for an example, where I drop the `useStableHandler` from foxact's [`useUncontrolled`](/use-uncontrolled).
+  - In short, reducer is inlined inside the component, thus having access to the latest prop/state when dispatched.
 - Memoizing selector function of global state management libraries
   - Use `useSyncExternalStoreWithSelector` instead
   - https://github.com/reactwg/react-18/discussions/86

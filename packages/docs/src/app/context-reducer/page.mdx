@@ -1,0 +1,132 @@
+---
+title: Context Reducer
+---
+
+# Context Reducer
+
+import ExportMetaInfo from '../../components/export-meta-info';
+
+<ExportMetaInfo />
+
+You don't need a global state management library like Redux or Zustand for every state in your app. Just store your shared state that lives only in React (without using any global state management library). Lift your state up and passing them deeply into your React app with [React Context](https://react.dev/learn/passing-data-deeply-with-context), without worrying about performance.
+
+`createContextReducer` is similar to [`createContextState`](/context-state) but built on top of React's `useReducer` hook.
+
+> Looking for a state-management with a `useState`-like API? Check out [`createContextState`](/context-state).
+
+## Usage
+
+Create a shared reducer provider. Put it into a separate file:
+
+```tsx filename="src/context/counter.tsx" copy
+'use client';
+
+import { createContextReducer } from 'foxact/context-reducer';
+// createContextReducer is also available from 'foxact/create-context-reducer'
+
+type State = { count: number };
+type Action = { type: 'inc' } | { type: 'dec' };
+
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case 'inc': return { count: state.count + 1 };
+    case 'dec': return { count: state.count - 1 };
+    default: return state;
+  }
+};
+
+// Option A: Provide initial state directly (2-arg `useReducer` semantics)
+export const [CounterProvider, useCounter, useCounterDispatch] = createContextReducer(reducer, { count: 0 });
+
+// Option B: Provide initial arg + init function (3-arg `useReducer` semantics)
+export const [CounterProvider, useCounter, useCounterDispatch] = createContextReducer(reducer, 0, (n) => ({ count: n }));
+
+// Option C: Only provide reducer, and pass initialArg + init to the provider (3-arg `useReducer` semantics)
+export const [CounterProvider, useCounter, useCounterDispatch] = createContextReducer(reducer);
+// Note: in this case, you must pass `initialArg` and `init` to the provider when using it.
+// See "Provider-level initialization" section below.
+```
+
+Wrap your app with the provider:
+
+```tsx filename="src/layout/main-layout.tsx" copy
+import { memo } from 'react';
+import { CounterProvider } from '../context/counter';
+
+function MainLayout({ children }: React.PropsWithChildren) {
+  return (
+    <CounterProvider>
+      {children}
+    </CounterProvider>
+  );
+}
+
+export default memo(MainLayout);
+```
+
+Use the hooks:
+
+```tsx filename="src/components/counter.tsx" copy
+'use client';
+
+import { memo } from 'react';
+import { useCounter, useCounterDispatch } from '../context/counter';
+
+function Counter() {
+  const state = useCounter();
+  const dispatch = useCounterDispatch();
+
+  return (
+    <div>
+      <div>Count: {state.count}</div>
+      <button onClick={() => dispatch({ type: 'inc' })}>+1</button>
+      <button onClick={() => dispatch({ type: 'dec' })}>-1</button>
+    </div>
+  );
+}
+
+export default memo(Counter);
+```
+
+## Provider-level initialization
+
+You can also pass `initialArg` and `init` directly to the provider if you used the single-arg overload when creating the context:
+
+```tsx filename="src/layout/main-layout.tsx" copy
+import { memo } from 'react';
+import { CounterProvider } from '../context/counter';
+
+function MainLayout({ children }: React.PropsWithChildren) {
+  return (
+    <CounterProvider initialArg={10} init={(n) => ({ count: n })}>
+      {children}
+    </CounterProvider>
+  );
+}
+
+export default memo(MainLayout);
+```
+
+## Read context state conditionally
+
+Normally, you can not read context state conditionally per Rules of Hooks:
+
+> **Only Call Hooks at the Top Level**: Don’t call Hooks inside loops, conditions, or nested functions.
+
+However, if you do need to read the context state conditionally, you can use the new `React.use` introduced since React 18.3:
+
+```tsx filename="src/components/conditional-counter.tsx" copy
+import { memo, use } from 'react';
+import { CounterProvider, useCounter, CounterContext } from '../context/counter';
+
+function ConditionalCounter({ show }: { show: boolean }) {
+  if (!show) return null;
+
+  // read context conditionally with `use`
+  const state = use(CounterContext);
+
+  return <div>Count: {state.count}</div>;
+}
+
+export default memo(ConditionalCounter);
+```

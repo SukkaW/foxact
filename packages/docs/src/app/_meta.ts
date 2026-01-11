@@ -71,6 +71,7 @@ export default {
     type: 'separator',
     title: 'Utilities'
   },
+  'context-reducer': {},
   'context-state': {},
   'create-local-storage-state': {},
   'create-session-storage-state': {},
