@@ -10,15 +10,15 @@
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
   "devDependencies": {
-    "@eslint-sukka/node": "^8.0.6",
-    "@eslint-sukka/react": "^8.0.6",
+    "@eslint-sukka/node": "^8.1.0",
+    "@eslint-sukka/react": "^8.1.0",
     "eslint": "^9.39.2",
-    "eslint-config-sukka": "^8.0.6",
-    "eslint-formatter-sukka": "^8.0.6",
+    "eslint-config-sukka": "^8.1.0",
+    "eslint-formatter-sukka": "^8.1.0",
     "turbo": "^2.7.3",
     "typescript": "^5.9.3"
   },
-  "packageManager": "pnpm@10.27.0",
+  "packageManager": "pnpm@10.28.0",
   "pnpm": {
     "overrides": {
       "array-includes": "npm:@nolyfill/array-includes@latest",
