@@ -1,4 +1,10 @@
-# 0.2.50
+# 0.2.52
+
+**Core Changes**
+
+- Add `createContextReducer` API, which is similar to `createContextState`, but powered by `useReducer` instead of `useState`. This is useful when you need more complex state management logic that benefits from reducer patterns, while avoiding prop drilling or third-party global state management libraries.
+
+# 0.2.51
 
 **Core Changes**
 
