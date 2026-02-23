@@ -30,7 +30,7 @@ export const EmailProtection = memo(({ mailbox, domain }: Readonly<EmailProtecti
   // eslint-disable-next-line sukka/unicorn/prefer-string-replace-all -- target lib es2018
   const [text, setText] = useState(() => Math.random().toString(36).slice(2) + '[at]' + domain.replace(/\./g, '[dot]'));
   useIsomorphicLayoutEffect(() => {
-    // This is only allowed because it won't trigger infinite re-render and double render is intentional
+    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect -- This is only allowed because it won't trigger infinite re-render and double render is intentional
     setText(mailbox + '@' + domain);
   }, [domain, mailbox]);
 

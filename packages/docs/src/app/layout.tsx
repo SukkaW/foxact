@@ -63,6 +63,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {' '}
       by
       {' '}
+      {/* eslint-disable-next-line @eslint-react/dom/no-unsafe-target-blank -- my own homepage */}
       <a href="https://skk.moe" className="mx-1 text-black dark:text-white underline underline-offset-2" target="_blank">Sukka</a>
       {' '}
       |
@@ -73,7 +74,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {' '}
       <span className="mx-1">-</span>
       {' '}
-      {/** @ts-expect-error -- mismatch React version */}
       <CurrentYear defaultYear={2025} />
     </Footer>
   );

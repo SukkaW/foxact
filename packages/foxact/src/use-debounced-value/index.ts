@@ -11,6 +11,7 @@ export function useDebouncedValue<T>(value: NotFunction<T>, wait: number, leadin
   }
 
   const [outputValue, setOutputValue] = useState(value);
+  // eslint-disable-next-line @eslint-react/no-unnecessary-use-ref -- consistent reference across different effects
   const leadingRef = useRef(true);
 
   useEffect(signal => {

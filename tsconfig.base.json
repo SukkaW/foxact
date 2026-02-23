@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2018",
-    "lib": ["DOM", "ES2018", "ESNext.WeakRef"],
+    "lib": ["DOM", "DOM.Iterable", "ES2018", "ESNext.WeakRef"],
     "jsx": "react-jsx",
     "module": "preserve",
     "moduleResolution": "bundler",

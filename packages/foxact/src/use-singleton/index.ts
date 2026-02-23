@@ -8,6 +8,7 @@ export interface SingletonRefObject<T> {
 
 /** @see https://foxact.skk.moe/use-singleton */
 export function useSingleton<T>(initializor: () => T): SingletonRefObject<T> {
+  // eslint-disable-next-line @eslint-react/naming-convention/ref-name -- impl details
   const r = useRef<T>(null);
   if (r.current == null) {
     r.current = initializor();
