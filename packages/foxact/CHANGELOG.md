@@ -1,3 +1,9 @@
+# 0.2.53
+
+**Core Changes**
+
+- Add new `useReadonlySearchParams` hook, which provides a convenient way to read the `window.location.search` as a `ReadonlyURLSearchParams` object and keep it up-to-date when the URL changes. It also supports server-side rendering with an optional server default value getter.
+
 # 0.2.52
 
 **Core Changes**
