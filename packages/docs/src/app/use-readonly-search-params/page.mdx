@@ -1,0 +1,39 @@
+---
+title: useReadonlySearchParams
+---
+
+# useReadonlySearchParams
+
+import ExportMetaInfo from '../../components/export-meta-info';
+
+<ExportMetaInfo />
+
+`useReadonlySearchParams` provides a convenient way to read the `window.location.search` as a `URLSearchParams` object and keep it up-to-date when the URL changes.
+
+Do notice that the returned `URLSearchParams` object is read-only. If you want to modify the search params, please perform the client-side navigation directly, either via routing library (like React Router) or a framework (like Next.js), or by using `window.history.pushState` or `window.history.replaceState` directly.
+
+## Usage
+
+```tsx copy
+import { useReadonlySearchParams, ReadonlyURLSearchParams } from 'foxact/use-readonly-search-params';
+
+const readOnlySearchParams = useReadonlySearchParams();
+
+console.log(readOnlySearchParams instanceof ReadonlyURLSearchParams); // true
+```
+
+## Server-side Rendering
+
+`useReadonlySearchParams` accepts an optional parameter `getServerDefaultValue`, which is a function that returns a `URLSearchParams` or `ReadonlyURLSearchParams` object to be used as the initial value on the server.
+
+When `getServerDefaultValue` is omitted (which is the default behavior), React will find the closest `<Suspense>` boundary and render its `fallback` UI into the generated server HTML on the server. The user will see the fallback UI at first. React will attempt to render the component during the hydration on the browser, where the latest `URLSearchParams` is generated from the browser's `window.location.search` and the user will see the actual value after the hydration is finished. See also [\<Suspense\> Providing a fallback for server errors and client-only content](https://react.dev/reference/react/Suspense#providing-a-fallback-for-server-errors-and-client-only-content) at React docs.
+
+If you provide the `getServerDefaultValue`, React will use the initial value to render the UI and generate HTML on the server. The user will see the initial value (which might be stale) first. On the client, React will first use the initial value to hydrate the server-side rendered HTML, and then immediately re-render the component with the actual value (read from the browser's `window.location.search`) after the hydration. The user will see the latest value after both the hydration and the re-render.
+
+```tsx copy
+import { useReadonlySearchParams, ReadonlyURLSearchParams } from 'foxact/use-window-location-url-search-params';
+
+const emptySearchParams = new ReadonlyURLSearchParams();
+
+useReadonlySearchParams(() => emptySearchParams /* getServerDefaultValue - an empty URLSearchParams */);
+```
