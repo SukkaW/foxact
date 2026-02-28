@@ -1,3 +1,9 @@
+# 0.2.54
+
+**Performance Improvements**
+
+Many foxact hooks have been refactored to use [`event-target-bus`](https://www.npmjs.com/package/event-target-bus) under the hood, which is a tiny library (190 bytes gzipped) that reduces the number of event listeners added to the DOM/Web APIs, and allows multiple hook usages to share the same event listener. This can improve performance and reduce memory usage, especially when you have many components using the same hook across your entire app.
+
 # 0.2.53
 
 **Core Changes**
