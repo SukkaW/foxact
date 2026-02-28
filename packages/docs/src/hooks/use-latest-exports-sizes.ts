@@ -36,7 +36,7 @@ export function useLatestExportsSizes() {
 export function useLatestTotalExportsSize() {
   const { data } = useLatestExportsSizes();
   return useMemo(() => {
-    if (!data) return 'about 5 KiB';
+    if (!data) return 'about 16 KiB';
     return humanReadableSize(data.total.gzip);
   }, [data]);
 }
