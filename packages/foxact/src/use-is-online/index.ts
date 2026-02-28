@@ -1,13 +1,22 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
+import { createEventTargetBus } from 'event-target-bus';
+import type { EventTargetBus } from 'event-target-bus';
+
+let onlineBus: EventTargetBus<Window, 'online'> | null = null;
+let offlineBus: EventTargetBus<Window, 'offline'> | null = null;
 
 function subscribe(onStoreChange: () => void): () => void {
-  window.addEventListener('online', onStoreChange);
-  window.addEventListener('offline', onStoreChange);
+  onlineBus ??= createEventTargetBus(window, 'online');
+  offlineBus ??= createEventTargetBus(window, 'offline');
+
+  const onlineUnsub = onlineBus.on(onStoreChange);
+  const offlineUnsub = offlineBus.on(onStoreChange);
+
   return () => {
-    window.removeEventListener('online', onStoreChange);
-    window.removeEventListener('offline', onStoreChange);
+    onlineUnsub();
+    offlineUnsub();
   };
 }
 

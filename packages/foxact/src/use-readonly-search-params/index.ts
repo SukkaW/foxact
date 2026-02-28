@@ -1,3 +1,5 @@
+import { createEventTargetBus } from 'event-target-bus';
+import type { EventTargetBus } from 'event-target-bus';
 import { noSSRError } from '../no-ssr';
 import { noop } from '../noop';
 import { useSyncExternalStore } from 'react';
@@ -37,15 +39,14 @@ export class ReadonlyURLSearchParams extends URLSearchParams {
   }
 }
 
-function subscribe(onStoreChange: () => void) {
-  if (typeof window === 'undefined') {
-    return noop;
-  }
+let popStateBus: EventTargetBus<Window, 'popstate'> | null = null;
 
-  window.addEventListener('popstate', onStoreChange);
-  return () => {
-    window.removeEventListener('popstate', onStoreChange);
-  };
+function subscribe(onStoreChange: () => void) {
+  if (typeof window === 'undefined') return noop;
+
+  popStateBus ??= createEventTargetBus(window, 'popstate');
+
+  return popStateBus.on(onStoreChange);
 }
 
 let lastSearch: string | null = null;

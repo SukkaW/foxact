@@ -28,6 +28,7 @@
   "license": "MIT",
   "dependencies": {
     "client-only": "^0.0.1",
+    "event-target-bus": "^1.0.0",
     "server-only": "^0.0.1"
   },
   "devDependencies": {

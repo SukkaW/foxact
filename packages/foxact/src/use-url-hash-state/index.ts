@@ -6,37 +6,22 @@ import { noSSRError } from '../no-ssr';
 
 import { identity } from 'foxts/identity';
 import { isFunction } from 'foxts/is-function';
+import { createEventTargetBus } from 'event-target-bus';
+import type { EventTargetBus } from 'event-target-bus';
+
+let hashChangeEventBus: EventTargetBus<Window, 'hashchange'> | null = null;
 
 type NotUndefined<T> = T extends undefined ? never : T;
 
-const subscribe: Parameters<typeof useSyncExternalStore>[0] = (() => {
+const subscribe: Parameters<typeof useSyncExternalStore>[0] = (onStoreChange) => {
   if (typeof window === 'undefined') {
-    return (_callback: () => void) => noop;
+    return noop;
   }
 
-  let hasSubscribedToHashChange = false;
+  hashChangeEventBus ??= createEventTargetBus(window, 'hashchange');
 
-  const listeners = new Set<() => void>();
-
-  // call every listener when hash changes
-  const handleHashChange = () => {
-    listeners.forEach((listener) => listener());
-  };
-
-  // subscribe to hash change event by useSyncExternalStore
-  return (callback: () => void) => {
-    listeners.add(callback);
-
-    if (!hasSubscribedToHashChange) {
-      hasSubscribedToHashChange = true;
-      window.addEventListener('hashchange', handleHashChange);
-    }
-
-    return () => {
-      listeners.delete(callback);
-    };
-  };
-})();
+  return hashChangeEventBus.on(onStoreChange);
+};
 
 export type Serializer<T> = (value: T) => string;
 export type Deserializer<T> = (value: string) => T;

@@ -4,25 +4,21 @@ import { noSSRError } from '../no-ssr';
 import { noop } from '../noop';
 
 import { useCallback, useSyncExternalStore } from 'react';
+import { createEventTargetBus } from 'event-target-bus';
+import type { EventTargetBus } from 'event-target-bus';
 
-const externalStore = new Map<string, boolean>(); // External store to hold the state of each media query
+const mediaQueryProxies = new Map<string, EventTargetBus<MediaQueryList, 'change'>>();
 
 function subscribeToMediaQuery(mq: string, callback: VoidFunction) {
   if (typeof window === 'undefined') return noop;
 
-  const mediaQueryList = window.matchMedia(mq);
+  let bus = mediaQueryProxies.get(mq);
+  if (!bus) {
+    bus = createEventTargetBus(window.matchMedia(mq), 'change');
+    mediaQueryProxies.set(mq, bus);
+  }
 
-  const handleChange = () => {
-    // update the store with the latest value of a media query
-    externalStore.set(mq, mediaQueryList.matches);
-    callback();
-  };
-
-  mediaQueryList.addEventListener('change', handleChange); // Add change listener to MediaQueryList
-
-  return () => {
-    mediaQueryList.removeEventListener('change', handleChange); // Cleanup function to remove listener
-  };
+  return bus.on(callback);
 }
 
 function getServerSnapshotWithoutServerValue(): never {
@@ -32,20 +28,18 @@ function getServerSnapshotWithoutServerValue(): never {
 /** @see https://foxact.skk.moe/use-media-query */
 // eslint-disable-next-line sukka/bool-param-default -- serveValue is intentionally optional
 export function useMediaQuery(mq: string, serverValue?: boolean): boolean {
-  if (typeof window !== 'undefined' && !externalStore.has(mq)) {
-    // This part of the code should only run once per media query, on client-side only
-    // since we are on the client-side, let's get initial value directly from DOM
-    externalStore.set(mq, window.matchMedia(mq).matches);
-  }
-
   // subscribe once per hook per media query
   const subscribe = useCallback((callback: VoidFunction) => subscribeToMediaQuery(mq, callback), [mq]);
 
   const getSnapshot = () => {
     if (typeof window === 'undefined') {
+      if (serverValue != null) {
+        return serverValue;
+      }
       return false;
     }
-    return externalStore.get(mq) ?? window.matchMedia(mq).matches;
+    // Always get the current value from the DOM
+    return window.matchMedia(mq).matches;
   };
   const getServerSnapshot = serverValue === undefined
     ? getServerSnapshotWithoutServerValue
