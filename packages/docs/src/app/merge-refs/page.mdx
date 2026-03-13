@@ -1,0 +1,17 @@
+---
+title: Merge Refs
+---
+
+# Merge Refs
+
+import ExportMetaInfo from '../../components/export-meta-info';
+
+<ExportMetaInfo />
+
+`mergeRefs` allows you to merge multiple refs into a single ref callback, enabling you to attach multiple refs to a single DOM element or component instance. It works seamlessly across different ref types and React versions.
+
+### React 19+
+
+React 19 introduced cleanup functions that can be returned from ref callbacks.
+
+Our version of `mergeRefs` supports both React 19 new ref callback behavior and the traditional (React 18 and earlier) ref callback behavior, ensuring compatibility across React versions.

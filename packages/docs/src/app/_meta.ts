@@ -79,6 +79,7 @@ export default {
   'fetch-jsonp': {},
   'invariant-nullthrow': {},
   'magic-portal': {},
+  'merge-refs': {},
   noop: {},
   'no-ssr': {},
   rem: {},
