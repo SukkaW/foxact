@@ -1,3 +1,9 @@
+# 0.2.55
+
+**Core Changes**
+
+- Add `mergeRefs` utility function, supports both React 19+ new ref callback cleanup behavior (`((T) => void | cleanup function)`) and traditional ref callback behavior (`(T | null) => void`).
+
 # 0.2.54
 
 **Performance Improvements**
