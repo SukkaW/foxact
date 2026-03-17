@@ -1,3 +1,16 @@
+# 0.3.0
+
+**BREAKING CHANGES**
+
+- Remove `foxact/use-next-link`
+  - This hook was implemented before Next.js [https://nextjs.org/docs/app/api-reference/functions/use-link-status](https://nextjs.org/docs/app/api-reference/functions/use-link-status) API was implemented, which you should use instead.
+- Remove `foxact/use-next-pathname`
+  - You can import [`usePathname`](https://nextjs.org/docs/app/api-reference/functions/use-pathname) from `next/navigation` in your Pages Router app (yes that's supported) now.
+- Remove `foxact/use-react-router-enable-concurrent-navigation`
+  - The hook was implemented before React Router had implemented the native concurrent navigation support, which is enabled by default now in React Router v7. If you are on React Router v6, enable `v7_startTransition` flag instead.
+- Remove `foxact/use-react-router-is-match`
+  - You should use [`<NavLink />`](https://reactrouter.com/api/components/NavLink), [`useMatch`](https://reactrouter.com/api/hooks/useMatch) and [`useMatches`](https://reactrouter.com/api/hooks/useMatches) from React Router instead.
+
 # 0.2.55
 
 **Core Changes**
