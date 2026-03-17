@@ -85,13 +85,5 @@ export default {
   rem: {},
   'request-idle-callback': {},
   'typescript-happy-forward-ref': {},
-  'is-safari': {},
-  '-- separator extensions': {
-    type: 'separator',
-    title: 'Extensions'
-  },
-  'use-next-link': {},
-  'use-next-pathname': {},
-  'use-react-router-enable-concurrent-navigation': {},
-  'use-react-router-is-match': {}
+  'is-safari': {}
 };
