@@ -48,17 +48,13 @@ async function createPackageJson(entries: Record<string, string>) {
     }
   };
 
-  packageJsonCopy.exports = {
+  const pkgExports: NonNullable<PackageJson['exports']> = {
     './package.json': './package.json',
     './sizes.json': './sizes.json'
   };
 
   Object.keys(entries).forEach(entryName => {
-    // This is an unnecessary check to make TypeScript happy
-    // For some reason TypeScript ignores the assignment above
-    packageJsonCopy.exports ??= {};
-
-    packageJsonCopy.exports[`./${entryName}`] = {
+    (pkgExports as Record<string, unknown>)[`./${entryName}`] = {
       types: `./${entryName}/index.d.ts`,
       import: {
         types: `./${entryName}/index.d.ts`,
@@ -68,6 +64,8 @@ async function createPackageJson(entries: Record<string, string>) {
       default: `./${entryName}/index.cjs`
     };
   });
+
+  packageJsonCopy.exports = pkgExports;
 
   await fsp.writeFile(
     path.resolve(distDir, 'package.json'),
