@@ -15,7 +15,7 @@
     "eslint": "^10.2.0",
     "eslint-config-sukka": "^8.9.2",
     "eslint-formatter-sukka": "^8.9.2",
-    "turbo": "^2.9.5",
+    "turbo": "^2.9.6",
     "typescript": "^6.0.2"
   },
   "packageManager": "pnpm@10.33.0",
