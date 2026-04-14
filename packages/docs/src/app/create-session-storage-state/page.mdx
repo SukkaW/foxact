@@ -16,7 +16,7 @@ Store your shared state that lives in sessionStorage and synchronize the state o
 ```tsx filename="src/context/sidebar-active.tsx" copy
 import { createSessionStorageState } from 'foxact/create-session-storage-state';
 
-const [useSidebarActive, useSidebarActiveValue] = createSessionStorageState(
+export const [useSidebarActive, useSidebarActiveValue] = createSessionStorageState(
   'sidebar-active', // The sessionStorage key
   /**
    * The initial value to use if there is no item in the local storage with the provided key,
@@ -37,8 +37,6 @@ const [useSidebarActive, useSidebarActiveValue] = createSessionStorageState(
     deserializer: JSON.parse,
   }
 );
-
-export { useSidebarActive, useSidebarActiveValue };
 ```
 
 And now you can use the getter and setter hooks anywhere in your app:

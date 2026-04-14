@@ -18,7 +18,7 @@ First, create a shared hooks with `createLocalStorageState`. It is recommended t
 ```tsx filename="src/context/sidebar-active.tsx" copy
 import { createLocalStorageState } from 'foxact/create-local-storage-state';
 
-const [useSidebarActive, useSidebarActiveValue] = createLocalStorageState(
+export const [useSidebarActive, useSidebarActiveValue] = createLocalStorageState(
   'sidebar-active', // The localStorage key
   /**
    * The initial value to use if there is no item in the local storage with the provided key,
@@ -39,8 +39,6 @@ const [useSidebarActive, useSidebarActiveValue] = createLocalStorageState(
     deserializer: JSON.parse,
   }
 );
-
-export { useSidebarActive, useSidebarActiveValue };
 ```
 
 And now you can use the getter and setter hooks anywhere in your app:
