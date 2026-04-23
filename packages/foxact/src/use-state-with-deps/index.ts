@@ -2,11 +2,13 @@ import { useState, useRef, useCallback } from 'react';
 import type { RefObject } from 'react';
 import { useLayoutEffect } from '../use-isomorphic-layout-effect';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- must be any for typescript to proper infer the type of S
 export function useStateWithDeps<S extends Record<string, any> = Record<string, any>>(initialState: S): [
   stateRef: RefObject<S>,
   stateDependenciesRef: RefObject<Partial<Record<keyof S, boolean>>>,
   setState: (payload: Partial<S>) => void
 ] {
+  // eslint-disable-next-line @eslint-react/use-state -- just trigger re-render
   const [, rerender] = useState<Record<string, unknown>>({});
 
   const unmountedRef = useRef(false);
