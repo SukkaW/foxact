@@ -1,3 +1,4 @@
+/* eslint-disable @eslint-react/component-hook-factories -- intentional library factory pattern */
 import { identity } from 'foxts/identity';
 
 import { createStorage } from '../create-storage-hook';
