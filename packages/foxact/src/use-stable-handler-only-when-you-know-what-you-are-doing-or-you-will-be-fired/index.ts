@@ -20,7 +20,7 @@ export function useStableHandler<Args extends any[], Result>(
   callback: (...args: Args) => Result
 ): typeof callback {
   // Keep track of the latest callback:
-  const latestRef = useRef<typeof callback>(shouldNotBeInvokedBeforeMount as any);
+  const latestRef = useRef<typeof callback>(shouldNotBeInvokedBeforeMount);
   useInsertionEffect(() => {
     latestRef.current = callback;
   }, [callback]);
@@ -35,7 +35,7 @@ export function useStableHandler<Args extends any[], Result>(
  * Render methods should be pure, especially when concurrency is used,
  * so we will throw this error if the callback is called while rendering.
  */
-function shouldNotBeInvokedBeforeMount() {
+function shouldNotBeInvokedBeforeMount(): never {
   throw new Error(
     'foxact: the stablized handler cannot be invoked before the component has mounted.'
   );
