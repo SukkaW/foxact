@@ -16,7 +16,7 @@ Store your shared state that lives in sessionStorage and synchronize the state o
 ```tsx filename="src/context/sidebar-active.tsx" copy
 import { createSessionStorageState } from 'foxact/create-session-storage-state';
 
-export const [useSidebarActive, useSidebarActiveValue] = createSessionStorageState(
+export const [useSidebarActive, useSidebarActiveValue, useSetSidebarActive] = createSessionStorageState(
   'sidebar-active', // The sessionStorage key
   /**
    * The initial value to use if there is no item in the local storage with the provided key,
@@ -39,20 +39,23 @@ export const [useSidebarActive, useSidebarActiveValue] = createSessionStorageSta
 );
 ```
 
-And now you can use the getter and setter hooks anywhere in your app:
+And now you can use these hooks anywhere in your app:
 
 ```tsx filename="s../../components/sidebar.tsx" copy
 import { memo } from 'react';
-import { useSidebarActive, useSidebarActiveValue } from '../context/sidebar-active';
+import { useSetSidebarActive, useSidebarActive, useSidebarActiveValue } from '../context/sidebar-active';
 
 function Sidebar() {
   const [sidebarActive, setSidebarActive] = useSidebarActive();
-  // If you only need the value, you can use `useSidebarActiveValue` instead:
+  // If you only need the value, you can use useSidebarActiveValue instead:
   const sidebarActive = useSidebarActiveValue();
+  // If you only need the setter, you can use useSetSidebarActive instead:
+  const setSidebarActive = useSetSidebarActive();
 
   return (
     <div className={`sidebar ${sidebarActive ? 'active' : ''}`}>
       <button onClick={() => setSidebarActive(false)}>Close Sidebar</button>
+      <button onClick={() => setSidebarActive(true)}>Open Sidebar</button>
     </div>
   );
 }

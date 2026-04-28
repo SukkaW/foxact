@@ -18,7 +18,7 @@ First, create a shared hooks with `createLocalStorageState`. It is recommended t
 ```tsx filename="src/context/sidebar-active.tsx" copy
 import { createLocalStorageState } from 'foxact/create-local-storage-state';
 
-export const [useSidebarActive, useSidebarActiveValue] = createLocalStorageState(
+export const [useSidebarActive, useSidebarActiveValue, useSetSidebarActive] = createLocalStorageState(
   'sidebar-active', // The localStorage key
   /**
    * The initial value to use if there is no item in the local storage with the provided key,
@@ -41,20 +41,23 @@ export const [useSidebarActive, useSidebarActiveValue] = createLocalStorageState
 );
 ```
 
-And now you can use the getter and setter hooks anywhere in your app:
+And now you can use these hooks anywhere in your app:
 
 ```tsx filename="s../../components/sidebar.tsx" copy
 import { memo } from 'react';
-import { useSidebarActive, useSidebarActiveValue } from '../context/sidebar-active';
+import { useSetSidebarActive, useSidebarActive, useSidebarActiveValue } from '../context/sidebar-active';
 
 function Sidebar() {
   const [sidebarActive, setSidebarActive] = useSidebarActive();
-  // If you only need the value, you can use `useSidebarActiveValue` instead:
+  // If you only need the value, you can use useSidebarActiveValue instead:
   const sidebarActive = useSidebarActiveValue();
+  // If you only need the setter, you can use useSetSidebarActive instead:
+  const setSidebarActive = useSetSidebarActive();
 
   return (
     <div className={`sidebar ${sidebarActive ? 'active' : ''}`}>
       <button onClick={() => setSidebarActive(false)}>Close Sidebar</button>
+      <button onClick={() => setSidebarActive(true)}>Open Sidebar</button>
     </div>
   );
 }
