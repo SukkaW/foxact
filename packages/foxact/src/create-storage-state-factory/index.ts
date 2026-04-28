@@ -1,11 +1,9 @@
 /* eslint-disable @eslint-react/component-hook-factories -- intentional library factory pattern */
-import { identity } from 'foxts/identity';
-
 import { createStorage } from '../create-storage-hook';
 import type { NotUndefined, StateHookTuple, StorageType, UseStorageParserOption, UseStorageRawOption } from '../create-storage-hook';
 
 export type ValueHook<T> = () => T;
-export type SetValueHook<T> = () => (value: T) => void;
+export type SetValueHook<T> = () => React.Dispatch<React.SetStateAction<T>>;
 export type StateHook<T> = () => StateHookTuple<T>;
 
 export function createStorageStateFactory(type: StorageType) {
@@ -29,14 +27,13 @@ export function createStorageStateFactory(type: StorageType) {
       deserializer: JSON.parse
     }
   ): readonly [StateHook<T>, ValueHook<T>, SetValueHook<T | null>] | readonly [StateHook<T | null>, ValueHook<T | null>, SetValueHook<T | null>] {
-    const { useStorage: useStorageOriginal, useSetStorage: useSetStorageOriginal } = createStorage(type);
+    const { useStorage: useStorageOriginal, useStorageValue: useStorageValueOriginal, useSetStorage: useSetStorageOriginal } = createStorage(type);
 
-    const useStorage = () => useStorageOriginal<T>(key, serverValue as any, options);
-    const useStorageState = () => useStorageOriginal<T>(key, serverValue as any, options)[0];
+    const useStorage = () => useStorageOriginal<T>(key, serverValue!, options);
+    const useStorageValue = () => useStorageValueOriginal<T>(key, serverValue!, options);
+    const useSetStorageValue = () => useSetStorageOriginal<T>(key, options);
 
-    const useSetStorageValue = () => useSetStorageOriginal(key, options.raw ? identity<T, string> : options.serializer);
-
-    return [useStorage, useStorageState, useSetStorageValue];
+    return [useStorage, useStorageValue, useSetStorageValue];
   };
 
   return createStorageState;

@@ -35,14 +35,14 @@ export interface UseStorageParserOption<T> {
   deserializer: Deserializer<T>
 }
 
-function getServerSnapshotWithoutServerValue(): never {
-  throw noSSRError('useLocalStorage cannot be used on the server without a serverValue');
-}
-
 export function createStorage(type: StorageType) {
   const FOXACT_LOCAL_STORAGE_EVENT_KEY = type === 'localStorage' ? 'foxact-use-local-storage' : 'foxact-use-session-storage';
 
   const foxactHookName = type === 'localStorage' ? 'foxact/use-local-storage' : 'foxact/use-session-storage';
+
+  function getServerSnapshotWithoutServerValue(): never {
+    throw noSSRError(`[${foxactHookName}] cannot be used on the server without a serverValue`);
+  }
 
   const dispatchStorageEvent = typeof window === 'undefined'
     ? noop
@@ -86,34 +86,56 @@ export function createStorage(type: StorageType) {
     }
   };
 
-  const useSetStorage = <T>(key: string, serializer: Serializer<T>) => useCallback(
-    (v: T | null) => {
-      try {
-        if (v === null) {
-          removeStorageItem(key);
-        } else {
-          setStorageItem(key, serializer(v));
+  const useSetStorage = <T>(
+    key: string,
+    // eslint-disable-next-line sukka/unicorn/no-object-as-default-parameter -- two different shape of options
+    options: UseStorageRawOption | UseStorageParserOption<T> = {
+      raw: false,
+      serializer: JSON.stringify,
+      deserializer: JSON.parse
+    }
+  ) => {
+    const serializer: Serializer<T> = options.raw ? identity : options.serializer;
+    const deserializer: Deserializer<T> = options.raw ? identity : options.deserializer;
+
+    return useCallback(
+      (v: React.SetStateAction<T | null>) => {
+        try {
+          let nextState: T | null;
+          if (isFunction(v)) {
+            const currentRaw = getStorageItem(key);
+            const currentState = currentRaw === null ? null : deserializer(currentRaw);
+            nextState = v(currentState);
+          } else {
+            nextState = v;
+          }
+
+          if (nextState === null) {
+            removeStorageItem(key);
+          } else {
+            setStorageItem(key, serializer(nextState));
+          }
+        } catch (e) {
+          console.warn(e);
         }
-      } catch (e) {
-        console.warn(e);
-      }
-    },
-    [key, serializer]
-  );
+      },
+      [key, serializer, deserializer]
+    );
+  };
 
   // ssr compatible
-  function useStorage<T>(
+  function useStorageValue<T>(
     key: string,
     serverValue: NotUndefined<T>,
     options?: UseStorageRawOption | UseStorageParserOption<T>
-  ): StateHookTuple<T>;
+  ): T;
   // client-render only
-  function useStorage<T>(
+  function useStorageValue<T>(
     key: string,
     serverValue?: undefined,
     options?: UseStorageRawOption | UseStorageParserOption<T>
-  ): StateHookTuple<T | null>;
-  function useStorage<T>(
+  ): T | null;
+  function useStorageValue<T>(
     key: string,
     serverValue?: NotUndefined<T>,
     // eslint-disable-next-line sukka/unicorn/no-object-as-default-parameter -- two different shape of options
@@ -122,7 +144,7 @@ export function createStorage(type: StorageType) {
       serializer: JSON.stringify,
       deserializer: JSON.parse
     }
-  ): StateHookTuple<T> | StateHookTuple<T | null> {
+  ): T | null {
     const subscribeToSpecificKeyOfLocalStorage = useCallback((callback: () => void) => {
       if (typeof window === 'undefined') {
         return noop;
@@ -169,25 +191,6 @@ export function createStorage(type: StorageType) {
 
     const deserialized = useMemo(() => (store === null ? null : deserializer(store)), [store, deserializer]);
 
-    const setState = useCallback<React.Dispatch<React.SetStateAction<T | null>>>(
-      (v) => {
-        try {
-          const nextState = isFunction(v)
-            ? v(deserialized ?? null)
-            : v;
-
-          if (nextState === null) {
-            removeStorageItem(key);
-          } else {
-            setStorageItem(key, serializer(nextState));
-          }
-        } catch (e) {
-          console.warn(e);
-        }
-      },
-      [key, serializer, deserialized]
-    );
-
     useLayoutEffect(() => {
       if (
         getStorageItem(key) === null
@@ -195,9 +198,9 @@ export function createStorage(type: StorageType) {
       ) {
         setStorageItem(key, serializer(serverValue));
       }
-    }, [deserializer, key, serializer, serverValue]);
+    }, [key, serializer, serverValue]);
 
-    const finalValue: T | null = deserialized === null
+    return deserialized === null
       // storage doesn't have value
       ? (serverValue === undefined
         // no default value provided
@@ -205,12 +208,39 @@ export function createStorage(type: StorageType) {
         : serverValue satisfies NotUndefined<T>)
       // storage has value
       : deserialized satisfies T;
+  }
 
-    return [finalValue, setState] as const;
+  // ssr compatible
+  function useStorage<T>(
+    key: string,
+    serverValue: NotUndefined<T>,
+    options?: UseStorageRawOption | UseStorageParserOption<T>
+  ): StateHookTuple<T>;
+  // client-render only
+  function useStorage<T>(
+    key: string,
+    serverValue?: undefined,
+    options?: UseStorageRawOption | UseStorageParserOption<T>
+  ): StateHookTuple<T | null>;
+  function useStorage<T>(
+    key: string,
+    serverValue?: NotUndefined<T>,
+    // eslint-disable-next-line sukka/unicorn/no-object-as-default-parameter -- two different shape of options
+    options: UseStorageRawOption | UseStorageParserOption<T> = {
+      raw: false,
+      serializer: JSON.stringify,
+      deserializer: JSON.parse
+    }
+  ): StateHookTuple<T> | StateHookTuple<T | null> {
+    const value: T | null = useStorageValue<T>(key, serverValue!, options);
+    const setState = useSetStorage<T>(key, options);
+
+    return [value, setState] as const;
   }
 
   return {
-    useStorage,
-    useSetStorage
+    useStorageValue,
+    useSetStorage,
+    useStorage
   };
 }
