@@ -7,7 +7,7 @@ import { createStorageStateFactory } from '../create-storage-state-factory';
  *
  * @example
  * ```ts
- * const [useOpenState, useOpen] = createLocalStorageState(
+ * const [useOpenState, useOpen, useSetOpen] = createLocalStorageState(
  *   'open', // storage key
  *   false, // server default value
  *   { raw: false } // options
@@ -15,6 +15,7 @@ import { createStorageStateFactory } from '../create-storage-state-factory';
  *
  * const [open, setOpen] = useOpenState();
  * const open = useOpen();
+ * const setOpen = useSetOpen();
  * ```
  */
 export const createLocalStorageState = createStorageStateFactory('localStorage');

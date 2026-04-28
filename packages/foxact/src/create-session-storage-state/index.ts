@@ -8,7 +8,7 @@ import { createStorageStateFactory } from '../create-storage-state-factory';
  * @example
  * ```ts
  * ```ts
- * const [useOpenState, useOpen] = createSessionStorageState(
+ * const [useOpenState, useOpen, useSetOpen] = createSessionStorageState(
  *   'open', // storage key
  *   false, // server default value
  *   { raw: false } // options
@@ -16,6 +16,7 @@ import { createStorageStateFactory } from '../create-storage-state-factory';
  *
  * const [open, setOpen] = useOpenState();
  * const open = useOpen();
+ * const setOpen = useSetOpen();
  * ```
  */
 export const createSessionStorageState = createStorageStateFactory('sessionStorage');
