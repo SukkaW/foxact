@@ -1,3 +1,10 @@
+# 0.3.1
+
+**Core Changes**
+
+- Add undocumented `createStacklessError` utility function, which creates an error without stack trace (Firefox and SpiderMonkey are not supported). This is an internal utility that is exposed for some other libraries to use.
+- Previously, `foxact/create-local-storage-state` and `foxact/create-session-storage-state` has an undocumented 3rd returned hook, which is the setter hook. The implementation is now finalized, stable, and documented.
+
 # 0.3.0
 
 **BREAKING CHANGES**
