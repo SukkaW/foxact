@@ -72,7 +72,7 @@ export default memo(function Navbar() {
 });
 ```
 
-See the full [`foxact/context-state`](/context-state) docs for more details, like how to provide an initial state within the react tree instead of at the module level. You may be also interested in [`foxact/context-reducer`](/context-reducer) where you can do the same thing but with `reducer` and `dispatch`.
+See the full [`foxact/context-state`](/context-state) docs for more details, like how to provide an initial state within the React tree instead of at the module level. You may also be interested in [`foxact/context-reducer`](/context-reducer) where you can do the same thing but with `reducer` and `dispatch`.
 
 <Callout type="info">
 
@@ -216,7 +216,7 @@ export function useUser(userId: string) {
 }
 ```
 
-Now you can call `useUser` anywhere in your app and they will all share the same underlying data with only one HTTP request toward your backend (that's the deduplication!):
+Now you can call `useUser` anywhere in your app, and they will share the same underlying data with only one HTTP request toward your backend (that's the deduplication!):
 
 ```tsx filename="src/components/profile.tsx" copy
 'use client';
@@ -321,7 +321,7 @@ export function useIsPanelActive() {
 }
 ```
 
-If your computation is asynchronous, or your source is coming from an async source, you may use `useSWR` and compute it in your `fetcher` function, so that it can be cached and only computed during first fetch and later cache invalidations:
+If your computation is asynchronous, or it is coming from an async source, you may use `useSWR` and compute it in your `fetcher` function. It will then be cached and only computed during first fetch and later cache invalidations:
 
 ```tsx filename="src/hooks/use-server-config.ts" copy
 'use client';
@@ -354,12 +354,91 @@ const useLocalConfigFromIndexedDB = (key) => {
     { key },
     async ({ key }) => {
       const localData = await idbkvInstance.current.get(key);
+      // run computation here
       return makeTransformation(await deserialize(localData));
     }
   );
 }
 ```
 
+## But I need to render a stream/flow of changing data!
+
+Streaming and subscription logic like this might look like a job for a global state management library — but aforementioned `SWR` (which, as I mentioned earlier, is a global state management library) is still your best friend to handle this kind of complex logic.
+
+**WebSocket and alike**
+
+```tsx copy
+'use client';
+
+import useSWRSubscription from 'swr/subscription';
+import type { SWRSubscription } from 'swr/subscription';
+
+useSWRSubscription(
+  'my-websocket-channel',
+  (channel, { next }) => {
+    const ws = new WebSocket(`wss://example.com/ws/${channel}`);
+    ws.onmessage = (event) => { next(null, JSON.parse(event.data)); };
+    ws.onerror = (err) => { next(err); };
+
+    return () => ws.close();
+  }
+);
+```
+
+**Server-Sent Events (SSE)**
+
+```tsx copy
+'use client';
+
+import { fetchEventSource } from '@microsoft/fetch-event-source';
+import useSWRSubscription from 'swr/subscription';
+
+useSWRSubscription(
+  channel,
+  (channel, { next }) => {
+    const abortController = new AbortController();
+
+    fetchEventSource(`/api/feed/${channel}`, {
+      signal: abortController.signal,
+      onmessage(ev) { next(null, JSON.parse(ev.data)); },
+      onerror(err) { next(err); },
+    });
+
+    return () => abortController.abort();
+  }
+);
+```
+
+**Generators and Iterators**
+
+```tsx copy
+'use client';
+
+import useSWRSubscription from 'swr/subscription';
+
+useSWRSubscription(
+  channel,
+  (channel, { next }) => {
+    const abortController = new AbortController();
+
+    (async () => {
+      try {
+        for await (const data of await getAsyncIterableSource(channel)) {
+          if (abortController.signal.aborted) {
+            return;
+          }
+          next(null, data);
+        }
+      } catch (err) {
+        next(err);
+      }
+    })();
+
+    return () => abortController.abort();
+  }
+);
+```
+
 ----
 
-Of course, there are many other cases where you don't need a global state management library, and there are also cases where you do need a global state management library for your complex logic. The bottom line is: most of the time, React already provides you with the tools you need to manage your state without an external library. Reach for a global state management library only when you have a clear need for it, and be mindful of the trade-offs it brings!
+Of course, there are many other cases where you don't need a global state management library, and there are also cases where you do need a global state management library for your complex logic. The bottom line is: reach for a global state management library only when you have a clear need for it, and be mindful of the trade-offs it brings!
