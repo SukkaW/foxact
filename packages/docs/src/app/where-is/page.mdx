@@ -25,6 +25,7 @@ const useBarcodeDetectorInstance = () => useSWRImmutable(
   async () => {
     let isUseBrowserBuiltInBarcodeDetector = 'BarcodeDetector' in window;
     if (isUseBrowserBuiltInBarcodeDetector) {
+      // feature detection
       try {
         window.BarcodeDetector.getSupportedFormats();
       } catch {

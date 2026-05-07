@@ -1,0 +1,365 @@
+---
+title: You might not need a global state management library, most of the time
+---
+
+import { Callout } from 'nextra/components'
+
+
+# You might not need a global state management library, most of the time
+
+Global state management libraries like [Redux](https://redux.js.org/), [Zustand](https://zustand.docs.pmnd.rs/) or [Jotai](https://jotai.org/) are powerful tools, but they come with trade-offs. They store state outside of React and use `useSyncExternalStore` (Jotai basically re-implements `useSyncExternalStore` with `useReducer` with potential slight tearing) to sync it back in.
+
+Before reaching for a global state library, ask yourself: does this state *actually* need to live outside of React? Most of the time, the answer is likely no.
+
+## But I want to access some state across components, pages, or even entire applications!
+
+Most of the time, you just need to lift your state up in your React tree. [`foxact/context-state`](/context-state) makes it easy to create providers and hooks with minimal boilerplate:
+
+```tsx filename="src/context/sidebar-active.tsx" copy
+'use client';
+
+import { createContextState } from 'foxact/context-state';
+
+export const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive] = createContextState(false);
+```
+
+Wrap your layout (or any shared ancestor) with the provider:
+
+```tsx filename="src/layout/main-layout.tsx" copy
+import { memo } from 'react';
+import { SidebarActiveProvider } from '../context/sidebar-active';
+
+export default memo(function MainLayout({ children }: React.PropsWithChildren) {
+  return (
+    <SidebarActiveProvider>
+      {children}
+    </SidebarActiveProvider>
+  );
+});
+```
+
+Then read and update the state anywhere inside the subtree by importing the hooks:
+
+```tsx filename="src/components/sidebar.tsx" copy
+import { memo } from 'react';
+import { useSidebarActive, useSetSidebarActive } from '../context/sidebar-active';
+
+export default memo(function Sidebar() {
+  const sidebarActive = useSidebarActive();
+  const setSidebarActive = useSetSidebarActive();
+
+  return (
+    <div className={`sidebar ${sidebarActive ? 'active' : ''}`}>
+      <button onClick={() => setSidebarActive(false)}>Close Sidebar</button>
+    </div>
+  );
+});
+```
+
+```tsx filename="src/components/navbar.tsx" copy
+import { memo } from 'react';
+import { useSetSidebarActive } from '../context/sidebar-active';
+
+export default memo(function Navbar() {
+  // Only calls the setter — this component never re-renders when sidebarActive changes
+  const setSidebarActive = useSetSidebarActive();
+
+  return (
+    <div className="navbar">
+      <button onClick={() => setSidebarActive(active => !active)}>Menu Button</button>
+    </div>
+  );
+});
+```
+
+See the full [`foxact/context-state`](/context-state) docs for more details, like how to provide an initial state within the react tree instead of at the module level. You may be also interested in [`foxact/context-reducer`](/context-reducer) where you can do the same thing but with `reducer` and `dispatch`.
+
+<Callout type="info">
+
+Tips: If you have multiple context states, you can use [`foxact/compose-context-provider`](/compose-context-provider) to avoid nesting JSX hell:
+
+```tsx filename="src/layout/main-layout.tsx" copy
+import { memo } from 'react';
+import { ComposeContextProvider } from 'foxact/compose-context-provider';
+
+export default memo(function MainLayout({ children }: React.PropsWithChildren) {
+  return (
+    <ComposeContextProvider
+      providers={[
+        <ProivderA />,
+        <ProviderB initialState={42} />,
+        <ProviderC initialState={() => 13} />,
+        <SWRConfig value={{ keepPreviousData: true }} />
+      ]}
+    >
+      {children}
+    </ComposeContextProvider>
+  );
+});
+```
+
+</Callout>
+
+## But I want to persist states via localStorage!
+
+If you need the same `localStorage`-backed value across multiple components and want them all to stay in sync, use [`foxact/create-local-storage-state`](/create-local-storage-state). It is kinda like `createContextState` but reads from and writes to `localStorage`:
+
+```tsx filename="src/state/user-config.ts" copy
+import { createLocalStorageState } from 'foxact/create-local-storage-state';
+
+export const [useUserConfigState, useUserConfigValue, useSetUserConfig] = createLocalStorageState(
+  'app-local-setting', // localStorage key
+  {}, // Initial / SSR server value
+  {
+    // Optional serialize and deserialize options goes here.
+    // Default to JSON.stringify and JSON.parse, you can also
+    // specify `raw: true` here to store and read value as-is
+  }
+);
+```
+
+Then use the hooks anywhere in your app:
+
+```tsx filename="src/components/a.tsx" copy
+import { memo } from 'react';
+import { useUserConfigValue, useUserConfigState } from '../state/user-config';
+
+export default memo(function ComponentA() {
+  const config = useUserConfigValue();
+});
+
+function Toggle() {
+  const [config, setConfig] = useUserConfigState();
+
+  return (
+    <Switch
+      value={config.someFlag}
+      onChange={useCallback((newValue) => {
+        setConfig(prev => ({ ...prev, someFlag: newValue }));
+      }, [setConfig])}
+      // `setConfig` is memoized, so it's safe to add it to dependencies array
+    />
+  )
+}
+```
+
+```tsx filename="src/components/config-editor.tsx" copy
+import { memo } from 'react';
+import { useSetUserConfig } from '../state/user-config';
+
+export default memo(function ConfigEditor() {
+  const setUserConfig = useSetUserConfig();
+
+  const handleSaveButtonClick = useCallback(() => {
+    setUserConfig(newConfig);
+  }, [setUserConfig]);
+  // `setUserConfig` is memoized, so it's safe to add it to dependencies array
+});
+```
+
+All components that call `useUserConfigValue()`, `useSetUserConfig()`, or `useUserConfigState()` will use the `localStorage` as the single source of truth and stay in sync automatically — including across browser tabs.
+
+Read the full [`foxact/create-local-storage-state`](/create-local-storage-state) docs for more usage details, including how you can use `<Suspense />` or server default value to support server-side rendering.
+
+If you only need to read and write a `localStorage` value in one component, [`foxact/use-local-storage`](/use-local-storage) is the perfect tool for the job. It is a drop-in replacement for `useState` that syncs with `localStorage`:
+
+```tsx filename="src/components/shape-picker.tsx" copy
+import { useLocalStorage } from 'foxact/use-local-storage';
+
+function ShapePicker() {
+  const [shape, setShape] = useLocalStorage<'circle' | 'square' | 'triangle'>(
+    'shape', // localStorage key
+    'circle', // initial / SSR value
+    /**
+     * serialize and deserialize options goes here, default to JSON.stringify and JSON.parse.
+     *
+     * you can also specify `raw: true` here to store and read value as-is, just like what
+     * we are doing here.
+     */
+    { raw: true }
+  );
+
+  return (
+    <div>
+      <button onClick={() => setShape('circle')}>Circle</button>
+      <button onClick={() => setShape('square')}>Square</button>
+      <button onClick={() => setShape('triangle')}>Triangle</button>
+      <p>Current shape: {shape}</p>
+    </div>
+  );
+}
+```
+
+And your `shape` state is now persisted in `localStorage` and shared across all tabs automatically!
+
+Read the full [`foxact/use-local-storage`](/use-local-storage) docs for more usage details, including how you can use `<Suspense />` or server default value to support server-side rendering.
+
+## But I want to fetch some data and share it across components and pages!
+
+Use libraries like [SWR](https://swr.vercel.app/) instead. Under the hood, SWR is actually also a global state management library, but it is designed and optimized specifically for remote data fetching with built-in caching, deduplication, and cache revalidation. It is a great choice for most data fetching needs in React apps:
+
+```tsx filename="src/hooks/user.ts" copy
+'use client';
+
+import useSWR from 'swr';
+
+export function useUser(userId: string) {
+  return useSWR(
+    // you can pass any value as the SWR key, most examples use string, but
+    // here we use an object to demonstrate that SWR can also accept non-string keys
+    {
+      url: `/api/user/${userId}`,
+      method: 'GET'
+    },
+    ({ url, method }) => fetch(url, { method }).then(res => res.json())
+  );
+}
+```
+
+Now you can call `useUser` anywhere in your app and they will all share the same underlying data with only one HTTP request toward your backend (that's the deduplication!):
+
+```tsx filename="src/components/profile.tsx" copy
+'use client';
+
+import { memo } from 'react';
+import { useUser } from '../hooks/user';
+
+export default memo(function Profile({ userId }: { userId: string }) {
+  const { data: user, error, isLoading } = useUser(userId);
+
+  if (error) return <div>Failed to load user</div>;
+  if (isLoading) return <div>Loading...</div>;
+
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>{user.email}</p>
+    </div>
+  );
+});
+```
+
+```tsx filename="src/components/navbar.tsx" copy
+'use client';
+
+import { memo } from 'react';
+import { useUser } from '../hooks/user';
+
+export default memo(function Navbar({ userId }: { userId: string }) {
+  const { data: user } = useUser(userId);
+
+  return (
+    <nav>
+      <img
+        src={user?.avatarUrl || '/avatar-loading.svg'}
+        alt={user ? `${user.name}'s Avatar` : 'User Avatar is loading'}
+      />
+    </nav>
+  );
+});
+```
+
+And you can use `useSWR` for anything asynchronous, not just remote data fetching:
+
+```tsx filename="src/hooks/use-barcode-detector.ts" copy
+'use client';
+
+import useSWRImmutable from 'swr/immutable';
+
+const useBarcodeDetectorInstance = () => useSWRImmutable(
+  'get-barcode-detector',
+  async () => {
+    let isUseBrowserBuiltInBarcodeDetector = 'BarcodeDetector' in window;
+    // feature detection
+    if (isUseBrowserBuiltInBarcodeDetector) {
+      try {
+        window.BarcodeDetector.getSupportedFormats();
+      } catch {
+        isUseBrowserBuiltInBarcodeDetector = false;
+      }
+    }
+    try {
+      const BarcodeDetectorImpl = isUseBrowserBuiltInBarcodeDetector
+        ? window.BarcodeDetector
+        : (await import('@preflower/barcode-detector-polyfill')).BarcodeDetectorPolyfill;
+
+      const supportedFormats = await BarcodeDetectorImpl.getSupportedFormats();
+      if (supportedFormats.includes('qr_code')) {
+        return new BarcodeDetectorImpl({ formats: ['qr_code'] });
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
+);
+```
+
+<Callout type="info">
+
+If you are using [SWR](https://swr.vercel.app/) together with [Hey API](https://heyapi.dev/) (generate TypeScript Client SDK from OpenAPI spec), you may be interested in [tayori](https://github.com/SukkaW/tayori), an opinionated React client-side data fetching stack built on top of SWR, Hey API, Ky, and Zod.
+
+</Callout>
+
+## But I need to produce derived state from other states and share it across components and pages!
+
+If your derived state is synchronous and cheap to compute, you can do it on the fly in your components. You can also use `useMemo` to memoize the derived state to prevent unnecessary re-computations and re-renders:
+
+```tsx filename="src/context/sidebar-active.tsx" copy
+'use client';
+
+import { createContextState } from 'foxact/context-state';
+
+export const [SidebarActiveProvider, useSidebarActive, useSetSidebarActive] = createContextState(false);
+export const [GlobalDrawerProvider, useGlobalDrawer, useSetGlobalDrawer] = createContextState(false);
+
+// This is an over-simplified example to demonstrate the point
+export function useIsPanelActive() {
+  const sidebarActive = useSidebarActive();
+  const globalDrawer = useGlobalDrawer();
+  return useMemo(() => sidebarActive && globalDrawer, [sidebarActive, globalDrawer]);
+}
+```
+
+If your computation is asynchronous, or your source is coming from an async source, you may use `useSWR` and compute it in your `fetcher` function, so that it can be cached and only computed during first fetch and later cache invalidations:
+
+```tsx filename="src/hooks/use-server-config.ts" copy
+'use client';
+
+import useSWR from 'swr';
+
+const useFinalizedServerConfig = () => useSWR(
+  { url: '/api/server-config', method: 'GET' },
+  async ({ url, method }) => {
+    const r = await fetch(url, { method });
+    const rawConfig = await r.json();
+    // run computation here
+    return await produceFinalConfig(rawConfig)
+  }
+);
+
+const { data: finalizedConfig, error, isLoading } = useFinalizedServerConfig();
+```
+
+```tsx filename="src/hooks/use-indexed-db-data.ts" copy
+import { useSingleton } from 'foxact/use-singleton';
+import useSWRImmutable from 'swr/immutable';
+
+const useLocalConfigFromIndexedDB = (key) => {
+  // `useSingleton` is a hook provided by `foxact` that only runs the initializer
+  // function once and holds the same return value across re-renders
+  const idbkvInstance = useSingleton(() => new IDBKeyVal('my-db', 'my-store'));
+
+  return useSWRImmutable(
+    { key },
+    async ({ key }) => {
+      const localData = await idbkvInstance.current.get(key);
+      return makeTransformation(await deserialize(localData));
+    }
+  );
+}
+```
+
+----
+
+Of course, there are many other cases where you don't need a global state management library, and there are also cases where you do need a global state management library for your complex logic. The bottom line is: most of the time, React already provides you with the tools you need to manage your state without an external library. Reach for a global state management library only when you have a clear need for it, and be mindful of the trade-offs it brings!
