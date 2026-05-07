@@ -55,6 +55,7 @@ export default {
   'use-media-query': {},
   'use-page-visibility': {},
   'use-retimer': {},
+  'use-readonly-search-params': {},
   'use-session-storage': {},
   'use-singleton': {},
   'use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired': {
