@@ -44,7 +44,7 @@ Then, wrap your app with the provider:
 import { memo } from 'react';
 import { SidebarActiveProvider } from '../context/sidebar-active';
 
-function MainLayout({ children }: React.PropsWithChildren) {
+export default memo(function MainLayout({ children }: React.PropsWithChildren) {
   return (
     <SidebarActiveProvider>
       <div>
@@ -52,9 +52,7 @@ function MainLayout({ children }: React.PropsWithChildren) {
       </div>
     </SidebarActiveProvider>
   );
-}
-
-export default memo(MainLayout);
+});
 ```
 
 And now you can use the getter and setter hooks anywhere in your app:
@@ -63,7 +61,7 @@ And now you can use the getter and setter hooks anywhere in your app:
 import { memo } from 'react';
 import { useSidebarActive, useSetSidebarActive } from '../context/sidebar-active';
 
-function Sidebar() {
+export default memo(function Sidebar() {
   const sidebarActive = useSidebarActive();
   const setSidebarActive = useSetSidebarActive();
 
@@ -72,16 +70,14 @@ function Sidebar() {
       <button onClick={() => setSidebarActive(false)}>Close Sidebar</button>
     </div>
   );
-}
-
-export default memo(Sidebar);
+});
 ```
 
 ```tsx filename="s../../components/navbar.tsx" copy
 import { memo } from 'react';
 import { useToggleSidebarActive } from '../context/sidebar-active';
 
-function Navbar() {
+export default memo(function Navbar() {
   const toggleSidebarActive = useToggleSidebarActive();
 
   return (
@@ -89,12 +85,27 @@ function Navbar() {
       <button onClick={toggleSidebarActive}>Menu Button</button>
     </div>
   );
-}
-
-export default memo(Navbar);
+});
 ```
 
 And when the sidebar active state is changed, only the component that uses `useSidebarActive()` hook will be re-rendered, in this case the only affected component is `<Sidebar />`.
+
+## Provide initial state within the React tree
+
+The initial state can also be provided within the React tree by passing it as a prop to the provider:
+
+```tsx filename="src/layout/main-layout.tsx" copy
+import { memo } from 'react';
+import { SidebarActiveProvider } from '../context/sidebar-active';
+
+export default memo(function MainLayout({ children }: React.PropsWithChildren) {
+  return (
+    <SidebarActiveProvider initialState={true}>
+      {children}
+    </SidebarActiveProvider>
+  );
+});
+```
 
 ## Read context state conditionally
 
@@ -120,7 +131,7 @@ interface SidebarProps {
   loggedIn: boolean
 }
 
-function Sidebar({ loggedIn }: SidebarProps) {
+export default memo(function Sidebar({ loggedIn }: SidebarProps) {
   // This is only for the demonstration purpose to show `React.use` can be called conditionally
   if (!loggedIn) {
     return (
@@ -138,7 +149,5 @@ function Sidebar({ loggedIn }: SidebarProps) {
       <div>Welcome back, Sukka!</div>
     </div>
   );
-}
-
-export default memo(Sidebar);
+});
 ```
