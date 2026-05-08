@@ -196,7 +196,7 @@ Read the full [`foxact/use-local-storage`](/use-local-storage) docs for more usa
 
 ## But I want to fetch some data and share it across components and pages!
 
-Use libraries like [SWR](https://swr.vercel.app/) instead. Under the hood, SWR is actually also a global state management library, but it is designed and optimized specifically for remote data fetching with built-in caching, deduplication, and cache revalidation. It is a great choice for most data fetching needs in React apps:
+Async resources like remote data fetching is actually a good use case for global state management libraries. Under the hood, libraries like [SWR](https://swr.vercel.app/) are global state management libraries, but unlike those general-purpose global state management libraries (like Redux, Zustand, Jotai we mentioned earlier), [SWR](https://swr.vercel.app/) is designed and optimized specifically for remote data fetching with built-in caching, deduplication, and cache revalidation. It is a great choice for most data fetching needs in React apps:
 
 ```tsx filename="src/hooks/user.ts" copy
 'use client';
@@ -363,7 +363,7 @@ const useLocalConfigFromIndexedDB = (key) => {
 
 ## But I need to render a stream/flow of changing data!
 
-Streaming and subscription logic like this might look like a job for a global state management library — but aforementioned `SWR` (which, as I mentioned earlier, is a global state management library) is still your best friend to handle this kind of complex logic.
+Streaming and subscription logic like this is another good use case for a global state management library — but aforementioned `SWR` (which, as I already mentioned earlier, is a global state management library) is still your best friend to handle this kind of state.
 
 **WebSocket and alike**
 
