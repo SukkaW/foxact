@@ -18,6 +18,7 @@
     "nextra-theme-docs": "^4.6.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
+    "schema-dts": "^2.0.0",
     "swr": "^2.4.1",
     "ufo": "^1.6.4"
   },

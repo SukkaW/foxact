@@ -7,6 +7,55 @@ import '../styles/main.css';
 
 import { CurrentYear } from 'foxact/current-year';
 import type { Metadata } from 'next';
+import type { Graph, Person, SoftwareSourceCode, WebSite, WebPage } from 'schema-dts';
+
+const jsonLd: Graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': 'https://skk.moe/#identity',
+      name: 'Sukka',
+      url: 'https://skk.moe',
+      sameAs: [
+        'https://github.com/SukkaW',
+        'https://twitter.com/isukkaw'
+      ]
+    } satisfies Person,
+    {
+      '@type': 'WebSite',
+      '@id': 'https://foxact.skk.moe/#website',
+      url: 'https://foxact.skk.moe',
+      name: 'foxact',
+      description: 'React Hooks/Utils done right. For browser, SSR, and React Server Components.',
+      author: { '@id': 'https://skk.moe/#identity' }
+    } satisfies WebSite,
+    {
+      '@type': 'WebPage',
+      '@id': 'https://foxact.skk.moe/#webpage',
+      url: 'https://foxact.skk.moe',
+      name: 'foxact - Made by Sukka',
+      isPartOf: { '@id': 'https://foxact.skk.moe/#website' },
+      about: { '@id': 'https://foxact.skk.moe/#software' },
+      description: 'Documentation for foxact — React Hooks/Utils done right. For browser, SSR, and React Server Components.'
+    } satisfies WebPage,
+    {
+      '@type': 'SoftwareSourceCode',
+      '@id': 'https://foxact.skk.moe/#software',
+      name: 'foxact',
+      description: 'React Hooks/Utils done right. For browser, SSR, and React Server Components. Made by Sukka.',
+      url: 'https://foxact.skk.moe',
+      codeRepository: 'https://github.com/SukkaW/foxact',
+      programmingLanguage: 'TypeScript',
+      runtimePlatform: 'Node.js',
+      license: 'https://opensource.org/licenses/MIT',
+      author: { '@id': 'https://skk.moe/#identity' }
+    } satisfies SoftwareSourceCode
+  ]
+};
+
+const serializeJsonLd = (data: unknown) => JSON.stringify(data).replaceAll('<', String.raw`\u003c`).replaceAll('>', String.raw`\u003e`);
+
 
 export const metadata: Metadata = {
   title: {
@@ -80,7 +129,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <Head />
       <body>
         <Layout
           navbar={navbar}
@@ -91,6 +139,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         >
           {children}
         </Layout>
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+        />
       </body>
     </html>
   );
