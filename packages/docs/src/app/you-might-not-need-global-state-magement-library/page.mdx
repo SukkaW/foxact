@@ -13,7 +13,7 @@ Before reaching for a global state library, ask yourself: does this state *actua
 
 ## But I want to access some state across components, pages, or even entire applications!
 
-Most of the time, you just need to lift your state up in your React tree. [`foxact/context-state`](/context-state) makes it easy to create providers and hooks with minimal boilerplate:
+Most of the time, you just need to lift your `useState` up in your React tree. [`foxact/context-state`](/context-state) makes it easy to create providers and hooks with minimal boilerplate and avoid prop drilling:
 
 ```tsx filename="src/context/sidebar-active.tsx" copy
 'use client';
@@ -196,7 +196,7 @@ Read the full [`foxact/use-local-storage`](/use-local-storage) docs for more usa
 
 ## But I want to fetch some data and share it across components and pages!
 
-Async resources like remote data fetching is actually a good use case for global state management libraries. Under the hood, libraries like [SWR](https://swr.vercel.app/) are global state management libraries, but unlike those general-purpose global state management libraries (like Redux, Zustand, Jotai we mentioned earlier), [SWR](https://swr.vercel.app/) is designed and optimized specifically for remote data fetching with built-in caching, deduplication, and cache revalidation. It is a great choice for most data fetching needs in React apps:
+Async resources like remote data fetching is actually a good use case for global state management libraries. Under the hood, libraries like [SWR](https://swr.vercel.app/) are actually also global state management libraries, but unlike those general-purpose global state management libraries (like Redux, Zustand, Jotai we mentioned earlier), [SWR](https://swr.vercel.app/) is designed and optimized specifically for remote data fetching with built-in caching, deduplication, and cache revalidation. It is a great choice for most data fetching needs in React apps:
 
 ```tsx filename="src/hooks/user.ts" copy
 'use client';
@@ -297,7 +297,7 @@ const useBarcodeDetectorInstance = () => useSWRImmutable(
 
 <Callout type="info">
 
-If you are using [SWR](https://swr.vercel.app/) together with [Hey API](https://heyapi.dev/) (generate TypeScript Client SDK from OpenAPI spec), you may be interested in [tayori](https://github.com/SukkaW/tayori), an opinionated React client-side data fetching stack built on top of SWR, Hey API, Ky, and Zod.
+If you are using [SWR](https://swr.vercel.app/) together with [Hey API](https://heyapi.dev/) (generate TypeScript Client SDK from OpenAPI spec), you may be interested in [tayori](https://github.com/SukkaW/tayori), an opinionated React client-side data fetching stack built on top of SWR and Hey API.
 
 </Callout>
 
@@ -363,7 +363,7 @@ const useLocalConfigFromIndexedDB = (key) => {
 
 ## But I need to render a stream/flow of changing data!
 
-Streaming and subscription logic like this is another good use case for a global state management library — but aforementioned `SWR` (which, as I already mentioned earlier, is a global state management library) is still your best friend to handle this kind of state.
+Streaming and subscription logic like this is another good use case for a global state management library — but aforementioned [SWR](https://swr.vercel.app/) (which, as I already mentioned earlier, is a global state management library) is still your best friend to handle this kind of state.
 
 **WebSocket and alike**
 
@@ -371,7 +371,6 @@ Streaming and subscription logic like this is another good use case for a global
 'use client';
 
 import useSWRSubscription from 'swr/subscription';
-import type { SWRSubscription } from 'swr/subscription';
 
 useSWRSubscription(
   'my-websocket-channel',
