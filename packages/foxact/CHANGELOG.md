@@ -2,7 +2,7 @@
 
 **Core Changes**
 
-- Make `NoopComponent` a client component. This is to avoid potential issues when `<NoopComponent />` is passed to a React Server Components that uses `React.cloneElement` under the hood.
+- Make `NoopComponent` a client component. This is to avoid potential issues when `<NoopComponent />` is passed to React Server Components that uses `React.cloneElement` under the hood.
 
 # 0.3.2
 
