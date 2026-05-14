@@ -6,13 +6,13 @@
     "jsx": "react-jsx",
     "module": "preserve",
     "moduleResolution": "bundler",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "allowJs": true,
     "noEmit": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    },
     "plugins": [
       {
         "name": "next"

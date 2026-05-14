@@ -1,6 +1,6 @@
 import { Footer, Layout, Navbar } from 'nextra-theme-docs';
 import { getPageMap } from 'nextra/page-map';
-import { LastUpdated } from '@/last-updated';
+import { NoopComponent } from 'foxact/noop-component';
 import { Head } from 'nextra/components';
 
 import '@/styles/main.css';
@@ -56,7 +56,6 @@ const jsonLd: Graph = {
 
 const serializeJsonLd = (data: unknown) => JSON.stringify(data).replaceAll('<', String.raw`\u003c`).replaceAll('>', String.raw`\u003e`);
 
-
 export const metadata: Metadata = {
   title: {
     template: '%s | foxact - Made by Sukka',
@@ -96,7 +95,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <Navbar
       logo={
         <div className="flex items-center">
-          <img src="https://img.skk.moe/gh/foxact.gif" width={600} height={600} className="h-8 w-8" />
+          <img src="https://img.skk.moe/gh/foxact.gif" alt="The Logo of foxact library" width={600} height={600} className="h-8 w-8" />
           <span className="font-bold text-xl ml-2 tracking-wide">foxact</span>
         </div>
       }
@@ -112,7 +111,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {' '}
       by
       {' '}
-      {/* eslint-disable-next-line @eslint-react/dom/no-unsafe-target-blank -- my own homepage */}
+      {/* eslint-disable-next-line @eslint-react/dom-no-unsafe-target-blank -- my own homepage */}
       <a href="https://skk.moe" className="mx-1 text-black dark:text-white underline underline-offset-2" target="_blank">Sukka</a>
       {' '}
       |
@@ -136,7 +135,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           pageMap={pageMap}
           docsRepositoryBase="https://github.com/SukkaW/foxact/tree/master/packages/docs"
           footer={footer}
-          lastUpdated={<LastUpdated />}
+          lastUpdated={<NoopComponent />}
         >
           {children}
         </Layout>
