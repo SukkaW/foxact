@@ -1,3 +1,9 @@
+# 0.3.2
+
+**Core Changes**
+
+- Add `NoopComponent`, a component that renders nothing by returning an empty fragment (`<Fragment />`). This is useful when a library expects a React component or a `ReactElement` (instead of `ReactNode`, so you can't pass a `null` or `undefined`) but you intentionally want no UI output.
+
 # 0.3.1
 
 **Core Changes**
