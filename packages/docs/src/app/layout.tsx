@@ -1,9 +1,9 @@
 import { Footer, Layout, Navbar } from 'nextra-theme-docs';
-import { Head } from 'nextra/components';
 import { getPageMap } from 'nextra/page-map';
-import { LastUpdated } from '../last-updated';
+import { LastUpdated } from '@/last-updated';
+import { Head } from 'nextra/components';
 
-import '../styles/main.css';
+import '@/styles/main.css';
 
 import { CurrentYear } from 'foxact/current-year';
 import type { Metadata } from 'next';
@@ -129,6 +129,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <Head />
       <body>
         <Layout
           navbar={navbar}

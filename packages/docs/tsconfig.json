@@ -10,6 +10,9 @@
     "noEmit": true,
     "isolatedModules": true,
     "esModuleInterop": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "plugins": [
       {
         "name": "next"
