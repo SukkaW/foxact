@@ -33,7 +33,7 @@ export default {
   },
   'getting-started': 'Getting Started',
   'best-practice': 'Best Practice',
-  'you-might-not-need-global-state-magement-library': "You might not need a global state management library",
+  'you-might-not-need-global-state-magement-library': 'You might not need a global state management library',
   'where-is': 'Where is ...?',
   '-- separator hooks': {
     type: 'separator',
@@ -69,6 +69,7 @@ export default {
   },
   'compose-context-provider': {},
   'current-year': {},
+  'noop-component': {},
   '-- separator utilities': {
     type: 'separator',
     title: 'Utilities'

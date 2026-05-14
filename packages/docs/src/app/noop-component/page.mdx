@@ -1,0 +1,32 @@
+---
+title: NoopComponent
+---
+
+# NoopComponent
+
+import ExportMetaInfo from '../../components/export-meta-info';
+
+<ExportMetaInfo />
+
+A component that renders nothing by returning an empty fragment (`<Fragment />`).
+
+This is useful when a library expects a React component or a `ReactElement` (instead of `ReactNode`, so you can't pass a `null` or `undefined`) but you intentionally want no UI output.
+
+```tsx filename="src/app/layout.tsx" copy
+import { Layout } from 'nextra-theme-docs';
+import { NoopComponent } from 'foxact/noop-component';
+
+export default async function RootLayout({ children }: React.PropsWithChildren) {
+  return (
+    <html lang="en">
+      <body>
+        <Layout
+          lastUpdated={<NoopComponent />}
+        >
+          {children}
+        </Layout>
+      </body>
+    </html>
+  );
+}
+```
