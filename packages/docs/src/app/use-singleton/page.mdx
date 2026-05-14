@@ -31,7 +31,7 @@ function Video() {
 ```
 
 ## Usage
-
+0
 ```tsx copy
 import { useCallback, useEffect } from 'react';
 import { useSingleton } from 'foxact/use-singleton';
@@ -57,4 +57,42 @@ function Video({ videoSrc }: VideoProps) {
 }
 ```
 
+## Delayed initialization
+
+If you want to delay the initialization, you can return `null` or `undefined` in the initializer function and let `useSingleton` retry on the next render.
+
+```tsx copy
+import { useState } from 'react';
+import { useSingleton } from 'foxact/use-singleton';
+
+function Component() {
+  const [shouldInit, setShouldInit] = useState(false);
+
+  const workerRef = useSingleton(() => {
+    if (!shouldInit) {
+      return null;
+    }
+    return HeavyInstance.create();
+  });
+
+  if (!shouldInit) {
+  return (
+    <button onClick={() => setShouldInit(true)}>
+      Initialize
+    </button>
+  );
+
+  return <div />
+}
+```
+
+If you want to use `useSingleton` to conditionally create a singleton instance and don't want to retry, you should return a non-nullish value:
+
+```tsx copy
+const kNoInitialize = Symbol('no initialize');
+
+function Component() {
+  const playerRef = useSingleton<typeof kNoInitialize | VideoPlayer>(() => (Math.random() > 0.5 ? kNoInitialize : new VideoPlayer()));
+}
+```
 
