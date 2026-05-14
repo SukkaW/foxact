@@ -1,3 +1,5 @@
+'use client';
+
 import { Fragment } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-restricted-types -- this is return value, not an input option, so we want a more strict type
