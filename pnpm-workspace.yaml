@@ -1,3 +1,7 @@
 packages:
   - 'packages/foxact'
   - 'packages/docs'
+allowBuilds:
+  '@swc/core': true
+  sharp: true
+  unrs-resolver: true
