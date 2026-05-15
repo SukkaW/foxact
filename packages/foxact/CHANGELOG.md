@@ -1,3 +1,12 @@
+# 0.3.4
+
+**Core Changes**
+
+- `useClipboard` now implements a new fallback mechanism using `document.execCommand('copy')` when `navigator.clipboard` is unavailable or throws an error. This fallback method is enabled by default and can be disabled via the `useExecCommandAsFallback` option.
+  - Now `useClipboard` will try `navigator.clipboard` first
+  - If `navigator.clipboard` fails, it will try `document.execCommand('copy')` + hidden `<span />` if `useExecCommandAsFallback` option is set to `true` (which is the default)
+  - If `document.execCommand('copy')` also fails, it will show a `window.prompt` for manual copy if `usePromptAsFallback` option is set to `true` (which is `false` by default, you will need to enable it explicitly)
+
 # 0.3.3
 
 **Core Changes**
