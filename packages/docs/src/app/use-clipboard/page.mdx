@@ -21,11 +21,16 @@ const Demo = () => {
   const { copy, copied, error } = useClipboard({
     // optional, default to 1000, the duration of the copied state after copying
     timeout: 1000,
-    // optional, default to false, whether to use `window.prompt` as fallback when native copy method failed
+    // optional, default to true, whether to use `document.execCommand('copy')` as a fallback
+    // when `navigator.clipboard` is unavailable or throws. Uses a temporarily appended hidden
+    // <span> to hold the text and the Selection API to select it before issuing the command.
+    useExecCommandAsFallback: true,
+    // optional, default to false, whether to use `window.prompt` as a last-resort fallback
+    // when all clipboard methods fail. Shows a prompt dialog so the user can copy manually.
     usePromptAsFallback: false,
     // optional. When `window.prompt` is used as a fallback, this text will be shown in the prompt dialog
-    promptFallbackText: 'Failed to copy to clipboard automatically, please manually copy the text below.',
-    // optional. Triggers when copy failed and `usePromptAsFallback` is not enabled
+    promptFallbackText: 'Failed to copy to clipboard, please manually copy the text below.',
+    // optional. Triggers when copy failed and all fallbacks are disabled or also failed
     onCopyError(e) {
       notifications.show({ message: 'Failed to copy!' });
     }
