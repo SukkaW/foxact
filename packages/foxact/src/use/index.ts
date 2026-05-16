@@ -3,6 +3,7 @@
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports -- check if React.use is available
 import reactExports from 'react';
 
+// eslint-disable-next-line @eslint-react/no-unnecessary-use-prefix -- React.use polyfill
 export const use = typeof reactExports.use === 'function'
   ? reactExports.use
   : (<T>(

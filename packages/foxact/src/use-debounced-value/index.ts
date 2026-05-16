@@ -2,16 +2,16 @@ import 'client-only';
 import { useState, useRef } from 'react';
 import { useEffect } from '../use-abortable-effect';
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- allow any function
 type NotFunction<T> = T extends Function ? never : T;
 
 /** @see https://foxact.skk.moe/use-debounced-value */
 export function useDebouncedValue<T>(value: NotFunction<T>, wait: number, leading = false) {
   if (typeof value === 'function') {
-    throw new TypeError('useDebouncedValue does not support function as value');
+    throw new TypeError('[foxact/use-debounced-value] useDebouncedValue does not support function as value');
   }
 
   const [outputValue, setOutputValue] = useState(value);
-  // eslint-disable-next-line @eslint-react/no-unnecessary-use-ref -- consistent reference across different effects
   const leadingRef = useRef(true);
 
   useEffect(signal => {

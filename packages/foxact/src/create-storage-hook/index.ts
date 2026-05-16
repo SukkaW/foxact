@@ -1,4 +1,3 @@
-/* eslint-disable @eslint-react/component-hook-factories -- intentional library factory pattern */
 import 'client-only';
 import { useSyncExternalStore, useCallback, useMemo } from 'react';
 import { noop } from '../noop';

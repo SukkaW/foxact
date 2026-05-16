@@ -13,11 +13,11 @@ export const CurrentYear = memo(function CurrentYear({ defaultYear, ...restProps
     console.warn('[foxact/current-year] "defaultYear" is required during the server-side rendering.');
   }
 
-  const [year, setYear] = useState(defaultYear || new Date().getFullYear());
+  const [year, setYear] = useState(() => defaultYear || new Date().getFullYear());
   useIsomorphicLayoutEffect(() => {
     // This is only allowed because it won't trigger infinite re-render and double render is intentional
 
-    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect -- layout effect and only once
+    // eslint-disable-next-line @eslint-react/set-state-in-effect -- layout effect and only once
     setYear(new Date().getFullYear());
   }, []);
 

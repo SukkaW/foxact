@@ -142,6 +142,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
         <script
           type="application/ld+json"
+          // eslint-disable-next-line @eslint-react/dom-no-dangerously-set-innerhtml -- esacped jsonld
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
         />
       </body>

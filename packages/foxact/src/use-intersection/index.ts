@@ -2,6 +2,7 @@ import 'client-only';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { requestIdleCallback, cancelIdleCallback } from '../request-idle-callback';
+import { useStableHandler } from '../use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired';
 
 type UseIntersectionObserverInit = Pick<IntersectionObserverInit, 'rootMargin' | 'root'>;
 
@@ -30,6 +31,8 @@ export function useIntersection<T extends Element>({
   const [visible, setVisible] = useState(false);
   const elementRef = useRef<T | null>(null);
 
+  const onVisible = useStableHandler(() => setVisible(true));
+
   useEffect(() => {
     if (hasIntersectionObserver) {
       if (disabled || visible) return;
@@ -38,16 +41,16 @@ export function useIntersection<T extends Element>({
       if (el?.tagName) {
         return observe(
           el,
-          (isVisible) => isVisible && setVisible(true),
+          (isVisible) => isVisible && onVisible(),
           { root: rootRef?.current, rootMargin }
         );
       }
     }
     if (!visible) {
-      const idleCallback = requestIdleCallback(() => setVisible(true));
+      const idleCallback = requestIdleCallback(onVisible);
       return () => cancelIdleCallback(idleCallback);
     }
-  }, [disabled, rootMargin, rootRef, visible]);
+  }, [disabled, rootMargin, rootRef, visible, onVisible]);
 
   const resetVisible = useCallback(() => {
     setVisible(false);

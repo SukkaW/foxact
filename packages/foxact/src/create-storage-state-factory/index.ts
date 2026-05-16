@@ -1,4 +1,3 @@
-/* eslint-disable @eslint-react/component-hook-factories -- intentional library factory pattern */
 import { createStorage } from '../create-storage-hook';
 import type { NotUndefined, StateHookTuple, StorageType, UseStorageParserOption, UseStorageRawOption } from '../create-storage-hook';
 

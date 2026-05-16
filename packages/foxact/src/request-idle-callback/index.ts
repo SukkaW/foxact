@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-optional-chain -- polyfill */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition -- polyfill */
 
 /** @see https://foxact.skk.moe/request-idle-callback */

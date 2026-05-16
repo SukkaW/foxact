@@ -6,9 +6,13 @@
     }
   },
   "include": [
-    "./**/*.ts",
-    "./**/*.tsx",
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
     "./rollup.config.ts",
     "./tools/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "./dist/**/*"
   ]
 }
