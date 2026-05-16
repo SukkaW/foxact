@@ -45,7 +45,7 @@
     "fdir": "^6.5.0",
     "foxts": "^5.4.2",
     "gzip-size": "6.0.0",
-    "rollup": "^4.60.3",
+    "rollup": "^4.60.4",
     "rollup-plugin-dts": "^6.4.1",
     "rollup-plugin-swc3": "^0.12.1",
     "rollup-preserve-directives": "^1.1.3"
