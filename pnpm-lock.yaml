@@ -9,20 +9,20 @@ importers:
   .:
     devDependencies:
       '@eslint-sukka/node':
-        specifier: ^8.10.3
-        version: 8.10.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
+        specifier: ^8.10.4
+        version: 8.10.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
       '@eslint-sukka/react':
-        specifier: ^8.10.3
-        version: 8.10.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
+        specifier: ^8.10.4
+        version: 8.10.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
       eslint:
         specifier: ^10.4.0
         version: 10.4.0(jiti@2.7.0)
       eslint-config-sukka:
-        specifier: ^8.10.3
-        version: 8.10.3(@typescript-eslint/utils@8.59.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3))(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
+        specifier: ^8.10.4
+        version: 8.10.4(@typescript-eslint/utils@8.59.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3))(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
       eslint-formatter-sukka:
-        specifier: ^8.10.3
-        version: 8.10.3(eslint@10.4.0(jiti@2.7.0))
+        specifier: ^8.10.4
+        version: 8.10.4(eslint@10.4.0(jiti@2.7.0))
       turbo:
         specifier: ^2.9.14
         version: 2.9.14
@@ -278,16 +278,16 @@ packages:
     resolution: {integrity: sha512-EriSTlt5OC9/7SXkRSCAhfSxxoSUgBm33OH+IkwbdpgoqsSsUg7y3uh+IICI/Qg4BBWr3U2i39RpmycbxMq4ew==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
 
-  '@eslint-sukka/eslint-plugin-react-jsx-a11y@8.10.3':
-    resolution: {integrity: sha512-hLyLHP7t+hnJvnp3O9JNOv/QeYGbvfqS7jlyhQB5YgGS1snvA0M5zLygcamKDPK2QA4ChEfpmtUeTBIl8utGbQ==}
+  '@eslint-sukka/eslint-plugin-react-jsx-a11y@8.10.4':
+    resolution: {integrity: sha512-3bb3wLF+FlxBwMFudMULnDVLhm+TT3H+7x8k8BGMymN6Exlk/MDUUqem1hXOdFz1gWF7pjab89ma+dht2x2QUQ==}
 
-  '@eslint-sukka/eslint-plugin-stylistic@8.10.3':
-    resolution: {integrity: sha512-X1nmDm3COz2ZRdLnadbSBk1Fk0ftS01J45JxAgl4Tr45GyuIDXjBNC5Y9+mBmq6gptv2IODAV095z6haYJ0Vbw==}
+  '@eslint-sukka/eslint-plugin-stylistic@8.10.4':
+    resolution: {integrity: sha512-3cIXyifggpsyCxJXowtElXU4XtGlr9FNMOJxfHFd72rJ5Izk3nsl5v7Cr82EVCu9VrHh89Je2NsO53uT5V02QQ==}
     peerDependencies:
       eslint: '*'
 
-  '@eslint-sukka/eslint-plugin-sukka-full@8.10.3':
-    resolution: {integrity: sha512-YHzMSui1Oav64CLhIEA7zg8iKkavk70dq+x1yWD0/xhQN/a5bUZ25vLVRd3jAsG5qb5LCAzKMvqg2epwq4USew==}
+  '@eslint-sukka/eslint-plugin-sukka-full@8.10.4':
+    resolution: {integrity: sha512-hmbxyGcW9TGfHq9fSDbiuMnKKtzlYEiHkfxUntDwUM2iPin4WIV22+xXtUyhctsTbvrzfATAlNXOjarXBcAy4w==}
     peerDependencies:
       eslint: '*'
       typescript: '*'
@@ -295,14 +295,14 @@ packages:
       typescript:
         optional: true
 
-  '@eslint-sukka/node@8.10.3':
-    resolution: {integrity: sha512-BhXV7GFTIelYN/jeqM2PKw2seZ/3A0h7Cm7P8H6QKe1mBAUDGMLxAb68jYvot/IJ2ag6PjN6acPIYI3NfaNH3w==}
+  '@eslint-sukka/node@8.10.4':
+    resolution: {integrity: sha512-kEvYp+4sziZregj0G8Yia0/YZD4l++5wiHhColxJROgWKfDhNa2LMfcfpnbliYxlfDrA4ugIXEnnvE0Zln5tWQ==}
 
-  '@eslint-sukka/react@8.10.3':
-    resolution: {integrity: sha512-me8t5YZkUuB4pnzQGck3qndNAFY4k+tRElMVZjlFUnYF1D4q2hEhjohHUB8Tq3jlSe5HxRYXqIOXMPhE0/tuDA==}
+  '@eslint-sukka/react@8.10.4':
+    resolution: {integrity: sha512-GDr640Zob9ysfTmabWDA/quft4e2HPLUGipkh/xOEzUlCU/wNRkDtL3R62rOaAqGG40a21t06hdEKAnJ385V/Q==}
 
-  '@eslint-sukka/shared@8.10.3':
-    resolution: {integrity: sha512-0DaurTOfv4r7CUMldZ4jWjNx24ZkLWKk8G2YzTB2VUa5QohozuDJProWMHPm6QjpZbwXbSqZ2otXMeLSz5k86Q==}
+  '@eslint-sukka/shared@8.10.4':
+    resolution: {integrity: sha512-awvuEGaBO6NR6Fpu2YbAWSGMQC/svLm9gltIYuNwHhdJ8DKKbv5vPYUT1p0Hc1s5ITIEB7Wq0hEv2c+Sdy2EHQ==}
     peerDependencies:
       eslint: '*'
 
@@ -2333,11 +2333,11 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-config-sukka@8.10.3:
-    resolution: {integrity: sha512-XcqdBwfI7sj0ybTvxc8oCCpE1DYP5tj4Bra7otdi38tq1k7pWY8K1OYmIvlHd3WXjUfu1jSWhkXVnlyR3X93qA==}
+  eslint-config-sukka@8.10.4:
+    resolution: {integrity: sha512-A7YD+c0k2VP/iZwO9BfpJ2q7nGmTQOKoDYmzwHl5wrJWteqJEGw42/9mfj1+mq9aRziJifqbx/eMsgSZ8CaL5w==}
 
-  eslint-formatter-sukka@8.10.3:
-    resolution: {integrity: sha512-06EXOqvSmyaUt0QEzOb8gcjl0M3Srx5HqMVYDwR4Oj38wEol/dJjEZqjOQ55CYeUpczKjFFyM5aYpxUHKLDp3w==}
+  eslint-formatter-sukka@8.10.4:
+    resolution: {integrity: sha512-cuzN8bs0C9TG8qEOC1ABs5dmstV8zBMyPhEwtijKnif7CZRMMUyhH6BuRlFUoO2eYKinS/ZQRGUHGQemwKyGDA==}
     peerDependencies:
       eslint: '*'
 
@@ -2444,8 +2444,8 @@ packages:
     peerDependencies:
       eslint: '>=0.8.0'
 
-  eslint-plugin-sukka@9.4.0:
-    resolution: {integrity: sha512-DyrjIImPQuyxrJuzG6AZ1E3rsUkP8QMxBOKayKrN/uzqc3wsCmzGqM6DGKczNUe3MLEUsHMoE7tdyugC6v7ggw==}
+  eslint-plugin-sukka@9.5.0:
+    resolution: {integrity: sha512-G8Q2fcfMQHhyWAxf5i8/7OVCkGCa5vftYlX/hZjYy3B06YoBEHwBUevSOC8cMsYqd0tJbGW2obAJ3v5fSsmkQg==}
     peerDependencies:
       eslint: '>=9.29.0'
       typescript: '*'
@@ -4283,7 +4283,7 @@ snapshots:
 
   '@eslint-community/regexpp@4.12.2': {}
 
-  '@eslint-sukka/eslint-plugin-react-jsx-a11y@8.10.3':
+  '@eslint-sukka/eslint-plugin-react-jsx-a11y@8.10.4':
     dependencies:
       '@nolyfill/array-includes': 1.0.44
       '@nolyfill/array.prototype.flat': 1.0.44
@@ -4293,34 +4293,34 @@ snapshots:
       '@nolyfill/object.fromentries': 1.0.44
       '@nolyfill/object.values': 1.0.44
 
-  '@eslint-sukka/eslint-plugin-stylistic@8.10.3(eslint@10.4.0(jiti@2.7.0))':
+  '@eslint-sukka/eslint-plugin-stylistic@8.10.4(eslint@10.4.0(jiti@2.7.0))':
     dependencies:
       eslint: 10.4.0(jiti@2.7.0)
 
-  '@eslint-sukka/eslint-plugin-sukka-full@8.10.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)':
+  '@eslint-sukka/eslint-plugin-sukka-full@8.10.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)':
     dependencies:
       eslint: 10.4.0(jiti@2.7.0)
-      eslint-plugin-sukka: 9.4.0(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
+      eslint-plugin-sukka: 9.5.0(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
     optionalDependencies:
       typescript: 6.0.3
     transitivePeerDependencies:
       - supports-color
 
-  '@eslint-sukka/node@8.10.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)':
+  '@eslint-sukka/node@8.10.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)':
     dependencies:
-      '@eslint-sukka/eslint-plugin-sukka-full': 8.10.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
-      '@eslint-sukka/shared': 8.10.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
+      '@eslint-sukka/eslint-plugin-sukka-full': 8.10.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
+      '@eslint-sukka/shared': 8.10.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
       eslint-plugin-n: 17.24.0(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
     transitivePeerDependencies:
       - eslint
       - supports-color
       - typescript
 
-  '@eslint-sukka/react@8.10.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)':
+  '@eslint-sukka/react@8.10.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)':
     dependencies:
-      '@eslint-sukka/eslint-plugin-react-jsx-a11y': 8.10.3
-      '@eslint-sukka/eslint-plugin-stylistic': 8.10.3(eslint@10.4.0(jiti@2.7.0))
-      '@eslint-sukka/shared': 8.10.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
+      '@eslint-sukka/eslint-plugin-react-jsx-a11y': 8.10.4
+      '@eslint-sukka/eslint-plugin-stylistic': 8.10.4(eslint@10.4.0(jiti@2.7.0))
+      '@eslint-sukka/shared': 8.10.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
       '@eslint/compat': 2.1.0(eslint@10.4.0(jiti@2.7.0))
       '@next/eslint-plugin-next': 16.2.6
       '@stylexjs/eslint-plugin': 0.18.3
@@ -4334,7 +4334,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@eslint-sukka/shared@8.10.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)':
+  '@eslint-sukka/shared@8.10.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)':
     dependencies:
       '@package-json/types': 0.0.13
       '@typescript-eslint/utils': 8.59.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
@@ -6127,13 +6127,13 @@ snapshots:
       eslint: 10.4.0(jiti@2.7.0)
       semver: 7.7.3
 
-  eslint-config-sukka@8.10.3(@typescript-eslint/utils@8.59.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3))(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3):
+  eslint-config-sukka@8.10.4(@typescript-eslint/utils@8.59.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3))(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3):
     dependencies:
       '@antfu/install-pkg': 1.1.0
       '@eslint-community/eslint-plugin-eslint-comments': 4.7.1(eslint@10.4.0(jiti@2.7.0))
-      '@eslint-sukka/eslint-plugin-stylistic': 8.10.3(eslint@10.4.0(jiti@2.7.0))
-      '@eslint-sukka/eslint-plugin-sukka-full': 8.10.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
-      '@eslint-sukka/shared': 8.10.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
+      '@eslint-sukka/eslint-plugin-stylistic': 8.10.4(eslint@10.4.0(jiti@2.7.0))
+      '@eslint-sukka/eslint-plugin-sukka-full': 8.10.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
+      '@eslint-sukka/shared': 8.10.4(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
       '@eslint/config-helpers': 0.6.0
       '@eslint/js': 10.0.1(eslint@10.4.0(jiti@2.7.0))
       '@typescript-eslint/eslint-plugin': 8.59.3(@typescript-eslint/parser@8.59.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3))(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
@@ -6159,7 +6159,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-formatter-sukka@8.10.3(eslint@10.4.0(jiti@2.7.0)):
+  eslint-formatter-sukka@8.10.4(eslint@10.4.0(jiti@2.7.0)):
     dependencies:
       ci-info: 4.4.0
       eslint: 10.4.0(jiti@2.7.0)
@@ -6318,7 +6318,7 @@ snapshots:
       eslint: 10.4.0(jiti@2.7.0)
       globals: 13.24.0
 
-  eslint-plugin-sukka@9.4.0(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3):
+  eslint-plugin-sukka@9.5.0(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3):
     dependencies:
       '@typescript-eslint/types': 8.59.3
       '@typescript-eslint/utils': 8.59.3(eslint@10.4.0(jiti@2.7.0))(typescript@6.0.3)
