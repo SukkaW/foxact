@@ -60,6 +60,28 @@ describe('useStateWithDeps', () => {
     expect(renderCount).toEqual(1);
   });
 
+  it('supports adding a field that is not part of the initial state', () => {
+    let renderCount = 0;
+
+    const { result } = renderHook(() => {
+      renderCount++;
+      return useStateWithDeps<{ a: number, b?: number }>({ a: 1 });
+    });
+
+    // A brand-new key has never been read during render, so no re-render yet
+    act(() => result.current[1]({ b: 42 }));
+    expect(renderCount).toEqual(1);
+
+    // ... but a tracked getter has been attached for it on the fly
+    expect('b' in result.current[0]).toEqual(true);
+    expect(result.current[0].b).toEqual(42);
+
+    // Reading it above marked it as a dependency, so updates now re-render
+    act(() => result.current[1]({ b: 43 }));
+    expect(renderCount).toEqual(2);
+    expect(result.current[0].b).toEqual(43);
+  });
+
   it('returns a stable setState across re-renders', () => {
     const { result, rerender } = renderHook(() => useStateWithDeps({ a: 1 }));
     const setState = result.current[1];
