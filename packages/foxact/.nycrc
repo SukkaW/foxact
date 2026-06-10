@@ -4,7 +4,9 @@
     "src/**"
   ],
   "exclude": [
-    "src/**/*.test.{ts,tsx}"
+    "src/**/*.test.{ts,tsx}",
+    "src/**/__fixtures__/**",
+    "src/types/**"
   ],
   "extension": [
     ".ts",
