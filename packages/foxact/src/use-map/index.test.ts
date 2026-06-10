@@ -25,10 +25,15 @@ describe('useMap', () => {
 
     expect(result.current[0].get('foo')).toEqual(42);
     expect(result.current[0]).not.toExactlyEqual(firstMap);
+    // The previous map must not be mutated
+    expect(firstMap.has('foo')).toEqual(false);
+
+    const mapBeforeRemove = result.current[0];
 
     act(() => result.current[2]('foo'));
 
     expect(result.current[0].has('foo')).toEqual(false);
+    expect(mapBeforeRemove.get('foo')).toEqual(42);
   });
 
   it('returns the same map instance when removing a key that is not there', () => {
