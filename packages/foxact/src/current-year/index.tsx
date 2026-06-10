@@ -9,6 +9,7 @@ interface CurrentYearProps extends React.ComponentProps<'span'> {
 
 /** @see https://foxact.skk.moe/current-year */
 export const CurrentYear = memo(function CurrentYear({ defaultYear, ...restProps }: CurrentYearProps) {
+  /* istanbul ignore if -- SSR-only warning, unreachable when Happy DOM registers window globally in tests */
   if (typeof window === 'undefined' && typeof defaultYear === 'undefined') {
     console.warn('[foxact/current-year] "defaultYear" is required during the server-side rendering.');
   }
