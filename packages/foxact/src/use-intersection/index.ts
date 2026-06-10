@@ -46,6 +46,9 @@ export function useIntersection<T extends Element>({
         );
       }
     }
+    /* istanbul ignore next -- the requestIdleCallback fallback only runs in environments
+       without IntersectionObserver, but the capability is sniffed once at module load,
+       so this branch cannot be reached from the (Happy DOM based) test environment */
     if (!visible) {
       const idleCallback = requestIdleCallback(onVisible);
       return () => cancelIdleCallback(idleCallback);
