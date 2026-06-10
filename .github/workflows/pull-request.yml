@@ -2,9 +2,9 @@ name: Pull Request Check
 on:
   pull_request:
     paths-ignore:
-      - '**/*.md'
+      - "**/*.md"
       - LICENSE
-      - '**/*.gitignore'
+      - "**/*.gitignore"
       - .editorconfig
       - docs/**
 jobs:
@@ -19,12 +19,10 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v6
         with:
-          node-version-file: '.node-version'
+          node-version-file: ".node-version"
           check-latest: true
-          cache: 'pnpm'
-      - name: Install dependencies
-        run: pnpm install
-#      - name: Lint
-#        run: pnpm run lint
-      - name: Build
-        run: pnpm run build
+          cache: "pnpm"
+      - run: pnpm config set --location=global minimumReleaseAge 0
+      - run: pnpm install
+      #   run: pnpm run lint
+      - run: pnpm run build

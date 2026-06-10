@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - 'packages/docs/**/*'
+      - "packages/docs/**/*"
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -22,9 +22,10 @@ jobs:
           run_install: false
       - uses: actions/setup-node@v6
         with:
-          node-version-file: '.node-version'
+          node-version-file: ".node-version"
           check-latest: true
-          cache: 'pnpm'
+          cache: "pnpm"
+      - run: pnpm config set --location=global minimumReleaseAge 0
       - run: pnpm install
       - run: pnpm run build
       - uses: actions/upload-pages-artifact@v3

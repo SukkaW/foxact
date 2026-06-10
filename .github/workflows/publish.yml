@@ -27,10 +27,11 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v6
         with:
-          node-version-file: '.node-version'
+          node-version-file: ".node-version"
           check-latest: true
-          cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+      - run: pnpm config set --location=global minimumReleaseAge 0
       - run: pnpm install
       - run: pnpm -F=foxact run build
       - name: Publish
@@ -38,12 +39,12 @@ jobs:
           if git log -1 --pretty=%B | grep "^release: [0-9]\+\.[0-9]\+\.[0-9]\+$";
           then
             cd packages/foxact/dist
-            npm publish --provenance --access public
+            pnpm publish --provenance --access public
             cd ../../..
           elif git log -1 --pretty=%B | grep "^release: [0-9]\+\.[0-9]\+\.[0-9]\+";
           then
             cd packages/foxact/dist
-            npm publish --tag next --provenance --access public
+            pnpm publish --tag next --provenance --access public
             cd ../../..
           else
             echo "Not a release, skipping publish"
