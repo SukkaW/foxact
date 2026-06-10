@@ -18,7 +18,7 @@
   "scripts": {
     "build": "rollup -c rollup.config.ts --configPlugin swc3 --bundleConfigAsCjs",
     "postbuild": "SWC_NODE_IGNORE_DYNAMIC=1 node -r @swc-node/register tools/postbuild.ts",
-    "test": "SWC_NODE_IGNORE_DYNAMIC=1 SWC_NODE_INLINE_SOURCE_MAP=1 nyc --extension .ts --extension .tsx --include 'src/**' --exclude 'src/**/*.test.{ts,tsx}' --reporter text --reporter html --reporter lcov mocha --require @swc-node/register --require test/setup.ts --extension ts,tsx 'src/**/*.test.{ts,tsx}'",
+    "test": "SWC_NODE_IGNORE_DYNAMIC=1 SWC_NODE_INLINE_SOURCE_MAP=1 nyc --reporter text --reporter text-summary --reporter lcov mocha --require @swc-node/register --require test/setup.ts --full-trace 'src/**/*.test.{ts,tsx}'",
     "prepublishOnly": "pnpm run build && pnpm run test"
   },
   "keywords": [
