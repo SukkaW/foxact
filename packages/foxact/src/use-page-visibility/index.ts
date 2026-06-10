@@ -8,6 +8,7 @@ import { noop } from '../noop';
 let visibilityChangeBus: EventTargetBus<Document, 'visibilitychange'> | null = null;
 
 const handlePageVisibilityChange: Parameters<typeof useSyncExternalStore>[0] = (onChange) => {
+  /* istanbul ignore if -- SSR-only guard, unreachable when Happy DOM registers window globally in tests */
   if (typeof window === 'undefined') return noop;
 
   visibilityChangeBus ??= createEventTargetBus(document, 'visibilitychange');
@@ -16,6 +17,7 @@ const handlePageVisibilityChange: Parameters<typeof useSyncExternalStore>[0] = (
 };
 
 const getSnapshot: Parameters<typeof useSyncExternalStore>[1] = () => {
+  /* istanbul ignore if -- SSR-only guard, unreachable when Happy DOM registers document globally in tests */
   if (typeof document === 'undefined') {
     return false;
   }

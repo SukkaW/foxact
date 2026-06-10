@@ -6,7 +6,9 @@ import reactExports from 'react';
 // eslint-disable-next-line @eslint-react/no-unnecessary-use-prefix -- React.use polyfill
 export const use = typeof reactExports.use === 'function'
   ? reactExports.use
-  : (<T>(
+  // the polyfill arm is unreachable when testing against React 19+ (the capability
+  // is sniffed once at module load), hence the istanbul ignore
+  : /* istanbul ignore next */ (<T>(
     promise: Promise<T> & {
       status?: 'pending' | 'fulfilled' | 'rejected',
       value?: T,

@@ -1,5 +1,6 @@
 import { version as reactVersion } from 'react';
 
+/* istanbul ignore next -- unreachable when testing against React 19+, the React version is sniffed once at module load */
 function react18AndBelowMergeRefs<T>(...refs: Array<React.Ref<T> | undefined>): React.RefCallback<T> {
   return (value) => {
     refs.forEach((ref) => {

@@ -10,6 +10,7 @@ import type { EventTargetBus } from 'event-target-bus';
 const mediaQueryProxies = new Map<string, EventTargetBus<MediaQueryList, 'change'>>();
 
 function subscribeToMediaQuery(mq: string, callback: VoidFunction) {
+  /* istanbul ignore if -- SSR-only guard, unreachable when Happy DOM registers window globally in tests */
   if (typeof window === 'undefined') return noop;
 
   let bus = mediaQueryProxies.get(mq);
@@ -32,6 +33,7 @@ export function useMediaQuery(mq: string, serverValue?: boolean): boolean {
   const subscribe = useCallback((callback: VoidFunction) => subscribeToMediaQuery(mq, callback), [mq]);
 
   const getSnapshot = () => {
+    /* istanbul ignore if -- SSR-only guard, unreachable when Happy DOM registers window globally in tests */
     if (typeof window === 'undefined') {
       if (serverValue != null) {
         return serverValue;

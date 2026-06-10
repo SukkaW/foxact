@@ -1,5 +1,7 @@
 'use strict';
 
+const { withFiles } = require('@eslint-sukka/shared');
+
 module.exports = require('eslint-config-sukka').sukka({
   ignores: {
     customGlobs: ['dist/**/*', 'docs/**/*', ...require('eslint-config-sukka').constants.GLOB_EXCLUDE]
@@ -26,4 +28,16 @@ module.exports = require('eslint-config-sukka').sukka({
   rules: {
     '@eslint-react/naming-convention/filename': 'off'
   }
-});
+},
+// https://kentcdodds.com/blog/common-mistakes-with-react-testing-library
+withFiles(
+  {
+    ...require('eslint-plugin-testing-library').configs['flat/react'],
+    settings: {
+      // only treat the real RTL render as a render util, NOT renderToString
+      // from react-dom/server (the default heuristic matches any render*)
+      'testing-library/custom-renders': 'off'
+    }
+  },
+  ['packages/foxact/src/**/*.test.{ts,tsx}', 'packages/foxact/test/**/*.{ts,tsx}']
+));

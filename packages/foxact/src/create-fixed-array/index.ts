@@ -2,6 +2,7 @@ const arrayMap = new Map<number, readonly number[]>();
 
 function makeArray(length: number) {
   const arr = Array.from(new Array(length).keys());
+  /* istanbul ignore if -- development-only safeguard, tests run without NODE_ENV=development */
   if (process.env.NODE_ENV === 'development') {
     Object.freeze(arr);
   }

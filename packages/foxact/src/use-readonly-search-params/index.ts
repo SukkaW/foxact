@@ -42,6 +42,7 @@ export class ReadonlyURLSearchParams extends URLSearchParams {
 let popStateBus: EventTargetBus<Window, 'popstate'> | null = null;
 
 function subscribe(onStoreChange: () => void) {
+  /* istanbul ignore if -- SSR-only guard, unreachable when Happy DOM registers window globally in tests */
   if (typeof window === 'undefined') return noop;
 
   popStateBus ??= createEventTargetBus(window, 'popstate');
@@ -53,6 +54,7 @@ let lastSearch: string | null = null;
 let lastUrlSearchParams: ReadonlyURLSearchParams | null = null;
 
 function getClientSnapshot() {
+  /* istanbul ignore if -- SSR-only guard, unreachable when Happy DOM registers window globally in tests */
   if (typeof window === 'undefined') {
     return new ReadonlyURLSearchParams();
   }

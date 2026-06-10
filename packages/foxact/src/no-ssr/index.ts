@@ -14,6 +14,8 @@ export function noSSRError(errorMessage?: string, nextjsDigest = 'BAILOUT_TO_CLI
 
 /** @see https://foxact.skk.moe/no-ssr */
 export function noSSR(extraMessage?: string) {
+  /* istanbul ignore if -- unreachable when Happy DOM registers window globally; covered
+     for real by the server-realm worker test (nyc cannot see into worker threads) */
   if (typeof window === 'undefined') {
     throw noSSRError(extraMessage);
   }

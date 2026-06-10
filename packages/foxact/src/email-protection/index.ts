@@ -1,7 +1,7 @@
 'use client';
 
-import { memo, useState } from 'react';
-import { useIsomorphicLayoutEffect } from '../use-isomorphic-layout-effect';
+import { memo, useState, useSyncExternalStore } from 'react';
+import { noop } from '../noop';
 
 interface EmailProtectionProps {
   /**
@@ -27,14 +27,19 @@ interface EmailProtectionProps {
  *
  */
 export const EmailProtection = memo(({ mailbox, domain }: Readonly<EmailProtectionProps>): React.ReactNode => {
+  // getServerSnapshot must return a cached value (React invokes it repeatedly),
+  // so keep the random placeholder in a lazy useState
   // eslint-disable-next-line sukka/unicorn/prefer-string-replace-all -- target lib es2018
-  const [text, setText] = useState(() => Math.random().toString(36).slice(2) + '[at]' + domain.replace(/\./g, '[dot]'));
-  useIsomorphicLayoutEffect(() => {
-    // eslint-disable-next-line @eslint-react/set-state-in-effect -- layout effect and only once
-    setText(mailbox + '@' + domain);
-  }, [domain, mailbox]);
+  const [obfuscated] = useState(() => Math.random().toString(36).slice(2) + '[at]' + domain.replace(/\./g, '[dot]'));
 
-  return text;
+  // The server renders the obfuscated placeholder; the client renders the real
+  // address right after hydration. This is exactly the server/client divergence
+  // useSyncExternalStore models, without a state + layout effect double render.
+  return useSyncExternalStore(
+    noop,
+    () => mailbox + '@' + domain,
+    () => obfuscated
+  );
 });
 
 if (process.env.NODE_ENV !== 'production') {

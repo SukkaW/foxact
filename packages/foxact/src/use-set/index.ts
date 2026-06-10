@@ -15,8 +15,10 @@ export function useSet<T>(initialState: Set<T> | (() => Set<T>) = () => new Set<
     if (!prevSet.has(item)) {
       return prevSet;
     }
-    prevSet.delete(item);
-    return new Set(prevSet);
+    // Copy first, then delete, so the previous set is never mutated
+    const copy = new Set(prevSet);
+    copy.delete(item);
+    return copy;
   }), []);
 
   const reset = useCallback(() => setSet(new Set()), []);

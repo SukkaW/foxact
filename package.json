@@ -5,18 +5,21 @@
   "description": "",
   "scripts": {
     "build": "turbo build",
-    "lint": "eslint --format=sukka ."
+    "lint": "eslint --format=sukka .",
+    "test": "turbo test"
   },
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
   "devDependencies": {
-    "@eslint-sukka/node": "^8.10.4",
-    "@eslint-sukka/react": "^8.10.4",
-    "eslint": "^10.4.0",
-    "eslint-config-sukka": "^8.10.4",
-    "eslint-formatter-sukka": "^8.10.4",
+    "@eslint-sukka/node": "^8.10.5",
+    "@eslint-sukka/react": "^8.10.5",
+    "@eslint-sukka/shared": "^8.10.5",
+    "eslint": "^10.4.1",
+    "eslint-config-sukka": "^8.10.5",
+    "eslint-formatter-sukka": "^8.10.5",
+    "eslint-plugin-testing-library": "^7.16.2",
     "turbo": "^2.9.14",
     "typescript": "^6.0.3"
   },
-  "packageManager": "pnpm@11.1.2"
+  "packageManager": "pnpm@11.5.2"
 }
