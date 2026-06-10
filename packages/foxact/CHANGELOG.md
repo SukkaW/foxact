@@ -1,3 +1,13 @@
+# Unreleased Changes
+
+**Core Changes**
+
+- `EmailProtection` is reimplemented on top of `useSyncExternalStore` instead of `useState` + `useLayoutEffect`. The behavior stays the same (the server renders the obfuscated placeholder, the client renders the real address right after the hydration), with less re-render machinery.
+
+**Other Changes**
+
+- foxact now has a test suite (mocha + earl + Happy DOM + `@testing-library/react`, with nyc coverage), covering every documented behavior of every hook, including SSR, hydration, and a worker-thread based "real server realm" harness for `typeof window`-dependent behaviors.
+
 # 0.3.4
 
 **Core Changes**
