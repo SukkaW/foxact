@@ -1,0 +1,22 @@
+{
+  "all": true,
+  "include": [
+    "src/**"
+  ],
+  "exclude": [
+    "src/**/*.test.{ts,tsx}"
+  ],
+  "extension": [
+    ".ts",
+    ".tsx"
+  ],
+  "parser-plugins": [
+    "typescript",
+    "jsx"
+  ],
+  "reporter": [
+    "text",
+    "text-summary",
+    "lcov"
+  ]
+}
