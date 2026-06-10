@@ -8,7 +8,8 @@ yarn.lock
 /.yarn
 
 # testing
-/coverage
+coverage/
+.nyc_output/
 
 # next.js
 .next/

@@ -5,7 +5,8 @@
   "description": "",
   "scripts": {
     "build": "turbo build",
-    "lint": "eslint --format=sukka ."
+    "lint": "eslint --format=sukka .",
+    "test": "turbo test"
   },
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
