@@ -2,7 +2,8 @@ import { GlobalRegistrator } from '@happy-dom/global-registrator';
 
 // react-dom/client requires a DOM. Register Happy DOM globals (document,
 // window, etc.) before anything imports React DOM.
-GlobalRegistrator.register();
+// A real URL (instead of the default about:blank) so history.pushState works
+GlobalRegistrator.register({ url: 'https://foxact.skk.moe/' });
 
 declare global {
   // eslint-disable-next-line vars-on-top -- types
