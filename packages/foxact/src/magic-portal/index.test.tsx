@@ -1,3 +1,7 @@
+/* eslint-disable testing-library/no-container, testing-library/no-node-access --
+   the portal target is located via the public `data-foxact-magic-portal-target`
+   attribute (no role/text), and raw node handling is deliberate here: see the
+   warning below about earl traversing portal-hosting nodes */
 import { describe, it } from 'mocha';
 import { expect } from 'earl';
 

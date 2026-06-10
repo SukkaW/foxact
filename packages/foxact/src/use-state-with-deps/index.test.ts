@@ -74,9 +74,9 @@ describe('useStateWithDeps', () => {
 
     // ... but a tracked getter has been attached for it on the fly
     expect('b' in result.current[0]).toEqual(true);
+    // reading it now marked it as a dependency
     expect(result.current[0].b).toEqual(42);
-
-    // Reading it above marked it as a dependency, so updates now re-render
+    // ... so updates now re-render
     act(() => result.current[1]({ b: 43 }));
     expect(renderCount).toEqual(2);
     expect(result.current[0].b).toEqual(43);

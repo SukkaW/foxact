@@ -2,7 +2,7 @@ import { afterEach, describe, it } from 'mocha';
 import { expect } from 'earl';
 import sinon from 'sinon';
 
-import { act, renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, screen, waitFor } from '@testing-library/react';
 import { useClipboard, UseClipboardError } from '.';
 
 describe('useClipboard', () => {
@@ -106,7 +106,7 @@ describe('useClipboard', () => {
       expect(result.current.copied).toEqual(true);
       expect(result.current.error).toEqual(null);
       // the temporary <span> is cleaned up
-      expect(document.body.querySelector('span')).toEqual(null);
+      expect(screen.queryByText('foxact')).toEqual(null);
     });
 
     it('reports the navigator.clipboard error when execCommand also fails', async () => {

@@ -2,7 +2,7 @@ import { describe, it } from 'mocha';
 import { expect } from 'earl';
 
 import { useState } from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { useComponentWillReceiveUpdate } from '.';
 
 // Usage-oriented probe, modeled after the documented use case: an editable
@@ -16,7 +16,7 @@ function DraftInput({ source }: { source: string }) {
 
 function mount(initialSource: string) {
   const view = render(<DraftInput source={initialSource} />);
-  const input: HTMLInputElement = view.container.querySelector('input')!;
+  const input: HTMLInputElement = screen.getByRole('textbox');
 
   return { view, input };
 }
@@ -67,5 +67,4 @@ describe('useComponentWillReceiveUpdate', () => {
     // the callback fires during the render that observed the change
     expect(log[1]).toEqual('sync:b');
   });
-
 });

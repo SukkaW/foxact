@@ -1,7 +1,7 @@
 import { describe, it } from 'mocha';
 import { expect } from 'earl';
 
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { useCompositionInput } from '.';
 
 function mount() {
@@ -12,8 +12,8 @@ function mount() {
     return <input {...props} />;
   }
 
-  const view = render(<Probe />);
-  const input: HTMLInputElement = view.container.querySelector('input')!;
+  render(<Probe />);
+  const input: HTMLInputElement = screen.getByRole('textbox');
 
   return { received, input };
 }

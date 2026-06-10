@@ -2,14 +2,18 @@ import { describe, it } from 'mocha';
 import { expect } from 'earl';
 
 import { renderToString } from 'react-dom/server';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { EmailProtection } from '.';
 
 describe('EmailProtection', () => {
   it('renders the real address on the client after the layout effect', () => {
-    const { container } = render(<EmailProtection mailbox="hello" domain="example.com" />);
+    render(
+      <span data-testid="email-protection">
+        <EmailProtection mailbox="hello" domain="example.com" />
+      </span>
+    );
 
-    expect(container.textContent).toEqual('hello@example.com');
+    expect(screen.getByTestId('email-protection').textContent).toEqual('hello@example.com');
   });
 
   it('renders an obfuscated address on the server', () => {

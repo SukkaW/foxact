@@ -1,7 +1,7 @@
 import { after, before, describe, it } from 'mocha';
 import { expect } from 'earl';
 
-import { act, render } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { useIntersection } from '.';
 import type { UseIntersectionArgs } from '.';
 
@@ -65,11 +65,11 @@ function mount(extraArgs: Omit<UseIntersectionArgs, 'rootMargin'> = {}) {
     const [setRef, visible, reset] = useIntersection<HTMLDivElement>(args);
     captured.visible = visible;
     captured.reset = reset;
-    return <div ref={setRef} />;
+    return <div ref={setRef} data-testid="intersection-probe" />;
   }
 
   const view = render(<Probe />);
-  const element = view.container.firstElementChild!;
+  const element = screen.getByTestId('intersection-probe');
   const observer = MockIntersectionObserver.instances.at(-1);
 
   return { captured, view, element, observer };
@@ -163,11 +163,11 @@ describe('useIntersection', () => {
     function Probe({ index }: { index: number }) {
       const [setRef, visible] = useIntersection<HTMLDivElement>({ rootMargin });
       visibles[index] = visible;
-      return <div ref={setRef} />;
+      return <div ref={setRef} data-testid={`shared-probe-${index}`} />;
     }
 
     const instancesBefore = MockIntersectionObserver.instances.length;
-    const view = render(
+    render(
       <>
         <Probe index={0} />
         <Probe index={1} />
@@ -178,7 +178,7 @@ describe('useIntersection', () => {
     expect(MockIntersectionObserver.instances.length).toEqual(instancesBefore + 1);
 
     const observer = MockIntersectionObserver.instances.at(-1)!;
-    const elements = [...view.container.querySelectorAll('div')];
+    const elements = [screen.getByTestId('shared-probe-0'), screen.getByTestId('shared-probe-1')];
     expect(observer.observed.size).toEqual(2);
 
     // Each element gets its own visibility state

@@ -1,7 +1,7 @@
 import { describe, it } from 'mocha';
 import { expect } from 'earl';
 
-import { act, render } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { useUncontrolled } from '.';
 
 interface Captured {
@@ -26,7 +26,7 @@ function mount(transformValue?: (value: string) => string, initialValue = 'initi
   }
 
   const view = render(<Probe />);
-  const input: HTMLInputElement = view.container.querySelector('input')!;
+  const input: HTMLInputElement = screen.getByRole('textbox');
 
   return { captured, input, view };
 }
@@ -80,7 +80,7 @@ describe('useUncontrolled', () => {
     }
 
     const view = render(<Probe transform={(value) => `${value}!`} />);
-    const input: HTMLInputElement = view.container.querySelector('input')!;
+    const input: HTMLInputElement = screen.getByRole('textbox');
 
     input.value = 'a';
     act(() => captured.commit());
