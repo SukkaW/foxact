@@ -1,11 +1,10 @@
 import { useState, useRef, useCallback } from 'react';
-import type { RefObject } from 'react';
 import { useLayoutEffect } from '../use-isomorphic-layout-effect';
+import { useSingleton } from '../use-singleton';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- must be any for typescript to proper infer the type of S
 export function useStateWithDeps<S extends Record<string, any> = Record<string, any>>(initialState: S): [
-  stateRef: RefObject<S>,
-  stateDependenciesRef: RefObject<Partial<Record<keyof S, boolean>>>,
+  state: Readonly<S>,
   setState: (payload: Partial<S>) => void
 ] {
   // eslint-disable-next-line @eslint-react/use-state -- just trigger re-render
@@ -14,16 +13,37 @@ export function useStateWithDeps<S extends Record<string, any> = Record<string, 
   const unmountedRef = useRef(false);
   const stateRef = useRef<S>(initialState);
 
-  // If a state property is accessed by the render function
-  // we mark the property as a dependency so if it is updated again
-  // in the future, we trigger a rerender.
-  //
-  // This is also known as dependency-tracking.
+  // Tracks which state properties are accessed by the render function, so
+  // that only changes to those properties trigger a rerender.
   const stateDependenciesRef = useRef<Partial<Record<keyof S, boolean>>>({});
+
+  const defineTrackedGetter = useCallback((target: S, key: keyof S) => {
+    Object.defineProperty(target, key, {
+      get() {
+        stateDependenciesRef.current[key] = true;
+        return stateRef.current[key];
+      },
+      enumerable: true
+    });
+  }, []);
+
+  // A stable object with a tracked getter for every known state property.
+  // Reading a property through it both returns the latest value from
+  // stateRef and marks the property as a rendering dependency.
+  const trackedStateRef = useSingleton<S>(() => {
+    const tracked = {} as S;
+    for (const key in initialState) {
+      // eslint-disable-next-line prefer-object-has-own -- compatibility with older browsers
+      if (Object.prototype.hasOwnProperty.call(initialState, key)) {
+        defineTrackedGetter(tracked, key);
+      }
+    }
+    return tracked;
+  });
 
   /**
    * Updates state and triggers re-render if necessary.
-   * @param payload To change stateRef, pass the values explicitly to setState:
+   * @param payload To change the state, pass the values explicitly to setState:
    *
    * @example
    * ```js
@@ -49,6 +69,13 @@ export function useStateWithDeps<S extends Record<string, any> = Record<string, 
       if (Object.prototype.hasOwnProperty.call(payload, key)) {
         const k = key as keyof S;
 
+        // A field we have never seen before (not part of initialState),
+        // attach a tracked getter for it so future reads are tracked too.
+        // eslint-disable-next-line prefer-object-has-own -- compatibility with older browsers
+        if (!Object.prototype.hasOwnProperty.call(trackedStateRef.current, k)) {
+          defineTrackedGetter(trackedStateRef.current, k);
+        }
+
         // If the property has changed, update the state and mark rerender as needed.
         if (currentState[k] !== payload[k]) {
           currentState[k] = payload[k]!;
@@ -65,7 +92,7 @@ export function useStateWithDeps<S extends Record<string, any> = Record<string, 
     if (shouldRerender && !unmountedRef.current) {
       rerender({});
     }
-  }, []);
+  }, [defineTrackedGetter, trackedStateRef]);
 
   useLayoutEffect(() => {
     unmountedRef.current = false;
@@ -74,5 +101,6 @@ export function useStateWithDeps<S extends Record<string, any> = Record<string, 
     };
   });
 
-  return [stateRef, stateDependenciesRef, setState];
+  // eslint-disable-next-line react-hooks/refs -- update is tracked via rerender()
+  return [trackedStateRef.current, setState];
 }
