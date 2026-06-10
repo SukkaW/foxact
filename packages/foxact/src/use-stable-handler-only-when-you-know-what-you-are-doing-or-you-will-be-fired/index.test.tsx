@@ -15,19 +15,22 @@ describe('useStableHandler', () => {
     expect(result.current).toExactlyEqual(handler);
   });
 
-  it('always invokes the latest callback', () => {
+  it('always invokes the latest callback through the very same reference', () => {
     const { result } = renderHook(() => {
       const [count, setCount] = useState(0);
       const handler = useStableHandler(() => count);
       return { handler, setCount };
     });
 
-    expect(result.current.handler()).toEqual(0);
+    const handlerBefore = result.current.handler;
+    expect(handlerBefore()).toEqual(0);
 
     act(() => result.current.setCount(42));
 
-    // same stable reference, but it sees the latest state
-    expect(result.current.handler()).toEqual(42);
+    // the reference did NOT change across the state update...
+    expect(result.current.handler).toExactlyEqual(handlerBefore);
+    // ... yet it sees the latest state
+    expect(handlerBefore()).toEqual(42);
   });
 
   it('throws when invoked during render, before the component has mounted', () => {

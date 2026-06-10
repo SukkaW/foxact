@@ -40,7 +40,8 @@ describe('createContextState', () => {
   });
 
   it('accepts the initial state from the Provider within the React tree', () => {
-    const [Provider, useValue] = createContextState(false);
+    // re-pick the option 2 overload: the Provider accepts an optional initialState prop
+    const [Provider, useValue] = createContextState<boolean>(false) as ReturnType<typeof createContextState<boolean>>;
 
     const { result } = renderHook(() => useValue(), {
       wrapper: ({ children }) => <Provider initialState>{children}</Provider>

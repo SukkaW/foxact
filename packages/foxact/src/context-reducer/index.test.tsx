@@ -58,7 +58,8 @@ describe('createContextReducer', () => {
   });
 
   it('prefers Provider props over create-time initialArg and init', () => {
-    const [Provider, useValue] = createContextReducer(reducer, 1, (n: number) => ({ count: n }));
+    // re-pick the option 3 overload: the Provider accepts initialArg and init props
+    const [Provider, useValue] = createContextReducer(reducer, 1, (n: number) => ({ count: n })) as ReturnType<typeof createContextReducer<State, Action, number>>;
 
     const { result } = renderHook(() => useValue(), {
       wrapper: ({ children }) => (
