@@ -54,6 +54,15 @@ describe('useMap', () => {
     expect(result.current[0].size).toEqual(0);
   });
 
+  it('replaces the entire map via setAll', () => {
+    const { result } = renderHook(() => useMap<string, number>());
+    const next = new Map([['foo', 1]]);
+
+    act(() => result.current[4](next));
+
+    expect(result.current[0]).toExactlyEqual(next);
+  });
+
   it('returns stable callbacks across re-renders', () => {
     const { result, rerender } = renderHook(() => useMap<string, number>());
     const [, add, remove, reset, setAll] = result.current;
