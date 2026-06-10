@@ -8,7 +8,10 @@ export function useArray<T>(initialState: T[] | (() => T[]) = () => []) {
   const reset = useCallback(() => setArray([]), []);
 
   const removeByIndex = useCallback((index: number) => setArray((prevArray) => {
-    if (index > -1) {
+    // Only copy + splice when the index actually points to an existing element.
+    // For an out-of-range index (negative, or >= length) we return the same
+    // array instance so React bails out of the state update without re-rendering.
+    if (index > -1 && index < prevArray.length) {
       const copy = prevArray.slice();
       copy.splice(index, 1);
       return copy;
