@@ -2,8 +2,8 @@
 
 **Core Changes**
 
-- `<ComposeContextProvider />` now have a more strict types. Only `React.ReactElement<React.PropsWithChildren>` is allowed from now on at the TypeScript level.
-  - You will most likely not affected by this. The types update is to align with the actual runtime behavior.
+- `<ComposeContextProvider />` now has a more strict types. Only `React.ReactElement<React.PropsWithChildren>` is allowed from now on at the TypeScript level.
+  - You will most likely not affect by this. The types update is to align with the actual runtime behavior.
 - `useStateWithDeps` is now finalized, stable, and documented.
 
 **Other Changes**
