@@ -1,9 +1,9 @@
 import { cloneElement, memo } from 'react';
-import type { Foxact } from '../types';
 
-export interface ContextComposeProviderProps extends Foxact.PropsWithChildren {
+export interface ContextComposeProviderProps extends React.PropsWithChildren {
+  /** Only elements that accept a `children` prop (e.g. context providers) can be composed */
   // eslint-disable-next-line @typescript-eslint/no-restricted-types -- cloneElement
-  contexts: React.ReactElement[]
+  contexts: Array<React.ReactElement<React.PropsWithChildren>>
 }
 
 /** @see https://foxact.skk.moe/compose-context-provider */
