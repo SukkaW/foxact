@@ -61,6 +61,7 @@ export default {
   'use-stable-handler-only-when-you-know-what-you-are-doing-or-you-will-be-fired': {
     title: 'useStableHandler'
   },
+  'use-state-with-deps': {},
   'use-typescript-happy-callback': {},
   'use-uncontrolled': {},
   '-- separator components': {

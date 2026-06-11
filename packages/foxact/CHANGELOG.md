@@ -2,7 +2,9 @@
 
 **Core Changes**
 
-- `EmailProtection` is reimplemented on top of `useSyncExternalStore` instead of `useState` + `useLayoutEffect`. The behavior stays the same (the server renders the obfuscated placeholder, the client renders the real address right after the hydration), with less re-render machinery.
+- `<ComposeContextProvider />` now have a more strict types. Only `React.ReactElement<React.PropsWithChildren>` is allowed from now on at the TypeScript level.
+  - You will most likely not affected by this. The types update is to align with the actual runtime behavior.
+- `useStateWithDeps` is now finalized, stable, and documented.
 
 **Other Changes**
 

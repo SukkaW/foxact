@@ -1,0 +1,86 @@
+---
+title: useStateWithDeps
+---
+
+# useStateWithDeps
+
+import ExportMetaInfo from '../../components/export-meta-info';
+
+<ExportMetaInfo />
+
+A `useState`-like hooks for plain objects with dependency tracking and minimum re-renders. `useStateWithDeps` returns a **snapshot** that tracks which properties you have read, and only re-renders when those properties change.
+
+## Usage
+
+```tsx copy
+import { useStateWithDeps } from 'foxact/use-state-with-deps';
+
+const Demo = () => {
+  const [snapshot, setState] = useStateWithDeps({
+    tracked: 0,
+    untracked: 0
+  });
+
+  // Only `tracked` is read during render, so it becomes the only rendering
+  // dependency of this component. Changing `untracked` alone will NOT
+  // re-render.
+  return (
+    <div>
+      <p>tracked: {snapshot.tracked}</p>
+      <button onClick={() => setState({ tracked: 1 })}>re-renders</button>
+      <button onClick={() => setState({ untracked: 1 })}>doesn't re-render</button>
+    </div>
+  );
+};
+```
+
+`setState` accepts a partial payload and merges it into the current state (unlike `useState`, which replaces the entire state):
+
+```js
+const [snap, setState] = useStateWithDeps({ a: 1, b: 42 });
+
+// `b` is left untouched
+setState({
+  a: 10,
+});
+
+// add `c` to the state object, `a` and `b` are left untouched
+setState({
+  c: 114514
+});
+
+// snap is now { a: 10, b: 42, c: 114514 }
+```
+
+A property only becomes a rendering dependency once it is read during render. In the first example above, calling `setState({ untracked: 1 })` updates the state (subsequent reads will see `1`) but doesn't trigger a re-render, because `untracked` hasn't been read yet.
+
+Values are compared with [`Object.is`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is), the same comparison `useState` uses to bail out: setting a property to its current value will not trigger re-render.
+
+`setState` also accepts an updater function that receives the current state and returns a partial payload:
+
+```js
+setState(prevState => ({ count: prevState.count + 1 }));
+```
+
+Always prefer the updater function when deriving the next state value from the current one, as accessing the current state value through the updater function will bypass the dependency tracking and may avoid unnecessary re-renders:
+
+```js
+const handleClick = useCallback(() => {
+  // ❌ reads `count` through the tracked snapshot: `count` becomes a
+  // permanent rendering dependency
+  setState({ count: snap.count + 1 });
+
+  // ✅ reads `count` through the untracked `prevState`: `count` will not
+  // become a rendering dependency
+  setState(prevState => ({ count: prevState.count + 1 }));
+}, [setState, snap]);
+```
+
+Both the `snapshot` and `setState` are referentially stable across re-renders, so it is safe to include/omit them from other hooks' dependency arrays.
+
+## Caveats
+
+`useStateWithDeps` is designed for plain objects  with the following caveats:
+
+- `useStateWithDeps` is designed for plain objects with a (mostly) fixed shape.
+- Rendering dependencies are permanent: once a property has been read through the snapshot, it stays a rendering dependency for the lifetime of the component (until unmount), even if a conditional branch stops reading it.
