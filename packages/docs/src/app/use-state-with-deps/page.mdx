@@ -84,3 +84,34 @@ Both the `snapshot` and `setState` are referentially stable across re-renders, s
 
 - `useStateWithDeps` is designed for plain objects with a (mostly) fixed shape.
 - Rendering dependencies are permanent: once a property has been read through the snapshot, it stays a rendering dependency for the lifetime of the component (until unmount), even if a conditional branch stops reading it.
+- **Never spread the snapshot.** Dependency tracking works by intercepting property reads with getters, and a spread (`{ ...snapshot }`) reads every property at once — every property becomes a rendering dependency, and the component re-renders on every change, which defeats the entire optimization.
+  - Destructuring specific properties (`const { a, b } = snapshot`) is perfectly fine, it only reads the properties you explicitly name, which are the ones you intend to depend on anyway.
+
+## Extending the snapshot
+
+When building a custom hook on top of `useStateWithDeps`, you may want to return the state alongside extra members that are not part of the state (a `mutate` function, for example). Spreading the snapshot would break the optimization as described above. Instead, wrap the snapshot with getters that delegate property access lazily:
+
+```js
+function useRequest() {
+  const [snapshot, setState] = useStateWithDeps({
+    data: undefined,
+    error: undefined,
+    isLoading: false
+  });
+
+  const mutate = useCallback(/** ... */, [setState]);
+
+  return {
+    // ❌ DON'T DO THIS. Spread would read (and track) every property right here
+    // ...snapshot
+    //
+    // ✅ a getter delegates the read: `data` is only read through the
+    // snapshot (and only becomes a rendering dependency) when the consumer
+    // of `useRequest` actually accesses it
+    get data() { return snapshot.data; },
+    get error() { return snapshot.error; },
+    get isLoading() { return snapshot.isLoading; },
+    mutate
+  };
+}
+```
