@@ -13,7 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
-        name: Install pnpm
         with:
           run_install: false
       - name: Setup node
@@ -26,3 +25,4 @@ jobs:
       - run: pnpm install
       #   run: pnpm run lint
       - run: pnpm run build
+      - run: pnpm run test

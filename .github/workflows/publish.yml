@@ -33,6 +33,7 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - run: pnpm config set --location=global minimumReleaseAge 0
       - run: pnpm install
+      - run: pnpm -F=foxact run test
       - run: pnpm -F=foxact run build
       - name: Publish
         run: |
