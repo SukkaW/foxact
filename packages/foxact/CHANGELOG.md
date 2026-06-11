@@ -1,3 +1,9 @@
+# Unreleased
+
+**Other Changes**
+
+- Removed the undocumented and unstable `<EmailProtection />` component. It was never intended to be used.
+
 # 0.3.5
 
 **Core Changes**
