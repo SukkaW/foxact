@@ -1,4 +1,8 @@
-# Unreleased
+# 0.3.6
+
+**Core Changes**
+
+- Introduce new `Breadcrumbs`, a React utility that allows you to colocate your breadcrumb declarations within your UI, without breaking React's one-way data flow. See [the documentation](https://foxact.skk.moe/breadcrumbs) for more information.
 
 **Other Changes**
 
