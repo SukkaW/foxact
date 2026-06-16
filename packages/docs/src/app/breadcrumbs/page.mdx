@@ -299,8 +299,9 @@ For a URL like `/products/electronics/42`, the breadcrumb chain would be:
 
 ```ts
 [
-  { title: "electronics", href: "/products/electronics" },
-  { title: "Super Widget" }
+  { title: "Products", href: "/products" },
+  { title: "Electronics" /* params.category */, href: "/products/electronics" },
+  { title: "Super Widget" /* params.id */ }
 ]
 ```
 
