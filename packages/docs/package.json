@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "foxact": "link:../foxact/dist",
-    "next": "^16.2.8",
+    "next": "^16.2.9",
     "nextra": "^4.6.1",
     "nextra-theme-docs": "^4.6.1",
     "react": "^19.2.7",
@@ -23,12 +23,12 @@
     "ufo": "^1.6.4"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.3.0",
+    "@tailwindcss/postcss": "^4.3.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint-plugin-mdx": "^3.8.1",
     "pagefind": "^1.5.2",
-    "tailwindcss": "^4.3.0"
+    "tailwindcss": "^4.3.1"
   }
 }

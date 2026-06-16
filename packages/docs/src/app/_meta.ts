@@ -75,6 +75,7 @@ export default {
     type: 'separator',
     title: 'Utilities'
   },
+  breadcrumbs: {},
   'context-reducer': {},
   'context-state': {},
   'create-local-storage-state': {},
