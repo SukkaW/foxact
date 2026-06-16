@@ -8,7 +8,7 @@ import ExportMetaInfo from '../../components/export-meta-info';
 
 <ExportMetaInfo />
 
-A headless breadcrumb primitive for React. Automatically collects breadcrumb items from nested layouts/components, then renders the full chain wherever you want — without breaking React's one-way data flow. Built on top of foxact's [`createMagicPortal`](/magic-portal).
+A headless breadcrumb primitive for React. Automatically collects breadcrumb items from nested layouts/components, then renders the full chain wherever you want — without breaking React's one-way data flow. Built on top of foxact's [Magic Portal](/magic-portal) utility.
 
 ## The Problem
 
@@ -30,7 +30,7 @@ With `foxact/breadcrumbs`, **you declare breadcrumbs the same way you declare yo
 
 Under the hood, each `BreadcrumbItem` uses React Context to accumulate the chain: it reads the parent chain, appends its own `{ title, href }`, and provides the extended chain to its children. This is just nested context providers — the same mechanism React already uses for tree-shaped data.
 
-At the leaf (a page component), `BreadcrumbPage` reads the full accumulated chain and portals the rendered breadcrumb UI to a target element in the root layout via [`createMagicPortal`](/magic-portal). No data flows "upward" — the chain is built top-down through context, and the UI is "teleported" to the global layout header via a React Portal.
+At the leaf (a page component), `BreadcrumbPage` reads the full accumulated chain and portals the rendered breadcrumb UI to a target element in the root layout via [Magic Portal](/magic-portal). No data flows "upward" — the chain is built top-down through context, and the UI is "teleported" to the global layout header via a React Portal.
 
 The result:
 
