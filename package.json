@@ -11,12 +11,12 @@
   "author": "Sukka <https://skk.moe>",
   "license": "MIT",
   "devDependencies": {
-    "@eslint-sukka/node": "^8.10.5",
-    "@eslint-sukka/react": "^8.10.5",
-    "@eslint-sukka/shared": "^8.10.5",
+    "@eslint-sukka/node": "^8.11.1",
+    "@eslint-sukka/react": "^8.11.1",
+    "@eslint-sukka/shared": "^8.11.1",
     "eslint": "^10.5.0",
-    "eslint-config-sukka": "^8.10.5",
-    "eslint-formatter-sukka": "^8.10.5",
+    "eslint-config-sukka": "^8.11.1",
+    "eslint-formatter-sukka": "^8.11.1",
     "eslint-plugin-testing-library": "^7.16.2",
     "turbo": "^2.9.14",
     "typescript": "^6.0.3"
