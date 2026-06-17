@@ -61,6 +61,10 @@ export function createBreadcrumbs<T = unknown>(name = '(Anonymous)'): [
     );
   }
 
+  if (process.env.NODE_ENV !== 'production') {
+    BreadcrumbSegment.displayName = name + '.BreadcrumbSegment';
+  }
+
   function BreadcrumbCurrent(props: BreadcrumbPageProps<T>) {
     const { title, meta } = props;
     const parentChain = useContext(ChainContext);
@@ -79,6 +83,10 @@ export function createBreadcrumbs<T = unknown>(name = '(Anonymous)'): [
         </PortalContent>
       </ChainContext.Provider>
     );
+  }
+
+  if (process.env.NODE_ENV !== 'production') {
+    BreadcrumbCurrent.displayName = name + '.BreadcrumbCurrent';
   }
 
   function useBreadcrumbs(): BreadcrumbChain<T> {
