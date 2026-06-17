@@ -1,3 +1,4 @@
+/* eslint-disable sukka/unicorn/require-css-escape -- testing purposes */
 import { describe, it } from 'mocha';
 import { expect } from 'earl';
 

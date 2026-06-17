@@ -4,6 +4,7 @@ import { expect } from 'earl';
 import { Suspense, use as reactUse } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { use } from '.';
+import { trapConsoleError } from '../../test/trap-console-error';
 
 // the thenable contract React.use consumes (and the polyfill implements):
 // a real promise carrying a pre-tracked status
@@ -63,15 +64,11 @@ describe('use', () => {
       return <span>{use(rejected)}</span>;
     }
 
-    // React reports the render error through console.error, silence it
-    /* eslint-disable no-console -- intercept React error reporting */
-    const originalConsoleError = console.error;
-    console.error = () => { /* noop */ };
+    const trap = trapConsoleError();
     try {
       expect(() => render(<Probe />)).toThrow('use() rejection reason');
     } finally {
-      console.error = originalConsoleError;
+      trap.restore();
     }
-    /* eslint-enable no-console */
   });
 });

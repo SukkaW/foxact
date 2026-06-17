@@ -5,6 +5,7 @@ import { renderToString } from 'react-dom/server';
 import { hydrateRoot } from 'react-dom/client';
 import { act, renderHook } from '@testing-library/react';
 import { useIsClient } from '.';
+import { trapConsoleError } from '../../test/trap-console-error';
 
 function Probe() {
   return <span>{useIsClient() ? 'client' : 'server'}</span>;
@@ -28,11 +29,7 @@ describe('useIsClient', () => {
 
     expect(container.textContent).toEqual('server');
 
-    // hydration mismatches are reported through console.error
-    /* eslint-disable no-console -- intercept console.error to catch hydration mismatches */
-    const consoleErrorCalls: unknown[] = [];
-    const originalConsoleError = console.error;
-    console.error = (...args: unknown[]) => consoleErrorCalls.push(args);
+    const trap = trapConsoleError();
 
     let root: ReturnType<typeof hydrateRoot>;
     try {
@@ -40,13 +37,12 @@ describe('useIsClient', () => {
         root = hydrateRoot(container, <Probe />);
       });
     } finally {
-      console.error = originalConsoleError;
+      trap.restore();
     }
-    /* eslint-enable no-console */
 
     // the first pass hydrates with the server markup, the second pass flips
     expect(container.textContent).toEqual('client');
-    expect(consoleErrorCalls).toEqual([]);
+    expect(trap.calls).toEqual([]);
 
     act(() => root.unmount());
     container.remove();

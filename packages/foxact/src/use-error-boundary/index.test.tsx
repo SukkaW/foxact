@@ -4,6 +4,7 @@ import { expect } from 'earl';
 import { Component } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { useErrorBoundary } from '.';
+import { trapConsoleError } from '../../test/trap-console-error';
 
 interface BoundaryState {
   error: Error | null
@@ -25,15 +26,12 @@ class Boundary extends Component<React.PropsWithChildren, BoundaryState> {
 }
 
 function silencingReactErrorReporting<T>(fn: () => T): T {
-  /* eslint-disable no-console -- React reports boundary-caught errors via console.error */
-  const originalConsoleError = console.error;
-  console.error = () => { /* noop */ };
+  const trap = trapConsoleError();
   try {
     return fn();
   } finally {
-    console.error = originalConsoleError;
+    trap.restore();
   }
-  /* eslint-enable no-console */
 }
 
 describe('useErrorBoundary', () => {
