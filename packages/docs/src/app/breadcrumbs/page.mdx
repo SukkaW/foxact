@@ -26,17 +26,17 @@ The naive solutions all have problems:
 
 ## The Idea
 
-With `foxact/breadcrumbs`, **you declare breadcrumbs the same way you declare your UI — as components, right where they belong.** Just like you write `<h1>Products</h1>` inside the Products layout, you write `<BreadcrumbItem title="Products" href="/products">` in the same place. Each breadcrumb segment is declared naturally alongside the UI it describes, and the full chain assembles itself automatically from the component tree. There's no separate config file to maintain, no global store to dispatch into.
+With `foxact/breadcrumbs`, **you declare breadcrumbs the same way you declare your UI — as components, right where they belong.** Just like you write `<h1>Products</h1>` inside the Products layout, you write `<BreadcrumbSegment title="Products" href="/products">` in the same place. Each breadcrumb segment is declared naturally alongside the UI it describes, and the full chain assembles itself automatically from the component tree. There's no separate config file to maintain, no global store to dispatch into.
 
-Under the hood, each `BreadcrumbItem` uses React Context to accumulate the chain: it reads the parent chain, appends its own `{ title, href }`, and provides the extended chain to its children. This is just nested context providers — the same mechanism React already uses for tree-shaped data.
+Under the hood, each `BreadcrumbSegment` uses React Context to accumulate the chain: it reads the parent chain, appends its own `{ title, href }`, and provides the extended chain to its children. This is just nested context providers — the natural React tree hierarchy.
 
-At the leaf (a page component), `BreadcrumbPage` reads the full accumulated chain and portals the rendered breadcrumb UI to a target element in the root layout via [Magic Portal](/magic-portal). No data flows "upward" — the chain is built top-down through context, and the UI is "teleported" to the global layout header via a React Portal.
+At the leaf (a page component), `BreadcrumbCurrent` reads the full accumulated chain and portals the rendered breadcrumb UI to a target element in the root layout via [Magic Portal](/magic-portal). No data flows "upward" — the chain is built top-down through context, and the UI is "teleported" back up to the global layout header via a React Portal.
 
 The result:
 
 - **Declarative** — breadcrumbs are declared as components in your UI tree, not configured elsewhere.
-- **Co-located** — each layout/page knows about its own segment.
-- **Automatic collection** — nesting `BreadcrumbItem` components is all it takes; no boilerplate wiring.
+- **Co-located** — your breadcrumb declarations live right at your UI.
+- **Automatic collection** — nesting `BreadcrumbSegment` components is all it takes; no boilerplate wiring.
 - **No extra renders** — no global state, no `useEffect` dispatches, no double-render workarounds.
 
 import NextImage from 'next/image';
@@ -51,7 +51,7 @@ import FoxactBreadcrumbsImage from '../../images/foxact-breadcrumbs.png';
 
 ### Setup
 
-Create the breadcrumb primitives in a shared file. `createBreadcrumbs` returns an array, so you can name the components however you like:
+Create the breadcrumb primitives in a shared file. `createBreadcrumbs` returns an array/tuple, so you can name the components and hooks however you like:
 
 ```tsx filename="src/breadcrumbs/index.tsx" copy
 'use client';
@@ -65,10 +65,10 @@ export const [
   BreadcrumbProvider,
   // Target — specify where the breadcrumb UI will "teleport" to, typically you render this in the root layout
   BreadcrumbTarget,
-  // Item — one per intermediate layout/route segment, declares a breadcrumb segment
-  BreadcrumbItem,
-  // Page — the leaf that completes the chain and renders the breadcrumb UI
-  BreadcrumbPage,
+  // Segment — one per intermediate layout/route segment, declares a breadcrumb segment
+  BreadcrumbSegment,
+  // Current — the leaf that completes the chain and renders the breadcrumb UI
+  BreadcrumbCurrent,
   // Hook — read the current breadcrumb chain from context
   useBreadcrumbs
 ] = createBreadcrumbs(
@@ -107,31 +107,33 @@ export default function AppLayout({ children }: React.PropsWithChildren) {
 
 ### Intermediate Layouts / Route Segments
 
-In each intermediate layout / route segment, wrap `children` with `BreadcrumbItem` to declare a breadcrumb segment:
+In each intermediate layout / route segment, wrap `children` with `BreadcrumbSegment` to declare a breadcrumb segment:
 
 ```tsx filename="src/layouts/products-layout.tsx" copy
-import { BreadcrumbItem } from '@/breadcrumbs';
+import { BreadcrumbSegment } from '@/breadcrumbs';
 
 export default function ProductsLayout({ children }: React.PropsWithChildren) {
   return (
-    <BreadcrumbItem title="Products" href="/products">
+    <BreadcrumbSegment title="Products" href="/products">
       {children}
-    </BreadcrumbItem>
+    </BreadcrumbSegment>
   );
 }
 ```
 
+> Under the hood, `BreadcrumbSegment` is a React context provider that accumulates the breadcrumb chain. That's why you must provide subtree via `children`.
+
 ### Leaf Page
 
-In the leaf page, use `BreadcrumbPage` to complete the chain and render the breadcrumb UI. Pass a **render function** as children to receive the full item array:
+In the leaf page, use `BreadcrumbCurrent` to complete the chain and render the breadcrumb UI. Pass a **render function** as children to receive the full item array:
 
 ```tsx filename="src/pages/product-detail.tsx" copy
-import { BreadcrumbPage } from '@/breadcrumbs';
+import { BreadcrumbCurrent } from '@/breadcrumbs';
 
 export default function ProductDetailPage({ product }: { product: Product }) {
   return (
     <div>
-      <BreadcrumbPage title={product.name}>
+      <BreadcrumbCurrent title={product.name}>
         {(items) => (
           <ol>
             {items.map((item) => (
@@ -143,7 +145,7 @@ export default function ProductDetailPage({ product }: { product: Product }) {
             ))}
           </ol>
         )}
-      </BreadcrumbPage>
+      </BreadcrumbCurrent>
 
       <h1>{product.name}</h1>
       {/* ... */}
@@ -164,16 +166,16 @@ The items array for a product page nested under "Products" would look like:
 You can also render a custom React element instead of providing a callback function. And you can read the item array via the `useBreadcrumbs` hook:
 
 ```tsx filename="src/pages/product-detail.tsx" copy
-import { BreadcrumbPage } from '@/breadcrumbs';
+import { BreadcrumbCurrent } from '@/breadcrumbs';
 import { ProductBreadcrumb } from './product-breadcrumb';
 
 export default function ProductDetailPage({ product }: { product: Product }) {
   return (
     <div>
-      <BreadcrumbPage title={product.name}>
+      <BreadcrumbCurrent title={product.name}>
         {/* Pass a React element instead of a function */}
         <ProductBreadcrumb />
-      </BreadcrumbPage>
+      </BreadcrumbCurrent>
 
       <h1>{product.name}</h1>
     </div>
@@ -225,19 +227,19 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
 
 ```tsx filename="src/app/products/layout.tsx" copy
 // layout for each route segment
-import { BreadcrumbItem } from '@/breadcrumbs';
+import { BreadcrumbSegment } from '@/breadcrumbs';
 
 export default function ProductsLayout({ children }: React.PropsWithChildren) {
   return (
-    <BreadcrumbItem title="Products" href="/products">
+    <BreadcrumbSegment title="Products" href="/products">
       {children}
-    </BreadcrumbItem>
+    </BreadcrumbSegment>
   );
 }
 ```
 
 ```tsx filename="src/app/products/[category]/layout.tsx" copy
-import { BreadcrumbItem } from '@/breadcrumbs';
+import { BreadcrumbSegment } from '@/breadcrumbs';
 
 export default async function CategoryLayout({
   children,
@@ -246,15 +248,15 @@ export default async function CategoryLayout({
   const { category } = await params;
 
   return (
-    <BreadcrumbItem title={category} href={`/products/${category}`}>
+    <BreadcrumbSegment title={category} href={`/products/${category}`}>
       {children}
-    </BreadcrumbItem>
+    </BreadcrumbSegment>
   );
 }
 ```
 
 ```tsx filename="src/app/products/[category]/[id]/page.tsx" copy
-import { BreadcrumbPage } from '@/breadcrumbs';
+import { BreadcrumbCurrent } from '@/breadcrumbs';
 import { ProductBreadcrumb } from './product-breadcrumb';
 
 export default async function ProductPage({ params }: { params: Promise<{ category: string, id: string }> }) {
@@ -263,9 +265,9 @@ export default async function ProductPage({ params }: { params: Promise<{ catego
 
   return (
     <div>
-      <BreadcrumbPage title={product.name}>
+      <BreadcrumbCurrent title={product.name}>
         <ProductBreadcrumb />
-      </BreadcrumbPage>
+      </BreadcrumbCurrent>
       <h1>{product.name}</h1>
     </div>
   );
@@ -318,8 +320,8 @@ import type { ReactNode } from 'react';
 export const [
   BreadcrumbProvider,
   BreadcrumbTarget,
-  BreadcrumbItem,
-  BreadcrumbPage,
+  BreadcrumbSegment,
+  BreadcrumbCurrent,
   useBreadcrumbs
 ] = createBreadcrumbs<{ icon?: ReactNode }>('MainNav');
 ```
@@ -327,11 +329,11 @@ export const [
 Then pass `meta` on each item and use it during rendering:
 
 ```tsx
-<BreadcrumbItem title="Products" href="/products" meta={{ icon: <ShopIcon /> }}>
+<BreadcrumbSegment title="Products" href="/products" meta={{ icon: <ShopIcon /> }}>
   {children}
-</BreadcrumbItem>
+</BreadcrumbSegment>
 
-<BreadcrumbPage title={product.name} meta={{ icon: <ProductIcon /> }}>
+<BreadcrumbCurrent title={product.name} meta={{ icon: <ProductIcon /> }}>
   {(items) => (
     <ol>
       {items.map((item) => (
@@ -342,7 +344,7 @@ Then pass `meta` on each item and use it during rendering:
       ))}
     </ol>
   )}
-</BreadcrumbPage>
+</BreadcrumbCurrent>
 ```
 
 ## Server-Side Rendering
