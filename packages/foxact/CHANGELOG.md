@@ -1,3 +1,14 @@
+# 0.3.7
+
+**Core Changes**
+
+- Introduce new `useResizing`, a React hook that allows you to detect whether an element is currently being resized via `ResizeObserver` and ref callback.
+
+**Other Changes**
+
+- Add `displayName` for `Breadcrumbs`'s components (guarded with non-production mode check), enabling better DX via React DevTools.
+- Disable `hoistTransitiveImports` in `foxact`'s Rollup build config.
+
 # 0.3.6
 
 **Core Changes**
