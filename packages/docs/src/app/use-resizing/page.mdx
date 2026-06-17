@@ -1,0 +1,133 @@
+---
+title: useResizing
+---
+
+# useResizing
+
+import ExportMetaInfo from '../../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Detect whether an element is currently being resized. Returns a boolean `isResizing` state and a ref callback to attach to the target element.
+
+Under the hood, it uses a `ResizeObserver` to watch for size changes and a debounced timeout to determine when resizing has stopped.
+
+## Usage
+
+```tsx copy
+import { useResizing } from 'foxact/use-resizing';
+
+function ResizablePanel() {
+  const [isResizing, resizingRef] = useResizing();
+
+  return (
+    <div
+      ref={resizingRef}
+      style={{
+        resize: 'both',
+        overflow: 'auto',
+        outline: isResizing ? '2px solid blue' : '1px solid gray'
+      }}
+    >
+      {isResizing ? 'Resizing...' : 'Resize me!'}
+    </div>
+  );
+}
+```
+
+If you have other ref(s) to attach to the element, you can use [`foxact/merge-refs`](/merge-refs) to combine them:
+
+```tsx copy
+import { useRef } from 'react';
+import { useResizing } from 'foxact/use-resizing';
+import { mergeRefs } from 'foxact/merge-refs';
+
+function Panel() {
+  const [isResizing, resizingRef] = useResizing();
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div ref={mergeRefs(resizingRef, panelRef)}>
+      {/* ... */}
+    </div>
+  );
+}
+```
+
+## Options
+
+```tsx
+const [isResizing, ref] = useResizing({
+  // How long (ms) after the last resize event before isResizing resets to false.
+  // Increase this if you want to keep `isResizing` active longer after the user stops dragging.
+  // Default: 150
+  timeout: 150,
+
+  // ResizeObserver will fire callback immediately on element observation, which is counter-intuitive.
+  // By setting this option to `true`, the first callback will be treated as a resize.
+  //
+  // Default: false (more intuitive and is most likely what you want)
+  leading: false
+});
+```
+
+## Example: Fixing Recharts resize performance
+
+[Recharts](https://recharts.org) is a popular React charting library, whose built-in `ResponsiveContainer` re-renders the entire chart on every resize frame, causing [significant jank during window or container resizing](https://github.com/recharts/recharts/issues/1767). The Recharts team has marked this as won't fix / not planned.
+
+Here is an example of building a custom `ResponsiveContainer` replacement with `useResizing` that can swap the expensive chart for a lightweight skeleton during resizing:
+
+```tsx filename="src/components/responsive-container.tsx" copy
+'use client';
+
+import { useResizing } from 'foxact/use-resizing';
+
+interface ResponsiveContainerProps {
+  children: React.ReactNode,
+  fallback?: React.ReactNode,
+  timeout?: number,
+  className?: string,
+  style?: React.CSSProperties
+}
+
+export function ResponsiveContainer({
+  children,
+  fallback = null,
+  timeout = 150,
+  className,
+  style
+}: ResponsiveContainerProps) {
+  const [isResizing, resizingRef] = useResizing({ timeout });
+
+  return (
+    <div ref={resizingRef} className={className} style={style}>
+      {isResizing ? fallback : children}
+    </div>
+  );
+}
+```
+
+Then use it in place of Recharts' `ResponsiveContainer`:
+
+```tsx filename="src/components/revenue-chart.tsx" copy
+import { AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts';
+import { ResponsiveContainer } from './responsive-container';
+
+function RevenueChart({ data }) {
+  return (
+    <ResponsiveContainer
+      style={{ width: '100%', height: 300 }}
+      fallback={<ChartSkeleton />}
+    >
+      <AreaChart data={data} width={800} height={300}>
+        <XAxis dataKey="month" />
+        <YAxis />
+        <Tooltip />
+        <Area type="monotone" dataKey="revenue" />
+      </AreaChart>
+    </ResponsiveContainer>
+  );
+}
+```
+
+During resize, the chart unmounts entirely and the skeleton is shown instead. Once resizing stops, the chart re-mounts at its new size — one render instead of dozens.

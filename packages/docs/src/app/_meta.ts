@@ -54,6 +54,7 @@ export default {
   'use-local-storage': {},
   'use-media-query': {},
   'use-page-visibility': {},
+  'use-resizing': {},
   'use-retimer': {},
   'use-readonly-search-params': {},
   'use-session-storage': {},
