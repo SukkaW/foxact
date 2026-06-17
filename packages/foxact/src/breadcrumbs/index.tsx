@@ -35,8 +35,8 @@ export type BreadcrumbPortalTargetProps<E extends React.ElementType = 'div'> =
 export function createBreadcrumbs<T = unknown>(name = '(Anonymous)'): [
   BreadcrumbProvider: React.ComponentType<React.PropsWithChildren>,
   BreadcrumbPortalTarget: <E extends React.ElementType = 'div'>(props: BreadcrumbPortalTargetProps<E>) => React.ReactNode,
-  BreadcrumbItem: (props: BreadcrumbItemProps<T>) => React.ReactNode,
-  BreadcrumbPage: (props: BreadcrumbPageProps<T>) => React.ReactNode | null,
+  BreadcrumbSegment: (props: BreadcrumbItemProps<T>) => React.ReactNode,
+  BreadcrumbCurrent: (props: BreadcrumbPageProps<T>) => React.ReactNode | null,
   useBreadcrumbs: () => Array<BreadcrumbItemData<T>>
 ] {
   const ChainContext = createContext<BreadcrumbChain<T>>([]);
@@ -47,7 +47,7 @@ export function createBreadcrumbs<T = unknown>(name = '(Anonymous)'): [
     PortalContent
   ] = createMagicPortal(name);
 
-  function BreadcrumbItem({ title, href, meta, children }: BreadcrumbItemProps<T>) {
+  function BreadcrumbSegment({ title, href, meta, children }: BreadcrumbItemProps<T>) {
     const parentChain = useContext(ChainContext);
     const chain = useMemo(
       (): BreadcrumbChain<T> => [...parentChain, { title, href, meta }],
@@ -61,7 +61,7 @@ export function createBreadcrumbs<T = unknown>(name = '(Anonymous)'): [
     );
   }
 
-  function BreadcrumbPage(props: BreadcrumbPageProps<T>) {
+  function BreadcrumbCurrent(props: BreadcrumbPageProps<T>) {
     const { title, meta } = props;
     const parentChain = useContext(ChainContext);
     const fullChain = useMemo(
@@ -96,8 +96,8 @@ export function createBreadcrumbs<T = unknown>(name = '(Anonymous)'): [
   return [
     PortalProvider, // BreadcrumbProvider,
     PortalTarget,
-    BreadcrumbItem,
-    BreadcrumbPage,
+    BreadcrumbSegment,
+    BreadcrumbCurrent,
     useBreadcrumbs
   ];
 }
