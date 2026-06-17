@@ -20,7 +20,7 @@ function mount(matchMediaOverride?: boolean) {
   const clicks: string[] = [];
 
   function Probe() {
-    const props = useFastClick<HTMLButtonElement>((e) => clicks.push(e.type));
+    const props = useFastClick<HTMLButtonElement>((e) => { clicks.push(e.type); });
     return <button type="button" {...props}>fast</button>;
   }
 

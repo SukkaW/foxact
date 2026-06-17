@@ -11,9 +11,7 @@ export const requestIdleCallback = (
   return self.setTimeout(() => {
     cb({
       didTimeout: false,
-      timeRemaining() {
-        return Math.max(0, 50 - (Date.now() - start));
-      }
+      timeRemaining: () => Math.max(0, 50 - (Date.now() - start))
     });
   }, 1);
 };

@@ -54,7 +54,7 @@ describe('useComponentWillReceiveUpdate', () => {
     const log: string[] = [];
 
     function Probe({ dep }: { dep: string }) {
-      useComponentWillReceiveUpdate(() => log.push(`sync:${dep}`), [dep]);
+      useComponentWillReceiveUpdate(() => { log.push(`sync:${dep}`); }, [dep]);
       log.push(`render:${dep}`);
       return null;
     }

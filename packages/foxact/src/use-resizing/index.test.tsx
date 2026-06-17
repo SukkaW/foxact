@@ -1,3 +1,4 @@
+/* eslint-disable sukka/unicorn/no-unnecessary-global-this -- happy dom */
 import { after, before, describe, it } from 'mocha';
 import { expect } from 'earl';
 

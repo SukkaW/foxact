@@ -66,7 +66,7 @@ describe('useAbortableEffect', () => {
       };
     }, []));
 
-    receivedSignal!.addEventListener('abort', () => order.push('abort'));
+    receivedSignal!.addEventListener('abort', () => { order.push('abort'); });
 
     unmount();
 

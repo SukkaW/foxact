@@ -43,6 +43,7 @@ class MockIntersectionObserver {
   }
 }
 
+// eslint-disable-next-line sukka/unicorn/no-unnecessary-global-this -- happy dom
 const realIntersectionObserver = globalThis.IntersectionObserver;
 
 interface Captured {

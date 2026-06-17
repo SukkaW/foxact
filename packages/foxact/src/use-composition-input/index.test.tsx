@@ -8,7 +8,7 @@ function mount() {
   const received: string[] = [];
 
   function Probe() {
-    const props = useCompositionInput((value) => received.push(value));
+    const props = useCompositionInput((value) => { received.push(value); });
     return <input {...props} />;
   }
 
