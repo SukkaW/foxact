@@ -3,6 +3,7 @@ import path from 'node:path';
 import { getEntries } from './get-entries';
 import gzipSize from 'gzip-size';
 import { file as brotliSizeFile } from 'brotli-size';
+import { file as zstdSizeFile } from 'zstd-size';
 
 import zlib from 'node:zlib';
 
@@ -12,8 +13,8 @@ const rootDir = process.cwd();
 const distDir = path.resolve(rootDir, 'dist');
 
 interface GzipStats {
-  total: { raw: number, gzip: number, br: number },
-  exports: Record<string, { raw: number, gzip: number, br: number }>
+  total: { raw: number, gzip: number, br: number, zstd: number },
+  exports: Record<string, { raw: number, gzip: number, br: number, zstd: number }>
 }
 
 function copyAndCreateFiles() {
@@ -75,7 +76,7 @@ async function createPackageJson(entries: Record<string, string>) {
 
 async function createSizesJson(entries: Record<string, string>) {
   const gzipSizeStat: GzipStats = {
-    total: { raw: 0, gzip: 0, br: 0 },
+    total: { raw: 0, gzip: 0, br: 0, zstd: 0 },
     exports: {}
   };
 
@@ -85,7 +86,7 @@ async function createSizesJson(entries: Record<string, string>) {
       .map(async (entryName) => {
         const filePath = path.join(distDir, entryName, 'index.mjs');
 
-        const [fileSize, fileGzipSize, fileBrotliSize] = await Promise.all([
+        const [fileSize, fileGzipSize, fileBrotliSize, fileZstdSize] = await Promise.all([
           fsp.stat(filePath).then(stat => stat.size),
           // Cloudflare uses gzip level 8 and brotli level 4 as default
           // https://blog.cloudflare.com/this-is-brotli-from-origin/
@@ -93,16 +94,22 @@ async function createSizesJson(entries: Record<string, string>) {
           brotliSizeFile(filePath, {
             [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
             [zlib.constants.BROTLI_PARAM_QUALITY]: 4
+          }),
+          zstdSizeFile(filePath, {
+            level: zlib.constants.ZSTD_CLEVEL_DEFAULT
           })
         ]);
 
         gzipSizeStat.total.raw += fileSize;
         gzipSizeStat.total.gzip += fileGzipSize;
+        gzipSizeStat.total.br += fileBrotliSize;
+        gzipSizeStat.total.zstd += fileZstdSize;
 
         gzipSizeStat.exports[entryName] = {
           raw: fileSize,
           gzip: fileGzipSize,
-          br: fileBrotliSize
+          br: fileBrotliSize,
+          zstd: fileZstdSize
         };
       })
   );
