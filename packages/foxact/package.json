@@ -33,7 +33,7 @@
     "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "@happy-dom/global-registrator": "^20.10.5",
+    "@happy-dom/global-registrator": "^20.10.6",
     "@napi-rs/magic-string": "^0.3.4",
     "@package-json/types": "^0.0.13",
     "@rollup/plugin-node-resolve": "^16.0.3",
@@ -54,7 +54,7 @@
     "fdir": "^6.5.0",
     "foxts": "^5.5.1",
     "gzip-size": "6.0.0",
-    "happy-dom": "^20.10.5",
+    "happy-dom": "^20.10.6",
     "mocha": "^11.7.6",
     "nyc": "^18.0.0",
     "react": "^19.2.7",
