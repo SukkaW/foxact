@@ -14,7 +14,7 @@ export function isSafari() {
   if (/version\/[\d._].*?safari/i.test(navigator.userAgent)) {
     return true;
   }
-  // eslint-disable-next-line sukka/prefer-single-boolean-return -- cleaner code
+  // eslint-disable-next-line sukka/unicorn/prefer-boolean-return -- cleaner code
   if (/mobile safari [\d._]+/i.test(navigator.userAgent)) {
     return true;
   }
