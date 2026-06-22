@@ -1,3 +1,10 @@
+# 0.3.8
+
+**Core Changes**
+
+- Introduce new `mergeProps`, a utility that merges props smartly, with special handling for `className`, `style`, and event handlers.
+- Introduce new `polymorphic`, a set of utilities function and types that allows you to create polymorphic components.
+
 # 0.3.7
 
 **Core Changes**
