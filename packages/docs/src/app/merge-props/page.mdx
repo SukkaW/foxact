@@ -1,0 +1,107 @@
+---
+title: Merge Props
+---
+
+# Merge Props
+
+import ExportMetaInfo from '../../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Merge multiple sets of React props (rightmost wins) with smart handling for `className`, `style`, and event handlers. Follows the `Object.assign` pattern where the rightmost object's fields overwrite conflicting ones, with special merging logic for common React patterns.
+
+## How merging works
+
+**Rightmost wins**
+
+```tsx
+mergeProps({ id: 'a', value: 42 }, { value: 13 }); // { id: 'a', value: 13 }
+```
+
+**Ref is not merged**
+
+```tsx
+mergeProps({ ref: refA }, { ref: refB }); // { ref: refB }
+```
+
+> You can use [`mergeRefs` from `foxact/merge-refs`](/merge-refs) to merge refs.
+
+**`className` are concatenated with rightmost first**
+
+```tsx
+mergeProps({ className: 'a' }, { className: 'b' }); // { className: 'b a' }
+```
+
+**`style` are merged with keys from the rightmost style overwriting earlier ones**
+
+```tsx
+mergeProps({ style: { color: 'red', fontSize: 12 } }, { style: { color: 'blue' } }); // { style: { color: 'blue', fontSize: 12 } }
+```
+
+**Event handlers are merged and executed right-to-left**
+
+```tsx
+mergeProps(
+  { onClick() { console.log('1'); } },
+  { onClick() { console.log('2'); } },
+  { onClick() { console.log('3'); } }
+)
+// prints '3', '2', '1' when clicked
+```
+
+## Passing functions instead of objects
+
+Props can also be provided as functions that receive the accumulated props up to that point:
+
+```tsx copy
+import { mergeProps } from 'foxact/merge-props';
+
+const merged = mergeProps(
+  { className: 'base', role: 'button' },
+  (accumulatedProps) => ({
+    // accumulatedProps is { className: 'base', role: 'button' }
+    'aria-label': accumulatedProps.role === 'button' ? 'Click me' : undefined,
+  }),
+  { id: 'my-button' },
+);
+```
+
+## Passing an array of props
+
+```tsx
+mergeProps([ { id: 'a' }, { id: 'b' } ]); // { id: 'b' }
+```
+
+## Usage w/ Polymorphic Components
+
+See [`foxact/polymorphic`](/polymorphic) for full documentation. Here is an example combining both utilities:
+
+```tsx copy
+import { createPolymorphic, type PolymorphicComponentProps } from 'foxact/polymorphic';
+import { mergeProps } from 'foxact/merge-props';
+import { typescriptHappyForwardRef } from 'foxact/typescript-happy-forward-ref';
+import { mergeRefs } from 'foxact/merge-refs';
+
+const { renderPolymorphic } = createPolymorphic('as');
+
+type ButtonProps<C extends React.ElementType = 'button'> =
+  PolymorphicComponentProps<'as', C, { variant?: 'primary' | 'secondary' }>;
+
+export const Button = typescriptHappyForwardRef(
+  function Button<C extends React.ElementType = 'button'>(
+    { variant, ...rest }: ButtonProps<C>,
+    ref: React.ForwardedRef<HTMLButtonElement>
+  ) {
+    const internalRef = useRef<HTMLButtonElement>(null);
+
+    return renderPolymorphic({
+      props: mergeProps(
+        { className: `btn${variant ? ` btn-${variant}` : ''}`, style: { display: 'inline-flex' } },
+        rest
+      ),
+      defaultComponent: 'button',
+      ref: mergeRefs(ref, internalRef),
+    });
+  }
+);
+```

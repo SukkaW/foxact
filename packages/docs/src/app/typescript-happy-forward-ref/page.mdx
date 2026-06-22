@@ -17,16 +17,34 @@ Make React's `forwardRef` works with TypeScript in case:
 
 ## Usage
 
-Below is an example that uses `typescriptHappyForwardRef` to create a polymorphic button component with forwarded ref.
+Below is an example that uses `typescriptHappyForwardRef` and other foxact utilities to create a polymorphic button component with forwarded ref.
 
 ```tsx copy
+import { createPolymorphic, type PolymorphicComponentProps } from 'foxact/polymorphic';
+import { mergeProps } from 'foxact/merge-props';
 import { typescriptHappyForwardRef } from 'foxact/typescript-happy-forward-ref';
+import { mergeRefs } from 'foxact/merge-refs';
 
-export type ButtonProps<T extends React.ElementType> = React.ComponentPropsWithoutRef<T> & { as?: T };
+const { renderPolymorphic } = createPolymorphic('as');
 
-const Button = typescriptHappyForwardRef(<E extends React.ElementType>({ as, ...rest }: ButtonProps<E>, ref: React.ForwardedRef<any>) => {
-  const Comp = as || 'button';
+type ButtonProps<C extends React.ElementType = 'button'> =
+  PolymorphicComponentProps<'as', C, { variant?: 'primary' | 'secondary' }>;
 
-  return <Comp {...rest} ref={ref} />;
-});
+export const Button = typescriptHappyForwardRef(
+  function Button<C extends React.ElementType = 'button'>(
+    { variant, ...rest }: ButtonProps<C>,
+    ref: React.ForwardedRef<HTMLButtonElement>
+  ) {
+    const internalRef = useRef<HTMLButtonElement>(null);
+
+    return renderPolymorphic({
+      props: mergeProps(
+        { className: `btn${variant ? ` btn-${variant}` : ''}`, style: { display: 'inline-flex' } },
+        rest
+      ),
+      defaultComponent: 'button',
+      ref: mergeRefs(ref, internalRef),
+    });
+  }
+);
 ```

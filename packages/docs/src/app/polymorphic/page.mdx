@@ -1,0 +1,147 @@
+---
+title: Polymorphic
+---
+
+# Polymorphic
+
+import ExportMetaInfo from '../../components/export-meta-info';
+
+<ExportMetaInfo />
+
+Create polymorphic components that can render as different HTML elements or custom components. This is commonly used in component libraries where a component like `<Button>` should be renderable as a `<button>`, an `<a>`, or any custom component.
+
+## Usage
+
+### Setting Up
+
+Use `createPolymorphic` to create a renderer configured with your preferred prop name:
+
+```tsx copy
+import { createPolymorphic } from 'foxact/polymorphic';
+
+// Use "as" as the polymorphic prop name
+const { renderPolymorphic } = createPolymorphic('as');
+// Or use "render" if you prefer
+const { renderPolymorphic } = createPolymorphic('render');
+```
+
+### Defining a Polymorphic Component
+
+Use the `PolymorphicComponentProps` type helper to get fully typed props, then call `renderPolymorphic` in your component:
+
+```tsx copy
+import { createPolymorphic, type PolymorphicComponentProps } from 'foxact/polymorphic';
+
+const { renderPolymorphic } = createPolymorphic('as');
+
+type ButtonProps<C extends React.ElementType = 'button'> =
+  PolymorphicComponentProps<
+    'as', // your polymorphic prop name
+    C, // your default component
+    { variant?: 'primary' | 'secondary' } // your own props
+  >;
+
+function Button<C extends React.ElementType = 'button'>(props: ButtonProps<C>) {
+  return renderPolymorphic({ props, defaultComponent: 'button' });
+}
+```
+
+### Consumer Usage
+
+```tsx copy
+// Renders a <button>
+<Button variant="primary">Click me</Button>
+
+// Renders an <a> — href is fully typed
+<Button as="a" href="/home">Go home</Button>
+
+// Renders a custom component — its props are fully typed
+<Button as={MyLink} to="/dashboard">Dashboard</Button>
+
+// Renders by cloning a React element
+<Button as={<Link scroll />}>Styled</Button>
+```
+
+## Combining with `mergeProps`
+
+When your component needs to inject its own props, use [`mergeProps`](/merge-props) before passing props to `renderPolymorphic`:
+
+```tsx copy
+import { createPolymorphic, type PolymorphicComponentProps } from 'foxact/polymorphic';
+import { mergeProps } from 'foxact/merge-props';
+
+const { renderPolymorphic } = createPolymorphic('as');
+
+type ButtonProps<C extends React.ElementType = 'button'> =
+  PolymorphicComponentProps<'as', C, { variant?: 'primary' | 'secondary' }>;
+
+function Button<C extends React.ElementType = 'button'>({
+  variant = 'primary',
+  ...rest
+}: ButtonProps<C>) {
+  return renderPolymorphic({
+    props: mergeProps(
+      { className: `btn btn-${variant}`, style: { display: 'inline-flex' } },
+      rest
+    ),
+    defaultComponent: 'button',
+  });
+}
+
+<Button variant="primary" className="extra" style={{ color: 'red' }} />
+```
+
+See [`mergeProps`](/merge-props) for more information.
+
+## Forwarding Refs
+
+Pass `ref` as a separate option to `renderPolymorphic`. This works with both React 18 (`forwardRef`) and React 19 (ref as prop):
+
+```tsx copy
+import { createPolymorphic, type PolymorphicComponentProps } from 'foxact/polymorphic';
+import { typescriptHappyForwardRef } from 'foxact/typescript-happy-forward-ref';
+import { mergeRefs } from 'foxact/merge-refs';
+
+const { renderPolymorphic } = createPolymorphic('as');
+
+type ButtonProps<C extends React.ElementType = 'button'> =
+  PolymorphicComponentProps<'as', C, { variant?: 'primary' | 'secondary' }>;
+
+// React 18 compatible with forwardRef
+export const Button = typescriptHappyForwardRef(
+  function Button<C extends React.ElementType = 'button'>(
+    { variant, ...rest }: ButtonProps<C>,
+    ref: React.ForwardedRef<HTMLButtonElement>
+  ) {
+    const internalRef = useRef<HTMLButtonElement>(null);
+
+    return renderPolymorphic({
+      props: rest,
+      defaultComponent: 'button',
+      ref: mergeRefs(ref, internalRef),
+    });
+  }
+);
+```
+
+> Use [`mergeRefs` from `foxact/merge-refs`](/merge-refs) when you need to combine a forwarded ref with an internal ref.
+
+## Type Helpers
+
+### `PolymorphicComponentProps<PropName, Component, OwnProps>`
+
+Produces the full prop type for a polymorphic component:
+
+- `PropName` — the name of the polymorphic prop (e.g. `'as'`, `'component'`).
+- `Component` — the element type (`React.ElementType`), defaults to the component's base element.
+- `OwnProps` — the component's own props. These take precedence over the target component's props when there are conflicts.
+
+### `PolymorphicRef<Component>`
+
+Extracts the `ref` type for a given element type. Useful when you need to type a ref for the polymorphic target:
+
+```tsx copy
+import type { PolymorphicRef } from 'foxact/polymorphic';
+
+type MyRef = PolymorphicRef<'a'>; // React ref type for an <a> element
+```
