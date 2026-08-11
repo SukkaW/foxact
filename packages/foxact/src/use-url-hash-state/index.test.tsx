@@ -6,11 +6,12 @@ import { Suspense } from 'react';
 import { renderToString } from 'react-dom/server';
 import { act, renderHook } from '@testing-library/react';
 import { unstable_useUrlHashState as useUrlHashState } from '.';
+import { wait } from 'foxts/wait';
 
 // Happy DOM fires a real hashchange event on location.hash assignment, just
 // like a browser: asynchronously, on the next tick. Await it inside act().
 function nextTick() {
-  return new Promise<void>((resolve) => { setTimeout(resolve, 0); });
+  return wait(0);
 }
 
 function setHash(hash: string) {
@@ -100,6 +101,7 @@ describe('useUrlHashState', () => {
 
   it('uses the default value when rendering on the server', () => {
     function ServerProbe() {
+      // eslint-disable-next-line vibe-proof/react-no-use-state-as-ref -- this test intentionally exercises the read-only tuple member
       const [value] = useUrlHashState('tab', 'server-default');
       return <span>{value}</span>;
     }
@@ -109,6 +111,7 @@ describe('useUrlHashState', () => {
 
   it('bails out to the closest Suspense fallback on the server without a default value', () => {
     function ServerProbe() {
+      // eslint-disable-next-line vibe-proof/react-no-use-state-as-ref -- this test intentionally exercises the read-only tuple member
       const [value] = useUrlHashState<string>('tab');
       return <span>{value}</span>;
     }

@@ -59,7 +59,7 @@ function mutablyMergeInto<T extends React.ElementType>(
   }
 
   const keys = Object.keys(externalProps);
-  for (let i = 0; i < keys.length; i++) {
+  for (let i = 0, len = keys.length; i < len; i++) {
     const propName = keys[i];
     const externalPropValue = (externalProps as Record<string, unknown>)[propName];
 

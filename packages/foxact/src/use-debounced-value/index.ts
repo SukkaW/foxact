@@ -23,6 +23,7 @@ export function useDebouncedValue<T>(value: NotFunction<T>, wait: number, leadin
         // This only happens when leading is enabled
         // This won't trigger infinitly re-render as long as value is stable
 
+        // eslint-disable-next-line vibe-proof/react-no-use-effect-watching -- the leading debounce edge intentionally publishes the new input immediately
         setOutputValue(value);
       } else {
         timeout = window.setTimeout(() => {

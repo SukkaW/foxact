@@ -1,3 +1,4 @@
+/* eslint-disable vibe-proof/react-prefer-foxact-use-clipboard -- this module implements foxact/use-clipboard */
 import 'client-only';
 
 import { useState, useRef } from 'react';
@@ -38,7 +39,7 @@ export function useClipboard({
       clearTimeout(copyTimeoutRef.current);
     }
     if (isCopied) {
-      copyTimeoutRef.current = window.setTimeout(() => setCopied(false), timeout);
+      copyTimeoutRef.current = window.setTimeout(setCopied, timeout, false);
     }
     setCopied(isCopied);
   }, [timeout]);

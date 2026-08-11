@@ -30,7 +30,7 @@ function mount(matchMediaOverride?: boolean) {
   return { clicks, button };
 }
 
-const originalMatchMedia = window.matchMedia;
+const originalMatchMedia = window.matchMedia.bind(window);
 
 describe('useFastClick', () => {
   afterEach(() => {

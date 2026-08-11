@@ -192,8 +192,8 @@ export function createStorage(type: StorageType) {
 
     useLayoutEffect(() => {
       if (
-        getStorageItem(key) === null
-        && serverValue !== undefined
+        serverValue !== undefined
+        && getStorageItem(key) === null
       ) {
         setStorageItem(key, serializer(serverValue));
       }

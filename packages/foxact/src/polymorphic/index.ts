@@ -31,7 +31,7 @@ export function createPolymorphic<PropName extends string>(propName: PropName) {
     } = options;
 
     const {
-      // eslint-disable-next-line sukka/unicorn/no-unreadable-object-destructuring -- prop name is user-controlled
+
       [propName]: componentProp,
       ...restProps
     } = props;

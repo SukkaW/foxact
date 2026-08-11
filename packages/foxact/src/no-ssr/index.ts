@@ -16,6 +16,7 @@ export function noSSRError(errorMessage?: string, nextjsDigest = 'BAILOUT_TO_CLI
 export function noSSR(extraMessage?: string) {
   /* istanbul ignore if -- unreachable when Happy DOM registers window globally; covered
      for real by the server-realm worker test (nyc cannot see into worker threads) */
+  // eslint-disable-next-line sukka/prefer-nullthrow -- noSSR must throw its specialized recoverable error
   if (typeof window === 'undefined') {
     throw noSSRError(extraMessage);
   }

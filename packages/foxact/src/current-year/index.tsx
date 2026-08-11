@@ -18,7 +18,7 @@ export const CurrentYear = memo(function CurrentYear({ defaultYear, ...restProps
   useIsomorphicLayoutEffect(() => {
     // This is only allowed because it won't trigger infinite re-render and double render is intentional
 
-    // eslint-disable-next-line @eslint-react/set-state-in-effect -- layout effect and only once
+    // eslint-disable-next-line @eslint-react/set-state-in-effect, vibe-proof/react-no-use-effect-watching -- hydration intentionally updates the SSR fallback once
     setYear(new Date().getFullYear());
   }, []);
 

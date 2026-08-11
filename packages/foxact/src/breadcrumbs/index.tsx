@@ -21,7 +21,7 @@ export interface BreadcrumbItemProps<T = unknown> {
 export interface BreadcrumbPageProps<T = unknown> {
   title: string,
   meta?: T,
-  // eslint-disable-next-line @typescript-eslint/no-restricted-types -- intentional, API shape
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types, vibe-proof/react-no-render-function-prop -- intentional public API shape
   children: ((items: Array<BreadcrumbItemData<T>>) => React.ReactNode) | React.ReactElement
 }
 

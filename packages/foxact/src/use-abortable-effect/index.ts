@@ -1,9 +1,8 @@
 import 'client-only';
 import { useEffect as useEffectFromReact } from 'react';
-import type { EffectCallback, DependencyList } from 'react';
 
 /** @see https://foxact.skk.moe/use-abortable-effect */
-export function useAbortableEffect(callback: (signal: AbortSignal) => ReturnType<EffectCallback>, deps: DependencyList) {
+export function useAbortableEffect(callback: (signal: AbortSignal) => ReturnType<React.EffectCallback>, deps: React.DependencyList) {
   useEffectFromReact(() => {
     const controller = new AbortController();
     const signal = controller.signal;

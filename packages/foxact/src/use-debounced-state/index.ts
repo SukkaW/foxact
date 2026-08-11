@@ -9,7 +9,7 @@ export function useDebouncedState<T>(defaultValue: T | (() => T), wait: number, 
   const retimer = useRetimer();
 
   const debouncedSetValue = useCallback((newValue: T) => {
-    if (leadingRef.current && leading) {
+    if (leading && leadingRef.current) {
       setValue(newValue);
     } else {
       retimer(window.setTimeout(() => {

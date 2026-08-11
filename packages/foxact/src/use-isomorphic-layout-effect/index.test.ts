@@ -1,7 +1,7 @@
 import { describe, it } from 'mocha';
 import { expect } from 'earl';
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports -- compare against the real useLayoutEffect
+// eslint-disable-next-line no-restricted-imports -- compare against React's real layout effect
 import { useLayoutEffect as useLayoutEffectFromReact } from 'react';
 import { useIsomorphicLayoutEffect, useLayoutEffect } from '.';
 

@@ -7,7 +7,7 @@ export function useComponentWillReceiveUpdate(callback: () => void, deps: readon
   deps = [...deps];
   const [prev, setPrev] = useState(deps);
   let changed = deps.length !== prev.length;
-  for (let i = 0; i < deps.length; i += 1) {
+  for (let i = 0, len = deps.length; i < len; i += 1) {
     if (changed) break;
     if (prev[i] !== deps[i]) changed = true;
   }

@@ -88,7 +88,7 @@ export const metadata: Metadata = {
   }
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: React.PropsWithChildren) {
   const pageMap = await getPageMap();
 
   const navbar = (

@@ -115,7 +115,9 @@ describe('mergeProps', () => {
   });
 
   it('handles non-standard event handlers without error', () => {
-    for (const eventArgument of [true, 13, 'newValue', { key: 'value' }, ['value'], () => 'value']) {
+    const eventArguments = [true, 13, 'newValue', { key: 'value' }, ['value'], () => 'value'];
+    for (let i = 0, len = eventArguments.length; i < len; i++) {
+      const eventArgument = eventArguments[i];
       const log: string[] = [];
 
       const mergedProps = mergeProps<any>(

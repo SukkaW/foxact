@@ -1,3 +1,4 @@
+/* eslint-disable vibe-proof/react-prefer-foxact-use-media-query -- this module implements foxact/use-media-query */
 'use client';
 
 import { noSSRError } from '../no-ssr';

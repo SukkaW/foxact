@@ -1,3 +1,4 @@
+/* eslint-disable sukka/no-array-from-length-spread -- this module implements foxact/create-fixed-array */
 const arrayMap = new Map<number, readonly number[]>();
 
 function makeArray(length: number) {

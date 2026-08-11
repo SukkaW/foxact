@@ -1,3 +1,4 @@
+/* eslint-disable vibe-proof/react-prefer-foxact-use-clipboard -- these tests intentionally exercise the underlying clipboard APIs */
 import { afterEach, describe, it } from 'mocha';
 import { expect } from 'earl';
 import sinon from 'sinon';

@@ -3,4 +3,5 @@ export interface Noop {
 }
 
 /** @see https://foxact.skk.moe/noop */
+// eslint-disable-next-line sukka/prefer-foxts-noop -- this module defines foxact/noop
 export const noop: Noop = () => { /* noop */ };

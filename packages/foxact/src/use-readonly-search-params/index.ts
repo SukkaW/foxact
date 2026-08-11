@@ -59,7 +59,7 @@ function getClientSnapshot() {
     return new ReadonlyURLSearchParams();
   }
 
-  if (window.location.search === lastSearch && lastUrlSearchParams !== null) {
+  if (lastUrlSearchParams !== null && window.location.search === lastSearch) {
     return lastUrlSearchParams;
   }
 

@@ -4,6 +4,7 @@ import { expect } from 'earl';
 import { Suspense, use as reactUse } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { use } from '.';
+import { noop } from '../noop';
 import { trapConsoleError } from '../../test/trap-console-error';
 
 // the thenable contract React.use consumes (and the polyfill implements):
@@ -16,8 +17,7 @@ describe('use', () => {
 
   it('suspends to the closest Suspense fallback on a pending promise', async () => {
     // a forever-pending promise keeps the boundary suspended
-    // eslint-disable-next-line @typescript-eslint/no-empty-function -- forever pending
-    const pending = new Promise<string>(() => {});
+    const pending = new Promise<string>(noop);
 
     function Probe() {
       return <span>{use(pending)}</span>;
@@ -55,8 +55,7 @@ describe('use', () => {
   it('throws the reason of a rejected thenable', () => {
     const rejected = Object.assign(
       // the underlying promise never settles, React only reads the status
-      // eslint-disable-next-line @typescript-eslint/no-empty-function -- forever pending
-      new Promise<string>(() => {}),
+      new Promise<string>(noop),
       { status: 'rejected' as const, reason: new Error('use() rejection reason') }
     );
 

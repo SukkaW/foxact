@@ -1,7 +1,7 @@
 // https://github.com/pmndrs/jotai/blob/2188d7557500e59c10415a9e74bb5cfc8a3f9c31/src/react/useAtomValue.ts#L13-L42
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports -- check if React.use is available
-import reactExports from 'react';
+// eslint-disable-next-line no-restricted-imports -- the compatibility implementation must detect whether React.use exists
+import * as reactExports from 'react';
 
 // eslint-disable-next-line @eslint-react/no-unnecessary-use-prefix -- React.use polyfill
 export const use = typeof reactExports.use === 'function'

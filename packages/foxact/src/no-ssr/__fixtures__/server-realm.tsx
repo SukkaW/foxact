@@ -1,6 +1,7 @@
 import { Writable } from 'node:stream';
 import { Suspense } from 'react';
 import { renderToPipeableStream } from 'react-dom/server';
+import { extractErrorMessage, isErrorLikeObject } from 'foxts/extract-error-message';
 import { noSSR } from '..';
 
 // Runs inside the server-realm worker (see test/server-realm), where
@@ -30,7 +31,7 @@ function renderToStreamString(element: React.ReactNode) {
         pipe(writable);
       },
       onShellError(error) {
-        reject(error instanceof Error ? error : new Error(String(error)));
+        reject(new Error(extractErrorMessage(error) ?? 'Unknown server rendering error', { cause: error }));
       },
       onError() {
         // the error thrown by noSSR() is expected during server rendering
@@ -48,8 +49,8 @@ export default async function run() {
   } catch (error) {
     const e = error as Error & { digest?: string, recoverableError?: string };
     thrown = {
-      isError: e instanceof Error,
-      message: e.message,
+      isError: isErrorLikeObject(e),
+      message: extractErrorMessage(e, false) ?? 'Unknown error',
       digest: e.digest,
       recoverableError: e.recoverableError
     };

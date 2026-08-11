@@ -1,5 +1,8 @@
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports -- check if React.use is available
-import reactExports, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+/* eslint-disable vibe-proof/react-ban-peak-via-ref -- this module implements the stable-handler pattern recommended by the rule */
+// eslint-disable-next-line no-restricted-imports -- compatibility implementation must inspect React exports and use the real layout effect fallback
+import * as reactExports from 'react';
+
+const { useCallback, useEffect, useLayoutEffect, useRef } = reactExports;
 
 // useIsomorphicInsertionEffect
 const useInsertionEffect =

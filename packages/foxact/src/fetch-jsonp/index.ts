@@ -1,3 +1,5 @@
+import { invariant } from '../invariant';
+
 declare global {
   interface Window {
     __foxact_jsonp_callbacks__SECRET_INTERNAL_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: Record<string, ((data: any) => void) | undefined>
@@ -8,9 +10,7 @@ const INTERNAL = '__foxact_jsonp_callbacks__SECRET_INTERNAL_DO_NOT_USE_OR_YOU_WI
 
 /** @see https://foxact.skk.moe/fetch-jsonp */
 export function fetchJsonp<T>(getUrl: (callbackName: string) => string, scriptElOptions?: Partial<HTMLScriptElement>): Promise<T> {
-  if (typeof window === 'undefined') {
-    throw new TypeError('fetchJsonp is only available in the browser');
-  }
+  invariant(typeof window !== 'undefined', 'fetchJsonp is only available in the browser');
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- initialization
   if (!window[INTERNAL]) {

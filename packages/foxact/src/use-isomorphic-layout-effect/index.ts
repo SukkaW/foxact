@@ -1,6 +1,6 @@
 import 'client-only';
 
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports -- the implementation of useIsomorphicLayoutEffect
+// eslint-disable-next-line no-restricted-imports -- the implementation requires React's real layout effect
 import { useEffect, useLayoutEffect as useLayoutEffectFromReact } from 'react';
 
 /** @see https://foxact.skk.moe/use-isomorphic-layout-effect */

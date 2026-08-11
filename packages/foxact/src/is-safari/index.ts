@@ -1,3 +1,6 @@
+const RE_SAFARI = /version\/[\d._].*?safari/i;
+const RE_MOBILE_SAFARI = /mobile safari [\d._]+/i;
+
 export function isSafari() {
   /* istanbul ignore if -- SSR-only guard, unreachable when Happy DOM registers window globally in tests */
   if (typeof window === 'undefined') {
@@ -11,11 +14,11 @@ export function isSafari() {
   if (typeof navigator.userAgent !== 'string') {
     return false;
   }
-  if (/version\/[\d._].*?safari/i.test(navigator.userAgent)) {
+  if (RE_SAFARI.test(navigator.userAgent)) {
     return true;
   }
-  // eslint-disable-next-line sukka/unicorn/prefer-boolean-return -- cleaner code
-  if (/mobile safari [\d._]+/i.test(navigator.userAgent)) {
+
+  if (RE_MOBILE_SAFARI.test(navigator.userAgent)) {
     return true;
   }
   return false;

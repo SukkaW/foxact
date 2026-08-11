@@ -2,6 +2,7 @@ import { describe, it } from 'mocha';
 import { expect } from 'earl';
 
 import { cancelIdleCallback, requestIdleCallback } from '.';
+import { wait } from 'foxts/wait';
 
 // Happy DOM does not implement requestIdleCallback, so these tests exercise
 // the setTimeout-based polyfill branch.
@@ -26,8 +27,7 @@ describe('requestIdleCallback', () => {
     });
     cancelIdleCallback(id);
 
-    // eslint-disable-next-line sukka/prefer-timer-id -- one-shot wait, nothing to clean up
-    await new Promise<void>((resolve) => { setTimeout(resolve, 10); });
+    await wait(10);
 
     expect(fired).toEqual(false);
   });

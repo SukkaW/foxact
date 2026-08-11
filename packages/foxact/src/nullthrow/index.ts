@@ -2,6 +2,7 @@
 
 /** @see https://foxact.skk.moe/invariant-nullthrow */
 export function nullthrow<T>(value: T, message = '[foxact/invariant] "value" is null or undefined'): NonNullable<T> {
+  // eslint-disable-next-line sukka/prefer-nullthrow -- this function defines foxact/nullthrow
   if (value === null || value === undefined) {
     throw new TypeError(message);
   }
