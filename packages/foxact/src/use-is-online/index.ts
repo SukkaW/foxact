@@ -1,24 +1,12 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import { createEventTargetBus } from 'event-target-bus';
-import type { EventTargetBus } from 'event-target-bus';
+import { createSyncExternalStoreSubscribe } from 'event-target-bus/react';
 
-let onlineBus: EventTargetBus<Window, 'online'> | null = null;
-let offlineBus: EventTargetBus<Window, 'offline'> | null = null;
-
-function subscribe(onStoreChange: () => void): () => void {
-  onlineBus ??= createEventTargetBus(window, 'online');
-  offlineBus ??= createEventTargetBus(window, 'offline');
-
-  const onlineUnsub = onlineBus.on(onStoreChange);
-  const offlineUnsub = offlineBus.on(onStoreChange);
-
-  return () => {
-    onlineUnsub();
-    offlineUnsub();
-  };
-}
+const subscribe = createSyncExternalStoreSubscribe(
+  () => window,
+  ['online', 'offline']
+);
 
 function getSnapshot() {
   if (typeof window === 'undefined') {

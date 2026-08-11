@@ -2,26 +2,14 @@
 'use client';
 
 import { noSSRError } from '../no-ssr';
-import { noop } from '../noop';
 
-import { useCallback, useSyncExternalStore } from 'react';
-import { createEventTargetBus } from 'event-target-bus';
-import type { EventTargetBus } from 'event-target-bus';
+import { useMemo, useSyncExternalStore } from 'react';
+import { createKeyedSyncExternalStoreSubscribe } from 'event-target-bus/react';
 
-const mediaQueryProxies = new Map<string, EventTargetBus<MediaQueryList, 'change'>>();
-
-function subscribeToMediaQuery(mq: string, callback: VoidFunction) {
-  /* istanbul ignore if -- SSR-only guard, unreachable when Happy DOM registers window globally in tests */
-  if (typeof window === 'undefined') return noop;
-
-  let bus = mediaQueryProxies.get(mq);
-  if (!bus) {
-    bus = createEventTargetBus(window.matchMedia(mq), 'change');
-    mediaQueryProxies.set(mq, bus);
-  }
-
-  return bus.on(callback);
-}
+const getMediaQuerySubscribe = createKeyedSyncExternalStoreSubscribe(
+  (mq: string) => window.matchMedia(mq),
+  'change'
+);
 
 function getServerSnapshotWithoutServerValue(): never {
   throw noSSRError('useMediaQuery cannot be used on the server without a serverValue');
@@ -30,9 +18,6 @@ function getServerSnapshotWithoutServerValue(): never {
 /** @see https://foxact.skk.moe/use-media-query */
 // eslint-disable-next-line sukka/bool-param-default -- serveValue is intentionally optional
 export function useMediaQuery(mq: string, serverValue?: boolean): boolean {
-  // subscribe once per hook per media query
-  const subscribe = useCallback((callback: VoidFunction) => subscribeToMediaQuery(mq, callback), [mq]);
-
   const getSnapshot = () => {
     /* istanbul ignore if -- SSR-only guard, unreachable when Happy DOM registers window globally in tests */
     if (typeof window === 'undefined') {
@@ -47,6 +32,9 @@ export function useMediaQuery(mq: string, serverValue?: boolean): boolean {
   const getServerSnapshot = serverValue === undefined
     ? getServerSnapshotWithoutServerValue
     : () => serverValue;
+
+  // ensure stableness per mq
+  const subscribe = useMemo(() => getMediaQuerySubscribe(mq), [mq]);
 
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot); // Use useSyncExternalStore to manage the subscription and state
 }

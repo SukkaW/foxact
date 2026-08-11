@@ -1,7 +1,5 @@
-import { createEventTargetBus } from 'event-target-bus';
-import type { EventTargetBus } from 'event-target-bus';
+import { createSyncExternalStoreSubscribe } from 'event-target-bus/react';
 import { noSSRError } from '../no-ssr';
-import { noop } from '../noop';
 import { useSyncExternalStore } from 'react';
 
 class ReadonlyURLSearchParamsError extends Error {
@@ -39,16 +37,7 @@ export class ReadonlyURLSearchParams extends URLSearchParams {
   }
 }
 
-let popStateBus: EventTargetBus<Window, 'popstate'> | null = null;
-
-function subscribe(onStoreChange: () => void) {
-  /* istanbul ignore if -- SSR-only guard, unreachable when Happy DOM registers window globally in tests */
-  if (typeof window === 'undefined') return noop;
-
-  popStateBus ??= createEventTargetBus(window, 'popstate');
-
-  return popStateBus.on(onStoreChange);
-}
+const subscribe = createSyncExternalStoreSubscribe(() => window, 'popstate');
 
 let lastSearch: string | null = null;
 let lastUrlSearchParams: ReadonlyURLSearchParams | null = null;

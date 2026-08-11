@@ -1,27 +1,15 @@
 import 'client-only';
 
 import { useCallback, useMemo, useSyncExternalStore } from 'react';
-import { noop } from '../noop';
 import { noSSRError } from '../no-ssr';
 
 import { identity } from 'foxts/identity';
 import { isFunction } from 'foxts/is-function';
-import { createEventTargetBus } from 'event-target-bus';
-import type { EventTargetBus } from 'event-target-bus';
+import { createSyncExternalStoreSubscribe } from 'event-target-bus/react';
 
-let hashChangeEventBus: EventTargetBus<Window, 'hashchange'> | null = null;
+const subscribe = createSyncExternalStoreSubscribe(() => window, 'hashchange');
 
 type NotUndefined<T> = T extends undefined ? never : T;
-
-const subscribe: Parameters<typeof useSyncExternalStore>[0] = (onStoreChange) => {
-  if (typeof window === 'undefined') {
-    return noop;
-  }
-
-  hashChangeEventBus ??= createEventTargetBus(window, 'hashchange');
-
-  return hashChangeEventBus.on(onStoreChange);
-};
 
 export type Serializer<T> = (value: T) => string;
 export type Deserializer<T> = (value: string) => T;

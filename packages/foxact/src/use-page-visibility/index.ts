@@ -1,20 +1,12 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import { createEventTargetBus } from 'event-target-bus';
-import type { EventTargetBus } from 'event-target-bus';
-import { noop } from '../noop';
+import { createSyncExternalStoreSubscribe } from 'event-target-bus/react';
 
-let visibilityChangeBus: EventTargetBus<Document, 'visibilitychange'> | null = null;
-
-const handlePageVisibilityChange: Parameters<typeof useSyncExternalStore>[0] = (onChange) => {
-  /* istanbul ignore if -- SSR-only guard, unreachable when Happy DOM registers window globally in tests */
-  if (typeof window === 'undefined') return noop;
-
-  visibilityChangeBus ??= createEventTargetBus(document, 'visibilitychange');
-
-  return visibilityChangeBus.on(onChange);
-};
+const subscribe = createSyncExternalStoreSubscribe(
+  () => document,
+  'visibilitychange'
+);
 
 const getSnapshot: Parameters<typeof useSyncExternalStore>[1] = () => {
   /* istanbul ignore if -- SSR-only guard, unreachable when Happy DOM registers document globally in tests */
@@ -28,7 +20,7 @@ const getSnapshot: Parameters<typeof useSyncExternalStore>[1] = () => {
 /** @see https://foxact.skk.moe/use-page-visibility */
 export function usePageVisibility() {
   return useSyncExternalStore(
-    handlePageVisibilityChange,
+    subscribe,
     getSnapshot,
     getSnapshot
   );
