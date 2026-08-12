@@ -9,9 +9,28 @@ import ExportMetaInfo from '../../components/export-meta-info';
 
 <ExportMetaInfo />
 
-Tracks the changes in the intersection of a target element with an ancestor element or with a top-level document's viewport. Uses the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API).
+Tracks whether a target element has *ever* entered the intersection of the viewport (or specified root). Uses the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API).
 
-## Usage
+```ts
+const [setIntersection, hasIntersected, resetHasIntersected] = useIntersection<HTMLElement>({
+  rootRef: null, // optional, the ref of the ancestor element, defaults to the viewport
+  rootMargin: '200px', // optional
+  disabled: false // optional, skip observing entirely
+});
+```
+
+The returned boolean is named `hasIntersected` on purpose. It is **sticky**:
+
+- It starts as `false`.
+- It flips to `true` the first time the element enters the root (plus `rootMargin`).
+- It **stays** `true` forever after that, even once the element scrolls back out of view.
+
+The hook stops observing the element as soon as it becomes `true`, so it will never flip back to `false` on its own. This design is deliberate. It targets the two most common cases where "did this ever become visible?" is the only question that matters:
+
+- **Lazy loading** — once an image, an iframe, or a chunk of content has been loaded, it should stay loaded. Unloading it when it scrolls away would only cause it to be re-fetched later.
+- **Animate-on-scroll, once** — a fade-in or slide-in should play the first time the element enters the viewport, and should not replay every time the user scrolls past it again.
+
+## Example
 
 Here is an example of a `<Thumbnail />` component that uses the `useIntersection` to lazy load the image.
 
@@ -29,15 +48,16 @@ interface ThumbnailProps {
 }
 
 const Thumbnail = ({ src, isLazy }: ThumbnailProps) => {
-  const [setIntersection, isIntersected, resetIsIntersected] = useIntersection<HTMLImageElement>({
+  const [setIntersection, hasIntersected, resetHasIntersected] = useIntersection<HTMLImageElement>({
     rootRef: null, // optional, the ref of the ancestor element
     rootMargin: '200px', // optional
     disabled: !isLazy // optional, allows to create reusable thumbnail component that supports both lazy and eager loading
   });
 
-  // Reset the `isIntersected` state when the `src` prop changes
+  // `hasIntersected` is sticky and never resets on its own, so reset it manually
+  // when the `src` prop changes and a different image needs to be lazy loaded.
   // You can find the docs about `useComponentWillReceiveUpdate` here: https://foxact.skk.moe/use-component-will-receive-update
-  useComponentWillReceiveUpdate(resetIsIntersected, [src])
+  useComponentWillReceiveUpdate(resetHasIntersected, [src])
 
   return (
     <img
@@ -51,9 +71,40 @@ const Thumbnail = ({ src, isLazy }: ThumbnailProps) => {
       }, [isLazy, setIntersection])}
       decoding="async"
       alt={alt}
-      // https://stackoverflow.com/questions/6018611/smallest-data-uri-image-possible-for-a-transparent-image
-      src={isIntersected ? src : 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'}
+      // Once the image has entered the viewport once, `hasIntersected` stays `true`,
+      // so the loaded image is never swapped back to the placeholder.
+      src={hasIntersected ? src : 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'}
     />
   );
 }
 ```
+
+And here is the animate-on-enter case, where the animation play only once on first entering the viewport:
+
+```tsx copy
+import { useCallback } from 'react';
+import { useIntersection } from 'foxact/use-intersection';
+
+const FadeInSection = ({ children }: { children: React.ReactNode }) => {
+  const [setIntersection, hasIntersected] = useIntersection<HTMLDivElement>({
+    rootMargin: '-10% 0px'
+  });
+
+  return (
+    <div
+      ref={setIntersection}
+      // `hasIntersected` never goes back to `false`, so scrolling away and back
+      // will not replay the animation.
+      className={hasIntersected ? 'fade-in' : 'fade-in-initial'}
+    >
+      {children}
+    </div>
+  );
+};
+```
+
+## Resetting
+
+The third element of the returned tuple, `resetHasIntersected`, sets `hasIntersected` back to `false` and starts observing the element again. It is the only way the state can become `false` after it has become `true`.
+
+Reset it when the element is reused for a different piece of content — e.g. the `src` of a lazy loaded image changes, or a list item is recycled for a different row. [`useComponentWillReceiveUpdate`](/use-component-will-receive-update) is a convenient way to do this during a prop change, as shown in the example above.
