@@ -17,6 +17,10 @@ import { Callout } from 'nextra/components'
 The `noSSR` function can only be used with React stream server-side rendering. If you are using the React synchronous server-side rendering (e.g. `renderToString`), you should use the `useIsClient` approach instead. See [`useIsClient`](/use-is-client).
 </Callout>
 
+<Callout type="info">
+React DOM now ships an official API for this, [`use(browser())`](https://react.dev/reference/react-dom/browser). foxact provides it as [`browser`](/browser), with a fallback (built on `noSSR`) for React DOM releases that don't ship it yet.
+</Callout>
+
 ## Usage
 
 ```tsx filename="src/chat.tsx" copy
