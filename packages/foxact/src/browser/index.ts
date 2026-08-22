@@ -1,6 +1,7 @@
 import * as reactDomExports from 'react-dom';
 
 import { noSSRError } from '../no-ssr';
+import type { FulfilledReactPromise, RejectedReactPromise } from '../use';
 
 /**
  * Explains why the content has to render in the browser. It becomes the `cause`
@@ -10,21 +11,11 @@ import { noSSRError } from '../no-ssr';
  */
 export type BrowserReason = string | (() => unknown);
 
-interface FulfilledBrowserUsable extends PromiseLike<undefined> {
-  status: 'fulfilled',
-  value: undefined
-}
-
-interface RejectedBrowserUsable extends PromiseLike<undefined> {
-  status: 'rejected',
-  reason: unknown
-}
-
 /**
  * The opaque value returned by `browser()`. Pass it to `use()`, do not read
  * it, await it, or throw it yourself.
  */
-export type BrowserUsable = FulfilledBrowserUsable | RejectedBrowserUsable;
+export type BrowserUsable = FulfilledReactPromise<undefined> | RejectedReactPromise<undefined>;
 
 // Same messages as React's own `browser()` implementation
 const BROWSER_BAILOUT_MESSAGE = 'Browser-only rendering was requested by `browser()`.';
@@ -53,7 +44,7 @@ export function browserBailoutError(reason?: BrowserReason) {
 // In the browser every `browser()` call hands out the same, already fulfilled
 // usable: `use()` reads the status synchronously and returns `undefined` without
 // suspending, and React never has to track a fresh thenable on re-render.
-const fulfilledBrowserUsable: FulfilledBrowserUsable = {
+const fulfilledBrowserUsable: FulfilledReactPromise<undefined> = {
   status: 'fulfilled',
   value: undefined,
   // eslint-disable-next-line sukka/unicorn/no-thenable -- a thenable is the contract React's use() consumes
@@ -88,9 +79,6 @@ function browserPolyfill(reason?: BrowserReason): BrowserUsable {
 }
 
 /** @see https://foxact.skk.moe/browser */
-export const browser: (reason?: BrowserReason) => BrowserUsable = typeof (reactDomExports as { browser?: unknown }).browser === 'function'
-  // React DOM 19.3+ ships `browser()` natively, with proper `onBrowserBailout`
-  // support in the server renderer. The arm is unreachable when testing against
-  // React 19.2 (the capability is sniffed once at module load), hence the ignore
-  ? /* istanbul ignore next */ (reactDomExports as unknown as { browser: (reason?: BrowserReason) => BrowserUsable }).browser
+export const browser: (reason?: BrowserReason) => BrowserUsable = 'browser' in reactDomExports && /* istanbul ignore next */ typeof reactDomExports.browser === 'function'
+  ? /* istanbul ignore next */ reactDomExports.browser as (reason?: BrowserReason) => BrowserUsable
   : browserPolyfill;

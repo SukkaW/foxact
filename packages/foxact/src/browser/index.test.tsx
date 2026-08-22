@@ -12,7 +12,7 @@ import { browser, browserBailoutError } from '.';
 import type { BrowserReason } from '.';
 import type { ServerRealmFixtureResult } from './__fixtures__/server-realm';
 
-const nativeBrowser = (reactDomExports as { browser?: unknown }).browser;
+const nativeBrowser = 'browser' in reactDomExports ? reactDomExports.browser : undefined;
 const isNativeBrowser = typeof nativeBrowser === 'function';
 
 function Editor({ reason }: { reason?: BrowserReason }) {
