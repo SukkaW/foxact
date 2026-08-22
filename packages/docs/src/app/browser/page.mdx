@@ -10,7 +10,7 @@ import ExportMetaInfo from '../../components/export-meta-info';
 
 Mark a component as browser-only during server rendering.
 
-This is [React DOM's `browser()` API](https://react.dev/reference/react-dom/browser) (currently only available in React's Canary channel), with a compatibility implementation for React DOM releases that don't ship it yet: when `react-dom` exports `browser`, foxact hands you the native implementation as is. Otherwise, foxact provides a polyfill built on the same mechanism as [`noSSR`](/no-ssr), so it works with React 18 and React 19.2 as well.
+This is [React DOM's `browser()` API](https://react.dev/reference/react-dom/browser) with a compatibility implementation for React DOM versions that don't ship it yet, where foxact provides a polyfill built on the same mechanism as [`noSSR`](/no-ssr), so it works with React 18 and React 19.2 as well.
 
 During stream server-side rendering, `use(browser())` stops rendering the component and leaves the closest `<Suspense>` boundary's fallback in the generated HTML. In the browser, `use(browser())` returns `undefined` and the component renders normally: the user sees the fallback first when the page loads, and the actual content once React hydrates the page. See [Rendering content only in the browser](https://react.dev/reference/react-dom/browser#rendering-content-only-in-the-browser) at React docs.
 
@@ -26,58 +26,30 @@ Like `noSSR`, `browser()` only works with React stream server-side rendering (`r
 
 ## Usage
 
-```tsx filename="src/editor.tsx" copy
-import { use } from 'react';
-import { browser } from 'foxact/browser';
-
-function BrowserOnlyEditor() {
-  use(browser('The editor requires browser APIs.'));
-
-  return <label>Draft: <input /></label>;
-}
-```
-
-```tsx filename="src/app.tsx" copy
-<Suspense fallback={<p>Loading editor...</p>}>
-  <BrowserOnlyEditor />
-</Suspense>
-```
-
-The server HTML will include `<p>Loading editor...</p>`. It will be replaced by the `<BrowserOnlyEditor />` component in the browser.
-
-`use` is React 19's `use`. On React 18, import it from `foxact/use` instead, which polyfills `use` for the values `browser()` returns.
-
-In a React Server Components app (e.g. Next.js App Router), `use(browser())` must be called from a Client Component, not a Server Component:
+A code editor like [CodeMirror](https://codemirror.net/) is the textbook case: constructing an `EditorView` builds and measures its own DOM and sniffs `navigator` for platform-specific key bindings, so the component cannot be rendered on the server at all.
 
 ```tsx filename="src/editor.tsx" copy
 'use client';
 
 import { use } from 'react';
 import { browser } from 'foxact/browser';
+import CodeMirror from '@uiw/react-codemirror';
+import { javascript } from '@codemirror/lang-javascript';
 
-export default function BrowserOnlyEditor() {
-  use(browser('The editor requires browser APIs.'));
+function Editor({ value, onChange }) {
+  use(browser('CodeMirror needs a real DOM to construct its EditorView.'));
 
-  return <Editor />;
+  return <CodeMirror value={value} extensions={[javascript()]} onChange={onChange} />;
 }
 ```
 
-### Conditionally rendering in the browser
-
-Unlike other hooks, `use` can be called conditionally, so you can bail out to the browser only when something is missing:
-
-```tsx filename="src/use-browser-query.ts" copy
-import { use } from 'react';
-import { browser } from 'foxact/browser';
-
-function useBrowserQuery(query, options) {
-  if (options.initialData === undefined) {
-    use(browser('useBrowserQuery: No initial data was provided.'));
-  }
-
-  return useQuery(query, options);
-}
+```tsx filename="src/app.tsx" copy
+<Suspense fallback={<pre>Loading editor...</pre>}>
+  <Editor value={draft} onChange={setDraft} />
+</Suspense>
 ```
+
+The server HTML will include `<pre>Loading editor...</pre>`. It will be replaced by the `<Editor />` component in the browser.
 
 ### Providing a reason
 

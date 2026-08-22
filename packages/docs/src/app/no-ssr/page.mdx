@@ -6,19 +6,22 @@ title: No SSR
 
 
 import ExportMetaInfo from '../../components/export-meta-info';
+import { Callout } from 'nextra/components'
 
 <ExportMetaInfo />
 
-Force React stream server-side rendering to include the closet `<Suspense>` boundary's fallback UI (e.g. a loading indicator) into the generated server HTML. On the browser, the user will see the fallback UI first when the page loads, while React attempts to render the same component again during the hydration, and the user will see the proper content once React finishes the hydration. See [\<Suspense\> Providing a fallback for server errors and client-only content](https://react.dev/reference/react/Suspense#providing-a-fallback-for-server-errors-and-client-only-content) at React docs.
+<Callout type="warning" emoji="⚠️">
+**Use [`browser`](/browser) instead whenever you can.** `noSSR` predates React's own solution to this problem, and it is only a workaround: it bails out by throwing an error that the server renderer, the browser, and your framework all have to be taught to recognize as deliberate.
 
-import { Callout } from 'nextra/components'
+React DOM now ships an official API [`use(browser())`](https://react.dev/reference/react-dom/browser) for the same use case, and foxact has since shipped [`foxact/browser`](/browser) (which is a re-export and automatically falls back to `noSSR`-based polyfill) that is safe for you to adopt today even on React 18.
+
+`noSSR` itself remains supported for backward compatibility.
+</Callout>
+
+Force React stream server-side rendering to include the closet `<Suspense>` boundary's fallback UI (e.g. a loading indicator) into the generated server HTML. On the browser, the user will see the fallback UI first when the page loads, while React attempts to render the same component again during the hydration, and the user will see the proper content once React finishes the hydration. See [\<Suspense\> Providing a fallback for server errors and client-only content](https://react.dev/reference/react/Suspense#providing-a-fallback-for-server-errors-and-client-only-content) at React docs.
 
 <Callout type="warning" emoji="⚠️">
 The `noSSR` function can only be used with React stream server-side rendering. If you are using the React synchronous server-side rendering (e.g. `renderToString`), you should use the `useIsClient` approach instead. See [`useIsClient`](/use-is-client).
-</Callout>
-
-<Callout type="info">
-React DOM now ships an official API for this, [`use(browser())`](https://react.dev/reference/react-dom/browser). foxact provides it as [`browser`](/browser), with a fallback (built on `noSSR`) for React DOM releases that don't ship it yet.
 </Callout>
 
 ## Usage
