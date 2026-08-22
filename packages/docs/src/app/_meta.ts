@@ -77,6 +77,7 @@ export default {
     title: 'Utilities'
   },
   breadcrumbs: {},
+  browser: {},
   'context-reducer': {},
   'context-state': {},
   'create-local-storage-state': {},
