@@ -20,16 +20,17 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
           run_install: false
+          cache: true
       - name: Setup node
         uses: actions/setup-node@v6
         with:
           node-version-file: ".node-version"
           check-latest: true
-          cache: "pnpm"
+          package-manager-cache: false
           registry-url: "https://registry.npmjs.org"
       - run: pnpm config set --location=global minimumReleaseAge 0
       - run: pnpm install
