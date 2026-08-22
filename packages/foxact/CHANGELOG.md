@@ -1,3 +1,9 @@
+# 0.3.9
+
+**Core Changes**
+
+- Introduce new `browser`, serves as a drop-in replacement for `react-dom`'s `browser` API for React DOM versions that don't ship it yet. It provides a re-export and automatically falls back to a polyfill so that you can adopt it today.
+
 # 0.3.8
 
 **Core Changes**
