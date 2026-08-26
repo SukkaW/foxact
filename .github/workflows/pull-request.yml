@@ -12,15 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/setup@v2
         with:
-          run_install: false
+          install: false
+          cache: true
       - name: Setup node
         uses: actions/setup-node@v6
         with:
           node-version-file: ".node-version"
           check-latest: true
-          cache: "pnpm"
+          package-manager-cache: false
       - run: pnpm config set --location=global minimumReleaseAge 0
       - run: pnpm install
       #   run: pnpm run lint
