@@ -38,6 +38,6 @@ To require and return one element directly, you can also use [`getSingleReactChi
 
 `getReactChildren` normalizes the Flight wrapper described above and returns its valid elements.
 
-A pending Flight value suspends, so call the helper during rendering under a `<Suspense>` boundary. A rejected Flight value propagates its error.
+A pending Flight value will still suspend, so call the helper during rendering under a `<Suspense>` boundary when necessary. A rejected Flight value propagates its error.
 
 The unwrap relies on React 19's current `Children.toArray` implementation. React does not document lazy resolution as part of that API, so this behavior may need revisiting in a future React major. Normalized elements are re-keyed clones; a valid element passed directly retains its identity and key.

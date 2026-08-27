@@ -26,4 +26,4 @@ function Slot({ children, className }: { children: React.ReactNode, className?: 
 }
 ```
 
-A pending Flight value suspends, so call the helper during rendering under a `<Suspense>` boundary. A rejected Flight value propagates its error. See [`getReactChildren`](/get-react-children#react-server-components) for more details.
+A pending Flight value will still suspend, so call the helper during rendering under a `<Suspense>` boundary when necessary. A rejected Flight value propagates its error. See [`getReactChildren`](/get-react-children#react-server-components) for more details.
