@@ -1,3 +1,9 @@
+# 0.3.10
+
+**Core Changes**
+
+- Introduce `getReactChildren` and `getSingleReactChildren` as workarounds for [React issue #32392](https://github.com/react/react/issues/32392).
+
 # 0.3.9
 
 **Core Changes**
