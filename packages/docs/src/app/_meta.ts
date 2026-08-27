@@ -84,6 +84,8 @@ export default {
   'create-session-storage-state': {},
   'create-fixed-array': {},
   'fetch-jsonp': {},
+  'get-react-children': {},
+  'get-single-react-children': {},
   'invariant-nullthrow': {},
   'magic-portal': {},
   'merge-props': {},

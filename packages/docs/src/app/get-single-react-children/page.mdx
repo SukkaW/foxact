@@ -1,0 +1,29 @@
+---
+title: getSingleReactChildren
+---
+
+# getSingleReactChildren
+
+import ExportMetaInfo from '../../components/export-meta-info';
+
+<ExportMetaInfo />
+
+`getSingleReactChildren` is a workaround for [React issue #32392](https://github.com/react/react/issues/32392). React 19 can pass an async Server Component to a Client Component as a `Symbol(react.lazy)` wrapper, which is not itself a valid React element and is therefore rejected by APIs such as `cloneElement`.
+
+`getSingleReactChildren` allows you to unwrap the lazy wrapper that React Flight place around children (when they cross a React Server Components boundary) and return exactly one valid React element from `children`.
+
+> Need to extract more than one element? Use [`getReactChildren`](/get-react-children) instead.
+
+```tsx copy
+'use client';
+
+import { cloneElement } from 'react';
+import { getSingleReactChildren } from 'foxact/get-single-react-children';
+
+function Slot({ children, className }: { children: React.ReactNode, className?: string }) {
+  const child = getSingleReactChildren(children);
+  return cloneElement(child, { className });
+}
+```
+
+A pending Flight value suspends, so call the helper during rendering under a `<Suspense>` boundary. A rejected Flight value propagates its error. See [`getReactChildren`](/get-react-children#react-server-components) for more details.

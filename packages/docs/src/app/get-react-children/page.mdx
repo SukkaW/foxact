@@ -1,0 +1,43 @@
+---
+title: getReactChildren
+---
+
+# getReactChildren
+
+import ExportMetaInfo from '../../components/export-meta-info';
+
+<ExportMetaInfo />
+
+`getReactChildren` is a workaround for [React issue #32392](https://github.com/react/react/issues/32392). React 19 can pass an async Server Component to a Client Component as a `Symbol(react.lazy)` wrapper, which is not itself a valid React element and is therefore rejected by APIs such as `cloneElement`.
+
+`getReactChildren` allows you to unwrap the lazy wrapper that React Flight place around children (when they cross a React Server Components boundary) and get every valid React element from `children`. Other React nodes such as text, numbers, booleans, and empty values are ignored.
+
+```tsx copy
+import { getReactChildren } from 'foxact/get-react-children';
+
+const elements = getReactChildren(children);
+```
+
+## Requiring an exact count
+
+Pass a count as the second argument to require an exact number of valid React elements. A mismatch throws a `TypeError`.
+
+```tsx copy
+const slotChildren = [
+  'ignored text',
+  <button key="trigger">Open</button>,
+  null,
+  <section key="content">Content</section>,
+];
+const [target, content] = getReactChildren(slotChildren, 2);
+```
+
+To require and return one element directly, you can also use [`getSingleReactChildren`](/get-single-react-children).
+
+## React Server Components
+
+`getReactChildren` normalizes the Flight wrapper described above and returns its valid elements.
+
+A pending Flight value suspends, so call the helper during rendering under a `<Suspense>` boundary. A rejected Flight value propagates its error.
+
+The unwrap relies on React 19's current `Children.toArray` implementation. React does not document lazy resolution as part of that API, so this behavior may need revisiting in a future React major. Normalized elements are re-keyed clones; a valid element passed directly retains its identity and key.
