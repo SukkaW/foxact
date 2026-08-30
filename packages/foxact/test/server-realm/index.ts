@@ -35,7 +35,7 @@ export function runOnServer<T>(fixturePath: string): Promise<T> {
       void worker.terminate();
     });
     worker.once('error', (error) => {
-      reject(error);
+      reject(error as Error);
       void worker.terminate();
     });
   });
