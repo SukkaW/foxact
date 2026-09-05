@@ -1,3 +1,12 @@
+# 0.3.11
+
+**Core Changes**
+
+- Add an optional `ReadonlySearchParamsProvider` for `useReadonlySearchParams`.
+  - Previously, `useReadonlySearchParams` only subscribes to the browser's `popstate` event, which keeps it up-to-date during history traversal (e.g. when the user navigates back or forward). Calling `window.history.pushState` or `window.history.replaceState` does not emit `popstate` and therefore does not update the hook by default.
+  - Now, if you wrap your app with `ReadonlySearchParamsProvider`, the provider will patch both History API methods and allows `useReadonlySearchParams` to also update after `window.history.pushState` and `window.history.replaceState`.
+  - Existing usage of `useReadonlySearchParams` without the provider will continue to work as before.
+
 # 0.3.10
 
 **Core Changes**
