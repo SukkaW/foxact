@@ -50,6 +50,8 @@ function App() {
 
 The provider patches both History API methods when it mounts and restores them during its React effect cleanup.
 
+import { Callout } from 'nextra/components'
+
 <Callout type="warning" emoji="⚠️">
 It is recommended to only use single `ReadonlySearchParamsProvider` across your entire app.
 
