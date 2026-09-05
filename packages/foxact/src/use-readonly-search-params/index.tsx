@@ -1,3 +1,6 @@
+'use client';
+// Provider must be client component
+
 import { createSyncExternalStoreSubscribe } from 'event-target-bus/react';
 import { noSSRError } from '../no-ssr';
 import { createContext, useContext, useEffect, useMemo, useSyncExternalStore } from 'react';
