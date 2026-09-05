@@ -16,25 +16,25 @@ class ReadonlyURLSearchParamsError extends Error {
 
 export class ReadonlyURLSearchParams extends URLSearchParams {
   /** @deprecated Method unavailable on `ReadonlyURLSearchParams`. Read more: https://foxact.skk.moe/use-readonly-search-params */
-  // eslint-disable-next-line @typescript-eslint/class-methods-use-this -- overriden
+  // eslint-disable-next-line @typescript-eslint/class-methods-use-this -- overridden
   append(): never {
     throw new ReadonlyURLSearchParamsError();
   }
 
   /** @deprecated Method unavailable on `ReadonlyURLSearchParams`. Read more: https://foxact.skk.moe/use-readonly-search-params */
-  // eslint-disable-next-line @typescript-eslint/class-methods-use-this -- overriden
+  // eslint-disable-next-line @typescript-eslint/class-methods-use-this -- overridden
   delete(): never {
     throw new ReadonlyURLSearchParamsError();
   }
 
   /** @deprecated Method unavailable on `ReadonlyURLSearchParams`. Read more: https://foxact.skk.moe/use-readonly-search-params */
-  // eslint-disable-next-line @typescript-eslint/class-methods-use-this -- overriden
+  // eslint-disable-next-line @typescript-eslint/class-methods-use-this -- overridden
   set(): never {
     throw new ReadonlyURLSearchParamsError();
   }
 
   /** @deprecated Method unavailable on `ReadonlyURLSearchParams`. Read more: https://foxact.skk.moe/use-readonly-search-params */
-  // eslint-disable-next-line @typescript-eslint/class-methods-use-this -- overriden
+  // eslint-disable-next-line @typescript-eslint/class-methods-use-this -- overridden
   sort(): never {
     throw new ReadonlyURLSearchParamsError();
   }
