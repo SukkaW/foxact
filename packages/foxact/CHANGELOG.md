@@ -1,3 +1,9 @@
+# 0.3.12
+
+**Core Changes**
+
+- Fixed a bug when `useClipboard` won't preserve the white space when `execCommand` fallback method is used.
+
 # 0.3.11
 
 **Core Changes**
