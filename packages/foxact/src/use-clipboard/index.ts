@@ -146,12 +146,12 @@ async function copyToClipboard(
 
       span = document.createElement('span');
       span.textContent = text;
-      // Preserve consecutive spaces and newlines
-      span.style.whiteSpace = 'pre';
       // avoid screen readers from reading out loud the text
       span.ariaHidden = 'true';
       // reset user styles for span element
       span.style.all = 'unset';
+      // Preserve consecutive spaces and newlines
+      span.style.whiteSpace = 'pre';
       // prevents scrolling to the end of the page
       span.style.position = 'fixed';
       span.style.top = '0';
